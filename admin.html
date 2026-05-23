@@ -7,422 +7,175 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #00ff87;
-  --dark-green: #00c96b;
-  --black: #030805;
-  --dark: #080f09;
-  --card: #0b1a0e;
-  --card2: #0f2213;
-  --border: rgba(0,255,135,0.12);
-  --border-bright: rgba(0,255,135,0.3);
-  --text: #dff0e3;
-  --muted: #5a8a65;
-  --red: #ff3b3b;
-  --orange: #f59e0b;
-  --blue: #3b82f6;
-  --purple: #a855f7;
+  --green:#00ff87; --dark-green:#00c96b; --black:#030805; --card:#0b1a0e;
+  --border:rgba(0,255,135,0.12); --border-bright:rgba(0,255,135,0.3);
+  --text:#dff0e3; --muted:#5a8a65; --red:#ff3b3b; --orange:#f59e0b; --blue:#3b82f6;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Cairo',sans-serif; background:var(--black); color:var(--text); min-height:100vh; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);min-height:100vh}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,135,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,0.02) 1px,transparent 1px);background-size:60px 60px}
+.glow{position:absolute;border-radius:50%;filter:blur(130px)}
+.glow-1{width:700px;height:700px;background:rgba(0,255,135,0.07);top:-250px;left:-150px}
+.glow-2{width:600px;height:600px;background:rgba(168,85,247,0.06);bottom:-150px;right:-150px}
 
-/* ══ BG ══ */
-.bg { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-.bg-grid {
-  position:absolute; inset:0;
-  background-image:linear-gradient(rgba(0,255,135,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,0.02) 1px,transparent 1px);
-  background-size:60px 60px;
-}
-.glow { position:absolute; border-radius:50%; filter:blur(130px); }
-.glow-1 { width:700px; height:700px; background:rgba(0,255,135,0.07); top:-250px; left:-150px; }
-.glow-2 { width:600px; height:600px; background:rgba(168,85,247,0.06); bottom:-150px; right:-150px; }
+#loginScreen{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--black)}
+.login-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:38px 34px;margin:20px;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo .icon{width:70px;height:70px;margin:0 auto 12px;background:linear-gradient(135deg,rgba(0,255,135,0.15),rgba(0,255,135,0.05));border:2px solid rgba(0,255,135,0.25);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.login-logo .name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--green)}
+.login-logo .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.login-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.field{margin-bottom:14px}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.field input,.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
+.field input:focus,.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,255,135,0.08);background:rgba(0,255,135,0.03)}
+select.inp{appearance:none;cursor:pointer}
+select.inp option{background:#0b1a0e}
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),var(--dark-green));border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;color:var(--black);cursor:pointer;transition:all 0.22s;margin-top:4px;box-shadow:0 4px 20px rgba(0,255,135,0.25)}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,255,135,0.4)}
+.login-err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;min-height:18px}
 
-/* ══ LOGIN SCREEN ══ */
-#loginScreen {
-  position:fixed; inset:0; z-index:50;
-  display:flex; align-items:center; justify-content:center;
-  background:var(--black);
-}
-.login-box {
-  width:100%; max-width:380px;
-  background:var(--card); border:1px solid var(--border);
-  border-radius:26px; padding:38px 34px;
-  margin:20px;
-  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
-.login-logo { text-align:center; margin-bottom:28px; }
-.login-logo .icon {
-  width:70px; height:70px; margin:0 auto 12px;
-  background:linear-gradient(135deg,rgba(0,255,135,0.15),rgba(0,255,135,0.05));
-  border:2px solid rgba(0,255,135,0.25);
-  border-radius:20px; display:flex; align-items:center; justify-content:center;
-  font-size:32px;
-}
-.login-logo .name { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; color:var(--green); }
-.login-logo .sub { font-size:12px; color:var(--muted); margin-top:2px; }
-.login-title { font-size:20px; font-weight:800; margin-bottom:4px; }
-.login-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+#adminPanel{display:none;position:relative;z-index:1}
+.adm-header{padding:14px 36px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,8,5,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.adm-logo{display:flex;align-items:center;gap:12px}
+.adm-logo .icon{width:42px;height:42px;background:linear-gradient(135deg,var(--green),var(--dark-green));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.adm-logo .name{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);letter-spacing:2px}
+.adm-logo .badge{background:rgba(0,255,135,0.1);border:1px solid rgba(0,255,135,0.2);color:var(--green);font-size:10px;padding:3px 9px;border-radius:20px;margin-right:6px}
+.header-actions{display:flex;gap:10px;align-items:center}
+.notif-btn{position:relative;width:40px;height:40px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:18px}
+.notif-btn:hover{border-color:var(--border-bright)}
+.notif-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--red);border-radius:50%;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--black);animation:badgePulse 2s ease infinite}
+@keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.notif-badge.hidden{display:none}
+.btn-logout{padding:8px 16px;background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);border-radius:10px;color:var(--red);font-family:'Cairo',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{background:var(--red);color:#fff}
+.view-site{padding:8px 16px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Cairo',sans-serif;font-size:13px;text-decoration:none;transition:all 0.2s}
+.view-site:hover{border-color:var(--green);color:var(--green)}
 
-.field { margin-bottom:14px; }
-.field label { font-size:12px; color:var(--muted); display:block; margin-bottom:6px; }
-.field input {
-  width:100%; background:rgba(255,255,255,0.04);
-  border:1px solid var(--border); border-radius:12px;
-  padding:12px 16px; color:var(--text);
-  font-family:'Cairo',sans-serif; font-size:14px;
-  outline:none; transition:all 0.2s;
-}
-.field input:focus {
-  border-color:var(--green);
-  box-shadow:0 0 0 3px rgba(0,255,135,0.08);
-  background:rgba(0,255,135,0.03);
-}
+.adm-body{padding:30px 36px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;text-align:center;transition:all 0.25s}
+.stat:hover{border-color:var(--border-bright);transform:translateY(-3px)}
+.stat-n{font-size:38px;font-weight:900;color:var(--green);line-height:1}
+.stat-n.red{color:var(--red)} .stat-n.orange{color:var(--orange)} .stat-n.blue{color:var(--blue)}
+.stat-l{font-size:12px;color:var(--muted);margin-top:6px}
 
-.btn-login {
-  width:100%; padding:14px;
-  background:linear-gradient(135deg,var(--green),var(--dark-green));
-  border:none; border-radius:12px;
-  font-family:'Cairo',sans-serif; font-size:16px; font-weight:700;
-  color:var(--black); cursor:pointer; transition:all 0.22s; margin-top:4px;
-  box-shadow:0 4px 20px rgba(0,255,135,0.25);
-}
-.btn-login:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,255,135,0.4); }
-.login-err { color:var(--red); font-size:13px; margin-top:10px; text-align:center; min-height:18px; }
+.adm-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.adm-tab{padding:12px 24px;font-family:'Cairo',sans-serif;font-size:14px;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.adm-tab:hover{color:var(--text)}
+.adm-tab.on{color:var(--green);border-bottom-color:var(--green);font-weight:700}
+.adm-panel{display:none}
+.adm-panel.on{display:block}
+.adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.adm-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px}
+.adm-card.full{grid-column:1/-1}
+.card-title{font-size:15px;font-weight:700;color:var(--green);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.card-title .ci{width:32px;height:32px;background:rgba(0,255,135,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.inp-label{font-size:12px;color:var(--muted);margin-bottom:5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.time-range-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
-/* ══ ADMIN PANEL ══ */
-#adminPanel { display:none; position:relative; z-index:1; }
+.btn-add{padding:12px;width:100%;background:linear-gradient(135deg,var(--green),var(--dark-green));border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--black);cursor:pointer;transition:all 0.22s;box-shadow:0 4px 16px rgba(0,255,135,0.2)}
+.btn-add:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,255,135,0.35)}
+.btn-add.danger{background:linear-gradient(135deg,var(--red),#cc2020);box-shadow:0 4px 16px rgba(255,59,59,0.2)}
+.btn-add.secondary{background:rgba(0,255,135,0.12);border:1px solid rgba(0,255,135,0.25);color:var(--green);box-shadow:none}
+.btn-add.secondary:hover{background:rgba(0,255,135,0.2);box-shadow:none}
+.btn-sm{padding:6px 13px;border-radius:8px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;border:1px solid}
+.btn-sm-g{background:rgba(0,255,135,0.08);border-color:rgba(0,255,135,0.2);color:var(--green)}
+.btn-sm-g:hover{background:var(--green);color:var(--black);border-color:var(--green)}
+.btn-sm-r{background:rgba(255,59,59,0.08);border-color:rgba(255,59,59,0.2);color:var(--red)}
+.btn-sm-r:hover{background:var(--red);color:#fff;border-color:var(--red)}
 
-/* HEADER */
-.adm-header {
-  padding:14px 36px;
-  display:flex; align-items:center; justify-content:space-between;
-  background:rgba(3,8,5,0.9); backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-  position:sticky; top:0; z-index:100;
-}
-.adm-logo { display:flex; align-items:center; gap:12px; }
-.adm-logo .icon {
-  width:42px; height:42px;
-  background:linear-gradient(135deg,var(--green),var(--dark-green));
-  border-radius:12px; display:flex; align-items:center; justify-content:center;
-  font-size:20px; box-shadow:0 0 18px rgba(0,255,135,0.25);
-}
-.adm-logo .name { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--green); letter-spacing:2px; }
-.adm-logo .badge {
-  background:rgba(0,255,135,0.1); border:1px solid rgba(0,255,135,0.2);
-  color:var(--green); font-size:10px; padding:3px 9px; border-radius:20px; margin-right:6px;
-}
+.list{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto}
+.list::-webkit-scrollbar{width:3px}
+.list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.list-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border);transition:all 0.2s}
+.list-item:hover{border-color:var(--border-bright)}
+.li-info{display:flex;flex-direction:column;gap:2px}
+.li-court{font-size:11px;color:var(--muted)}
+.li-time{font-size:14px;font-weight:700}
+.li-actions{display:flex;gap:8px;align-items:center}
+.badge-free{background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);color:var(--green);font-size:11px;padding:3px 9px;border-radius:20px}
+.badge-booked{background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);color:var(--red);font-size:11px;padding:3px 9px;border-radius:20px}
+.book-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border);transition:all 0.2s}
+.book-item:hover{border-color:var(--border-bright)}
+.book-name{font-size:15px;font-weight:700}
+.book-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.book-phone{font-size:13px;color:var(--green);font-weight:600;font-family:monospace}
 
-.header-actions { display:flex; gap:10px; align-items:center; }
-.notif-btn {
-  position:relative; width:40px; height:40px;
-  background:rgba(255,255,255,0.04); border:1px solid var(--border);
-  border-radius:11px; display:flex; align-items:center; justify-content:center;
-  cursor:pointer; transition:all 0.2s; font-size:18px;
-}
-.notif-btn:hover { border-color:var(--border-bright); background:rgba(0,255,135,0.06); }
-.notif-badge {
-  position:absolute; top:-4px; right:-4px;
-  width:18px; height:18px; background:var(--red);
-  border-radius:50%; font-size:10px; font-weight:700; color:#fff;
-  display:flex; align-items:center; justify-content:center;
-  border:2px solid var(--black);
-  animation:badgePulse 2s ease infinite;
-}
-@keyframes badgePulse {
-  0%,100%{ transform:scale(1); }
-  50%{ transform:scale(1.15); }
-}
-.notif-badge.hidden { display:none; }
+.filter-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.ftab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s}
+.ftab.on{background:var(--green);border-color:var(--green);color:var(--black);font-weight:700}
+.ftab:hover:not(.on){border-color:var(--green);color:var(--green)}
+.empty{text-align:center;padding:36px 20px;color:var(--muted);font-size:13px}
+.empty .ei{font-size:36px;margin-bottom:10px}
 
-.btn-logout {
-  padding:8px 16px;
-  background:rgba(255,59,59,0.08); border:1px solid rgba(255,59,59,0.2);
-  border-radius:10px; color:var(--red);
-  font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s;
-}
-.btn-logout:hover { background:var(--red); color:#fff; }
-.view-site {
-  padding:8px 16px; border:1px solid var(--border);
-  border-radius:10px; color:var(--muted);
-  font-family:'Cairo',sans-serif; font-size:13px; text-decoration:none; transition:all 0.2s;
-}
-.view-site:hover { border-color:var(--green); color:var(--green); }
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.settings-hint{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--orange);margin-bottom:16px}
+.days-selector{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0 16px}
+.day-toggle{padding:10px 4px;border-radius:11px;text-align:center;border:1px solid var(--border);background:transparent;font-family:'Cairo',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.day-toggle.on{background:rgba(0,255,135,0.12);border-color:rgba(0,255,135,0.3);color:var(--green);font-weight:700}
+.day-toggle.off{background:rgba(255,59,59,0.05);border-color:rgba(255,59,59,0.15);color:rgba(255,59,59,0.5)}
 
-/* ══ BODY ══ */
-.adm-body { padding:30px 36px; }
+.holiday-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;margin-top:10px}
+.holiday-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.15);border-radius:10px;font-size:13px}
+.holiday-name{color:var(--red);font-weight:600}
+.holiday-date{color:var(--muted);font-size:12px}
 
-/* STATS */
-.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
-.stat {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:18px; padding:20px; text-align:center;
-  transition:all 0.25s; position:relative; overflow:hidden;
-}
-.stat::before {
-  content:''; position:absolute; bottom:0; left:0; right:0;
-  height:3px; background:linear-gradient(90deg,var(--green),transparent);
-  opacity:0; transition:opacity 0.25s;
-}
-.stat:hover { border-color:var(--border-bright); transform:translateY(-3px); }
-.stat:hover::before { opacity:1; }
-.stat-n { font-size:38px; font-weight:900; color:var(--green); line-height:1; }
-.stat-n.red { color:var(--red); }
-.stat-n.orange { color:var(--orange); }
-.stat-n.blue { color:var(--blue); }
-.stat-l { font-size:12px; color:var(--muted); margin-top:6px; }
+.notif-list{display:flex;flex-direction:column;gap:10px}
+.notif-item{padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,0.02);display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:all 0.2s}
+.notif-item.unread{border-color:rgba(0,255,135,0.2);background:rgba(0,255,135,0.04)}
+.notif-item:hover{border-color:var(--border-bright)}
+.notif-dot{width:8px;height:8px;background:var(--green);border-radius:50%;flex-shrink:0;margin-top:5px}
+.notif-dot.read{background:var(--muted)}
+.notif-content{flex:1}
+.notif-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.notif-msg{font-size:12px;color:var(--muted)}
+.notif-time{font-size:11px;color:var(--muted);margin-top:4px}
+.pwd-hint{font-size:12px;color:var(--orange);background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:10px 12px;margin-bottom:14px}
 
-/* TABS */
-.adm-tabs { display:flex; gap:0; margin-bottom:24px; border-bottom:1px solid var(--border); }
-.adm-tab {
-  padding:12px 24px; font-family:'Cairo',sans-serif; font-size:14px;
-  color:var(--muted); background:transparent; border:none; cursor:pointer;
-  transition:all 0.2s; border-bottom:2px solid transparent; margin-bottom:-1px;
-}
-.adm-tab:hover { color:var(--text); }
-.adm-tab.on { color:var(--green); border-bottom-color:var(--green); font-weight:700; }
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.overlay.off{display:none}
+.confirm-box{background:var(--card);border:1px solid rgba(255,59,59,0.25);border-radius:22px;padding:30px;max-width:340px;width:100%;text-align:center;animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.confirm-box p{color:var(--muted);font-size:14px;margin-bottom:22px}
+.confirm-acts{display:flex;gap:10px;justify-content:center}
 
-/* PANELS */
-.adm-panel { display:none; }
-.adm-panel.on { display:block; }
+.new-book-alert{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-150px);background:linear-gradient(135deg,#0f2a14,#0b1a0e);border:1px solid rgba(0,255,135,0.4);border-radius:16px;padding:16px 22px;display:flex;align-items:center;gap:14px;z-index:250;box-shadow:0 16px 50px rgba(0,0,0,0.6);transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1);max-width:360px;width:90%}
+.new-book-alert.show{transform:translateX(-50%) translateY(0)}
+.nba-icon{font-size:30px;flex-shrink:0}
+.nba-text strong{color:var(--green);display:block;font-size:15px;margin-bottom:2px}
+.nba-text span{font-size:12px;color:var(--muted)}
+.nba-close{margin-right:auto;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;line-height:1}
 
-/* GRID */
-.adm-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
-.adm-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:20px; padding:24px;
-}
-.adm-card.full { grid-column:1/-1; }
-.card-title {
-  font-size:15px; font-weight:700; color:var(--green);
-  margin-bottom:20px; display:flex; align-items:center; gap:10px;
-}
-.card-title .ci {
-  width:32px; height:32px;
-  background:rgba(0,255,135,0.1); border-radius:9px;
-  display:flex; align-items:center; justify-content:center; font-size:16px;
-}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--green);border-radius:14px;padding:13px 24px;font-size:14px;font-weight:700;color:var(--green);z-index:300;transition:transform 0.42s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 10px 40px rgba(0,255,135,0.25);white-space:nowrap}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.toast.err{border-color:var(--red);color:var(--red)}
 
-/* INPUTS */
-.inp {
-  width:100%; background:rgba(255,255,255,0.04);
-  border:1px solid var(--border); border-radius:11px;
-  padding:11px 14px; color:var(--text);
-  font-family:'Cairo',sans-serif; font-size:14px;
-  outline:none; transition:all 0.2s;
-}
-.inp:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(0,255,135,0.08); }
-select.inp { appearance:none; cursor:pointer; }
-select.inp option { background:#0b1a0e; }
-
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.inp-label { font-size:12px; color:var(--muted); margin-bottom:5px; }
-
-/* BUTTONS */
-.btn-add {
-  padding:12px; width:100%;
-  background:linear-gradient(135deg,var(--green),var(--dark-green));
-  border:none; border-radius:11px;
-  font-family:'Cairo',sans-serif; font-size:15px; font-weight:700;
-  color:var(--black); cursor:pointer; transition:all 0.22s;
-  box-shadow:0 4px 16px rgba(0,255,135,0.2);
-}
-.btn-add:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,255,135,0.35); }
-.btn-add.danger {
-  background:linear-gradient(135deg,var(--red),#cc2020);
-  box-shadow:0 4px 16px rgba(255,59,59,0.2);
-}
-.btn-add.secondary {
-  background:rgba(0,255,135,0.12); border:1px solid rgba(0,255,135,0.25);
-  color:var(--green);
-  box-shadow:none;
-}
-.btn-add.secondary:hover { background:rgba(0,255,135,0.2); box-shadow:none; }
-
-.btn-sm {
-  padding:6px 13px; border-radius:8px;
-  font-family:'Cairo',sans-serif; font-size:12px; cursor:pointer; transition:all 0.2s; border:1px solid;
-}
-.btn-sm-g { background:rgba(0,255,135,0.08); border-color:rgba(0,255,135,0.2); color:var(--green); }
-.btn-sm-g:hover { background:var(--green); color:var(--black); border-color:var(--green); }
-.btn-sm-r { background:rgba(255,59,59,0.08); border-color:rgba(255,59,59,0.2); color:var(--red); }
-.btn-sm-r:hover { background:var(--red); color:#fff; border-color:var(--red); }
-.btn-sm-o { background:rgba(245,158,11,0.08); border-color:rgba(245,158,11,0.2); color:var(--orange); }
-.btn-sm-o:hover { background:var(--orange); color:#000; border-color:var(--orange); }
-
-/* LIST */
-.list { display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto; }
-.list::-webkit-scrollbar { width:3px; }
-.list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
-
-.list-item {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 14px; background:rgba(255,255,255,0.02);
-  border-radius:12px; border:1px solid var(--border);
-  transition:all 0.2s;
-}
-.list-item:hover { border-color:var(--border-bright); background:rgba(0,255,135,0.02); }
-.li-info { display:flex; flex-direction:column; gap:2px; }
-.li-court { font-size:11px; color:var(--muted); }
-.li-time { font-size:14px; font-weight:700; }
-.li-date { font-size:11px; color:var(--muted); }
-.li-actions { display:flex; gap:8px; align-items:center; }
-.badge-free { background:rgba(0,255,135,0.08); border:1px solid rgba(0,255,135,0.2); color:var(--green); font-size:11px; padding:3px 9px; border-radius:20px; }
-.badge-booked { background:rgba(255,59,59,0.08); border:1px solid rgba(255,59,59,0.2); color:var(--red); font-size:11px; padding:3px 9px; border-radius:20px; }
-
-/* BOOKINGS */
-.book-item {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:14px 16px; background:rgba(255,255,255,0.02);
-  border-radius:12px; border:1px solid var(--border);
-  transition:all 0.2s;
-}
-.book-item:hover { border-color:var(--border-bright); }
-.book-name { font-size:15px; font-weight:700; }
-.book-meta { font-size:12px; color:var(--muted); margin-top:3px; }
-.book-phone { font-size:13px; color:var(--green); font-weight:600; font-family:monospace; }
-
-/* FILTER TABS */
-.filter-tabs { display:flex; gap:7px; margin-bottom:14px; flex-wrap:wrap; }
-.ftab {
-  padding:6px 14px; border-radius:20px;
-  border:1px solid var(--border); background:transparent;
-  color:var(--muted); font-family:'Cairo',sans-serif;
-  font-size:12px; cursor:pointer; transition:all 0.2s;
-}
-.ftab.on { background:var(--green); border-color:var(--green); color:var(--black); font-weight:700; }
-.ftab:hover:not(.on) { border-color:var(--green); color:var(--green); }
-
-/* EMPTY */
-.empty { text-align:center; padding:36px 20px; color:var(--muted); font-size:13px; }
-.empty .ei { font-size:36px; margin-bottom:10px; }
-
-/* ══ WORK HOURS SETTINGS ══ */
-.settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
-.settings-hint {
-  background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15);
-  border-radius:12px; padding:12px 14px; font-size:12px; color:var(--orange);
-  margin-bottom:16px;
-}
-
-/* DAYS OF WEEK SELECTOR */
-.days-selector { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin:10px 0 16px; }
-.day-toggle {
-  padding:10px 4px; border-radius:11px; text-align:center;
-  border:1px solid var(--border); background:transparent;
-  font-family:'Cairo',sans-serif; font-size:11px; color:var(--muted);
-  cursor:pointer; transition:all 0.2s;
-}
-.day-toggle.on { background:rgba(0,255,135,0.12); border-color:rgba(0,255,135,0.3); color:var(--green); font-weight:700; }
-.day-toggle.off { background:rgba(255,59,59,0.05); border-color:rgba(255,59,59,0.15); color:rgba(255,59,59,0.5); }
-
-/* HOLIDAYS */
-.holiday-list { display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; margin-top:10px; }
-.holiday-item {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 14px; background:rgba(255,59,59,0.05);
-  border:1px solid rgba(255,59,59,0.15); border-radius:10px;
-  font-size:13px;
-}
-.holiday-name { color:var(--red); font-weight:600; }
-.holiday-date { color:var(--muted); font-size:12px; }
-
-/* BULK SLOTS */
-.bulk-form { display:grid; gap:12px; }
-.time-range-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-
-/* ══ NOTIFICATIONS PANEL ══ */
-.notif-list { display:flex; flex-direction:column; gap:10px; }
-.notif-item {
-  padding:14px 16px; border-radius:14px;
-  border:1px solid var(--border); background:rgba(255,255,255,0.02);
-  display:flex; align-items:flex-start; gap:14px;
-  transition:all 0.2s;
-}
-.notif-item.unread {
-  border-color:rgba(0,255,135,0.2); background:rgba(0,255,135,0.04);
-}
-.notif-item:hover { border-color:var(--border-bright); }
-.notif-dot { width:8px; height:8px; background:var(--green); border-radius:50%; flex-shrink:0; margin-top:5px; }
-.notif-dot.read { background:var(--muted); }
-.notif-content { flex:1; }
-.notif-title { font-size:14px; font-weight:700; margin-bottom:3px; }
-.notif-msg { font-size:12px; color:var(--muted); }
-.notif-time { font-size:11px; color:var(--muted); margin-top:4px; }
-
-/* PWD */
-.pwd-hint {
-  font-size:12px; color:var(--orange);
-  background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15);
-  border-radius:10px; padding:10px 12px; margin-bottom:14px;
-}
-
-/* CONFIRM */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.82); backdrop-filter:blur(12px); z-index:200; display:flex; align-items:center; justify-content:center; padding:20px; }
-.overlay.off { display:none; }
-.confirm-box {
-  background:var(--card); border:1px solid rgba(255,59,59,0.25);
-  border-radius:22px; padding:30px; max-width:340px; width:100%; text-align:center;
-  animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
-}
-.confirm-box h3 { font-size:18px; font-weight:700; margin-bottom:8px; }
-.confirm-box p { color:var(--muted); font-size:14px; margin-bottom:22px; }
-.confirm-acts { display:flex; gap:10px; justify-content:center; }
-
-/* TOAST */
-.toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--card); border:1px solid var(--green); border-radius:14px; padding:13px 24px; font-size:14px; font-weight:700; color:var(--green); z-index:300; transition:transform 0.42s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 10px 40px rgba(0,255,135,0.25); white-space:nowrap; }
-.toast.on { transform:translateX(-50%) translateY(0); }
-.toast.err { border-color:var(--red); color:var(--red); box-shadow:0 10px 40px rgba(255,59,59,0.2); }
-
-/* NEW BOOKING ALERT */
-.new-book-alert {
-  position:fixed; top:80px; left:50%;
-  transform:translateX(-50%) translateY(-120px);
-  background:linear-gradient(135deg,#0f2a14,#0b1a0e);
-  border:1px solid rgba(0,255,135,0.4);
-  border-radius:16px; padding:16px 22px;
-  display:flex; align-items:center; gap:14px;
-  z-index:250; box-shadow:0 16px 50px rgba(0,0,0,0.6);
-  transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
-  max-width:360px; width:90%;
-}
-.new-book-alert.show { transform:translateX(-50%) translateY(0); }
-.nba-icon { font-size:30px; flex-shrink:0; }
-.nba-text strong { color:var(--green); display:block; font-size:15px; margin-bottom:2px; }
-.nba-text span { font-size:12px; color:var(--muted); }
-.nba-close {
-  margin-right:auto; background:none; border:none; color:var(--muted);
-  font-size:18px; cursor:pointer; padding:4px; line-height:1;
-}
-.nba-close:hover { color:var(--text); }
-
-@media(max-width:768px) {
-  .adm-header{ padding:12px 18px; }
-  .adm-body{ padding:20px 16px; }
-  .stats{ grid-template-columns:repeat(2,1fr); }
-  .adm-grid{ grid-template-columns:1fr; }
-  .adm-card.full{ grid-column:auto; }
-  .settings-grid{ grid-template-columns:1fr; }
-  .days-selector{ grid-template-columns:repeat(4,1fr); }
-  .time-range-grid{ grid-template-columns:1fr 1fr; }
+@media(max-width:768px){
+  .adm-header{padding:12px 18px}
+  .adm-body{padding:20px 16px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .adm-grid{grid-template-columns:1fr}
+  .adm-card.full{grid-column:auto}
+  .settings-grid{grid-template-columns:1fr}
+  .days-selector{grid-template-columns:repeat(4,1fr)}
+  .time-range-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-
 <div class="bg"><div class="bg-grid"></div><div class="glow glow-1"></div><div class="glow glow-2"></div></div>
 
-<!-- ══ NEW BOOKING ALERT ══ -->
 <div class="new-book-alert" id="newBookAlert">
   <div class="nba-icon">🔔</div>
-  <div class="nba-text">
-    <strong id="alertTitle">حجز جديد!</strong>
-    <span id="alertMsg">تفاصيل الحجز</span>
-  </div>
-  <button class="nba-close" onclick="dismissAlert()">✕</button>
+  <div class="nba-text"><strong id="alertTitle">حجز جديد!</strong><span id="alertMsg"></span></div>
+  <button class="nba-close" id="alertClose">✕</button>
 </div>
 
-<!-- ══ LOGIN ══ -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
@@ -434,289 +187,225 @@ select.inp option { background:#0b1a0e; }
     <div class="login-sub">أدخل بيانات الدخول للمتابعة</div>
     <div class="field"><label>اسم المستخدم</label><input id="loginUser" type="text" placeholder="admin" autocomplete="username"></div>
     <div class="field"><label>كلمة المرور</label><input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-    <button class="btn-login" onclick="doLogin()">🔐 دخول</button>
+    <button class="btn-login" id="loginBtn">🔐 دخول</button>
     <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- ══ ADMIN PANEL ══ -->
 <div id="adminPanel">
   <header class="adm-header">
     <div class="adm-logo">
       <div class="icon">🏸</div>
-      <div>
-        <div class="name">PADEL ARENA <span class="badge">أدمن</span></div>
-      </div>
+      <div><div class="name">PADEL ARENA <span class="badge">أدمن</span></div></div>
     </div>
     <div class="header-actions">
-      <div class="notif-btn" onclick="switchTab('notifs')" title="الإشعارات">
-        🔔
-        <div class="notif-badge hidden" id="notifBadge">0</div>
-      </div>
+      <div class="notif-btn" id="notifBtn" title="الإشعارات">🔔<div class="notif-badge hidden" id="notifBadge">0</div></div>
       <a class="view-site" href="index.html" target="_blank">👁️ الموقع</a>
-      <button class="btn-logout" onclick="logout()">خروج</button>
+      <button class="btn-logout" id="logoutBtn">خروج</button>
     </div>
   </header>
 
   <div class="adm-body">
-
-    <!-- STATS -->
     <div class="stats" id="statsRow"></div>
-
-    <!-- TABS -->
     <div class="adm-tabs">
-      <button class="adm-tab on" onclick="switchTab('slots')">⏰ الأوقات والحجوزات</button>
-      <button class="adm-tab" onclick="switchTab('schedule')">📅 جدول العمل والإجازات</button>
-      <button class="adm-tab" onclick="switchTab('notifs')">🔔 الإشعارات</button>
-      <button class="adm-tab" onclick="switchTab('settings')">⚙️ الإعدادات</button>
+      <button class="adm-tab on" data-tab="slots">⏰ الأوقات والحجوزات</button>
+      <button class="adm-tab" data-tab="schedule">📅 جدول العمل</button>
+      <button class="adm-tab" data-tab="notifs">🔔 الإشعارات</button>
+      <button class="adm-tab" data-tab="settings">⚙️ الإعدادات</button>
     </div>
 
-    <!-- ═══ TAB: SLOTS & BOOKINGS ═══ -->
+    <!-- SLOTS TAB -->
     <div class="adm-panel on" id="panel-slots">
       <div class="adm-grid">
-
-        <!-- ADD SLOT -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">➕</div> إضافة وقت جديد</div>
-          <div class="slot-form" style="display:grid;gap:12px">
-            <div>
-              <div class="inp-label">الملعب</div>
-              <select class="inp" id="aC">
-                <option value="1">🔵 الملعب الأول – الأزرق</option>
-                <option value="2">🟣 الملعب الثاني – البنفسجي</option>
-              </select>
+          <div style="display:grid;gap:12px">
+            <div><div class="inp-label">الملعب</div>
+              <select class="inp" id="aC"><option value="1">🔵 الملعب الأول</option><option value="2">🟣 الملعب الثاني</option></select>
             </div>
-            <div>
-              <div class="inp-label">التاريخ</div>
-              <input type="date" class="inp" id="aD">
-            </div>
+            <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="aD"></div>
             <div class="form-row">
               <div><div class="inp-label">من</div><input type="time" class="inp" id="aF"></div>
               <div><div class="inp-label">إلى</div><input type="time" class="inp" id="aT"></div>
             </div>
-            <button class="btn-add" onclick="addSlot()">➕ إضافة الوقت</button>
+            <button class="btn-add" id="addSlotBtn">➕ إضافة الوقت</button>
           </div>
-
-          <!-- BULK ADD -->
           <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
           <div class="card-title" style="margin-bottom:14px"><div class="ci">⚡</div> إضافة جماعية</div>
-          <div class="bulk-form">
-            <div>
-              <div class="inp-label">الملعب</div>
-              <select class="inp" id="bkCourt">
-                <option value="1">🔵 الملعب الأول</option>
-                <option value="2">🟣 الملعب الثاني</option>
-                <option value="both">كلا الملعبين</option>
-              </select>
+          <div style="display:grid;gap:12px">
+            <div><div class="inp-label">الملعب</div>
+              <select class="inp" id="bkCourt"><option value="1">🔵 الملعب الأول</option><option value="2">🟣 الملعب الثاني</option><option value="both">كلا الملعبين</option></select>
             </div>
-            <div>
-              <div class="inp-label">التاريخ</div>
-              <input type="date" class="inp" id="bkDate">
-            </div>
+            <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="bkDate"></div>
             <div class="time-range-grid">
               <div><div class="inp-label">من</div><input type="time" class="inp" id="bkFrom" value="08:00"></div>
               <div><div class="inp-label">إلى</div><input type="time" class="inp" id="bkTo" value="23:00"></div>
-              <div><div class="inp-label">مدة الساعة (بالدقائق)</div><input type="number" class="inp" id="bkDur" value="60" min="30" max="120" step="30"></div>
+              <div><div class="inp-label">المدة (دقيقة)</div><input type="number" class="inp" id="bkDur" value="60" min="30" max="120" step="30"></div>
             </div>
-            <button class="btn-add secondary" onclick="addBulkSlots()">⚡ إضافة الأوقات تلقائياً</button>
+            <button class="btn-add secondary" id="bulkBtn">⚡ إضافة الأوقات تلقائياً</button>
           </div>
         </div>
 
-        <!-- CHANGE PASSWORD -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">🔑</div> تغيير كلمة المرور</div>
           <div style="display:grid;gap:12px">
             <div class="pwd-hint">💡 كلمة المرور الافتراضية: <strong>admin123</strong></div>
             <div><div class="inp-label">كلمة المرور الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
             <div><div class="inp-label">كلمة المرور الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
-            <div><div class="inp-label">تأكيد كلمة المرور</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
-            <button class="btn-add secondary" onclick="changePwd()">🔒 تحديث كلمة المرور</button>
+            <div><div class="inp-label">تأكيد</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
+            <button class="btn-add secondary" id="pwdBtn">🔒 تحديث كلمة المرور</button>
           </div>
-
           <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
           <div class="card-title" style="margin-bottom:14px"><div class="ci">🗑️</div> إدارة البيانات</div>
           <div style="display:grid;gap:10px">
-            <button class="btn-add danger" onclick="confirmClearOldSlots()">🗑️ حذف الأوقات القديمة</button>
-            <button class="btn-add danger" style="opacity:0.7" onclick="confirmClearAll()">⚠️ مسح جميع البيانات</button>
+            <button class="btn-add danger" id="clearOldBtn">🗑️ حذف الأوقات القديمة</button>
           </div>
         </div>
 
-        <!-- SLOTS LIST -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">🕐</div> الأوقات المضافة</div>
           <div class="filter-tabs">
-            <button class="ftab on" onclick="filterSlots('all',this)">الكل</button>
-            <button class="ftab" onclick="filterSlots('1',this)">ملعب 1</button>
-            <button class="ftab" onclick="filterSlots('2',this)">ملعب 2</button>
-            <button class="ftab" onclick="filterSlots('free',this)">متاحة</button>
-            <button class="ftab" onclick="filterSlots('today',this)">اليوم</button>
+            <button class="ftab on" data-sf="all">الكل</button>
+            <button class="ftab" data-sf="1">ملعب 1</button>
+            <button class="ftab" data-sf="2">ملعب 2</button>
+            <button class="ftab" data-sf="free">متاحة</button>
+            <button class="ftab" data-sf="today">اليوم</button>
           </div>
           <div class="list" id="slotsList"></div>
         </div>
 
-        <!-- BOOKINGS -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">📋</div> الحجوزات</div>
           <div class="filter-tabs">
-            <button class="ftab on" onclick="filterBookings('all',this)">الكل</button>
-            <button class="ftab" onclick="filterBookings('1',this)">ملعب 1</button>
-            <button class="ftab" onclick="filterBookings('2',this)">ملعب 2</button>
-            <button class="ftab" onclick="filterBookings('today',this)">اليوم</button>
+            <button class="ftab on" data-bf="all">الكل</button>
+            <button class="ftab" data-bf="1">ملعب 1</button>
+            <button class="ftab" data-bf="2">ملعب 2</button>
+            <button class="ftab" data-bf="today">اليوم</button>
           </div>
           <div class="list" id="bookList"></div>
         </div>
-
       </div>
     </div>
 
-    <!-- ═══ TAB: SCHEDULE ═══ -->
+    <!-- SCHEDULE TAB -->
     <div class="adm-panel" id="panel-schedule">
       <div class="adm-grid">
-
-        <!-- WORK HOURS -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">🕐</div> أوقات العمل</div>
-          <div class="settings-hint">
-            ⚠️ هذه الأوقات تظهر في موقع الزبائن وتحدد متى يمكن الحجز
-          </div>
+          <div class="settings-hint">⚠️ هذه الأوقات تظهر في موقع الزبائن</div>
           <div class="settings-grid">
             <div><div class="inp-label">وقت الفتح</div><input type="time" class="inp" id="sOpenTime" value="08:00"></div>
             <div><div class="inp-label">وقت الإغلاق</div><input type="time" class="inp" id="sCloseTime" value="23:00"></div>
           </div>
-          <div class="inp-label" style="margin-bottom:8px">أيام العمل (انقر لتفعيل/إلغاء)</div>
+          <div class="inp-label" style="margin-bottom:8px">أيام العمل</div>
           <div class="days-selector" id="daysSelector"></div>
-          <button class="btn-add" onclick="saveWorkHours()">💾 حفظ أوقات العمل</button>
+          <button class="btn-add" id="saveHoursBtn">💾 حفظ أوقات العمل</button>
         </div>
-
-        <!-- HOLIDAYS -->
         <div class="adm-card">
           <div class="card-title"><div class="ci">🔴</div> إضافة يوم إجازة</div>
           <div style="display:grid;gap:12px">
             <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="hDate"></div>
-            <div><div class="inp-label">اسم الإجازة (اختياري)</div><input type="text" class="inp" id="hName" placeholder="مثال: العيد الوطني"></div>
-            <button class="btn-add" onclick="addHoliday()">🔴 تعيين يوم إجازة</button>
+            <div><div class="inp-label">اسم الإجازة</div><input type="text" class="inp" id="hName" placeholder="مثال: العيد الوطني"></div>
+            <button class="btn-add" id="addHolidayBtn">🔴 تعيين يوم إجازة</button>
           </div>
-          <div class="card-title" style="margin-top:20px;margin-bottom:12px"><div class="ci">📅</div> الإجازات المضافة</div>
+          <div class="card-title" style="margin-top:20px;margin-bottom:12px"><div class="ci">📅</div> الإجازات</div>
           <div class="holiday-list" id="holidayList"></div>
         </div>
-
-        <!-- WEEKLY SCHEDULE PREVIEW -->
         <div class="adm-card full">
-          <div class="card-title"><div class="ci">📊</div> نظرة عامة على الجدول</div>
+          <div class="card-title"><div class="ci">📊</div> نظرة عامة – 7 أيام</div>
           <div id="schedulePreview" style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px"></div>
         </div>
-
       </div>
     </div>
 
-    <!-- ═══ TAB: NOTIFICATIONS ═══ -->
+    <!-- NOTIFS TAB -->
     <div class="adm-panel" id="panel-notifs">
       <div class="adm-card full">
         <div class="card-title" style="justify-content:space-between">
           <div style="display:flex;align-items:center;gap:10px"><div class="ci">🔔</div> الإشعارات</div>
-          <button class="btn-sm btn-sm-g" onclick="markAllRead()">✓ تعيين الكل كمقروء</button>
+          <button class="btn-sm btn-sm-g" id="markAllReadBtn">✓ تعيين الكل كمقروء</button>
         </div>
         <div class="notif-list" id="notifList"></div>
       </div>
     </div>
 
-    <!-- ═══ TAB: SETTINGS ═══ -->
+    <!-- SETTINGS TAB -->
     <div class="adm-panel" id="panel-settings">
-      <div class="adm-grid">
-        <div class="adm-card full">
-          <div class="card-title"><div class="ci">⚙️</div> إعدادات عامة</div>
-          <div class="settings-grid">
-            <div><div class="inp-label">اسم المكان</div><input type="text" class="inp" id="venueName" placeholder="بادل أرينا"></div>
-            <div><div class="inp-label">رسوم الحجز (اختياري)</div><input type="text" class="inp" id="venuePrice" placeholder="مثال: 50 ريال/ساعة"></div>
-          </div>
-          <button class="btn-add" style="max-width:220px" onclick="saveVenueSettings()">💾 حفظ الإعدادات</button>
+      <div class="adm-card full">
+        <div class="card-title"><div class="ci">⚙️</div> إعدادات عامة</div>
+        <div class="settings-grid">
+          <div><div class="inp-label">اسم المكان</div><input type="text" class="inp" id="venueName" placeholder="بادل أرينا"></div>
+          <div><div class="inp-label">السعر</div><input type="text" class="inp" id="venuePrice" placeholder="50 ريال/ساعة"></div>
         </div>
+        <button class="btn-add" style="max-width:220px" id="saveVenueBtn">💾 حفظ</button>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- CONFIRM -->
 <div class="overlay off" id="confirmOverlay">
   <div class="confirm-box">
     <h3>⚠️ تأكيد</h3>
     <p id="confirmMsg">هل أنت متأكد؟</p>
     <div class="confirm-acts">
       <button class="btn-sm btn-sm-r" id="confirmYes">نعم، تأكيد</button>
-      <button class="btn-sm btn-sm-g" onclick="document.getElementById('confirmOverlay').classList.add('off')">إلغاء</button>
+      <button class="btn-sm btn-sm-g" id="confirmNo">إلغاء</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-// ══════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════
-const DEFAULT_PASS = 'admin123';
-const DEFAULT_USER = 'admin';
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, push, set, remove, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDxdWkv2BZr0KQbUtpua5ZJeQJLYdQoeCw",
+  authDomain: "padel-arena-7b02b.firebaseapp.com",
+  databaseURL: "https://padel-arena-7b02b-default-rtdb.firebaseio.com",
+  projectId: "padel-arena-7b02b",
+  storageBucket: "padel-arena-7b02b.firebasestorage.app",
+  messagingSenderId: "1027464661619",
+  appId: "1:1027464661619:web:197906b62d2eef0ec4f806"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── AUTH ──
+const DEFAULT_PASS = 'admin123', DEFAULT_USER = 'admin';
 function getPass() { return localStorage.getItem('adminPass') || DEFAULT_PASS; }
 function getUser() { return localStorage.getItem('adminUser') || DEFAULT_USER; }
 function isLoggedIn() { return sessionStorage.getItem('adminAuth') === '1'; }
+
+document.getElementById('loginBtn').onclick = doLogin;
+document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('logoutBtn').onclick = () => { sessionStorage.removeItem('adminAuth'); location.reload(); };
 
 function doLogin() {
   const u = document.getElementById('loginUser').value.trim();
   const p = document.getElementById('loginPass').value;
   if (u === getUser() && p === getPass()) {
-    sessionStorage.setItem('adminAuth', '1');
+    sessionStorage.setItem('adminAuth','1');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     initAdmin();
   } else {
     const err = document.getElementById('loginErr');
     err.textContent = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
-    setTimeout(() => err.textContent = '', 3000);
+    setTimeout(() => err.textContent='', 3000);
   }
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !isLoggedIn()) doLogin();
-});
-
-function logout() {
-  sessionStorage.removeItem('adminAuth');
-  location.reload();
-}
-
-function changePwd() {
-  const old = document.getElementById('pwdOld').value;
-  const nw = document.getElementById('pwdNew').value.trim();
-  const cf = document.getElementById('pwdConf').value;
-  if (old !== getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة', true); return; }
-  if (nw.length < 4) { toast('⚠️ كلمة المرور يجب أن تكون 4 أحرف على الأقل', true); return; }
-  if (nw !== cf) { toast('⚠️ كلمة المرور وتأكيدها غير متطابقين', true); return; }
-  localStorage.setItem('adminPass', nw);
-  ['pwdOld','pwdNew','pwdConf'].forEach(id => document.getElementById(id).value = '');
-  toast('✅ تم تغيير كلمة المرور بنجاح');
-}
-
-// ══════════════════════════════════════
-// DATA
-// ══════════════════════════════════════
-function getSlots() { return JSON.parse(localStorage.getItem('padelSlots') || '[]'); }
-function getBookings() { return JSON.parse(localStorage.getItem('padelBookings') || '[]'); }
-function saveSlots(s) { localStorage.setItem('padelSlots', JSON.stringify(s)); }
-function saveBookings(b) { localStorage.setItem('padelBookings', JSON.stringify(b)); }
-function getSettings() { return JSON.parse(localStorage.getItem('padelSettings') || '{}'); }
-function saveSettings(s) { localStorage.setItem('padelSettings', JSON.stringify(s)); }
-function getNotifs() { return JSON.parse(localStorage.getItem('padelNotifs') || '[]'); }
-function saveNotifs(n) { localStorage.setItem('padelNotifs', JSON.stringify(n)); }
-
+// ── DATA STATE ──
+let allSlots = {}, allBookings = {}, allNotifs = {}, settings = {};
 let slotFilter = 'all', bookFilter = 'all';
-let lastNotifCount = 0;
-let lastBookCount = 0;
+let selectedWorkDays = [0,1,2,3,4,5,6];
+const dayShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+const dayFull = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
 function initAdmin() {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('aD').value = today;
@@ -725,391 +414,135 @@ function initAdmin() {
   document.getElementById('bkDate').value = today;
   document.getElementById('hDate').value = today;
 
-  loadSettingsUI();
-  renderAll();
-  renderNotifications();
-  renderHolidays();
-  renderSchedulePreview();
-  updateNotifBadge();
-  lastBookCount = getBookings().length;
-  lastNotifCount = getNotifs().length;
+  // Firebase listeners
+  onValue(ref(db,'slots'), snap => { allSlots = snap.val() || {}; renderAll(); });
+  onValue(ref(db,'bookings'), snap => { allBookings = snap.val() || {}; renderAll(); });
+  onValue(ref(db,'settings'), snap => {
+    settings = snap.val() || {};
+    loadSettingsUI();
+    renderSchedulePreview();
+    renderHolidays();
+  });
+  onValue(ref(db,'notifications'), snap => {
+    allNotifs = snap.val() || {};
+    updateNotifBadge();
+    renderNotifications();
+    checkNewNotifs();
+  });
 
-  // Poll for new bookings every 10 seconds
-  setInterval(checkNewBookings, 10000);
+  setupEventListeners();
 }
 
-function renderAll() {
-  renderStats();
-  renderSlots();
-  renderBookings();
+let lastNotifCount = 0;
+function checkNewNotifs() {
+  const notifs = Object.values(allNotifs);
+  const unread = notifs.filter(n => !n.read);
+  if (unread.length > lastNotifCount && lastNotifCount > 0) {
+    const latest = unread.sort((a,b)=>b.ts-a.ts)[0];
+    showAlert(latest.title, latest.msg);
+  }
+  lastNotifCount = unread.length;
 }
 
-// ══════════════════════════════════════
-// STATS
-// ══════════════════════════════════════
+function showAlert(title, msg) {
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertMsg').textContent = msg;
+  document.getElementById('newBookAlert').classList.add('show');
+  setTimeout(() => document.getElementById('newBookAlert').classList.remove('show'), 6000);
+}
+document.getElementById('alertClose').onclick = () => document.getElementById('newBookAlert').classList.remove('show');
+
+// ── RENDER ──
+function renderAll() { renderStats(); renderSlots(); renderBookings(); }
+
 function renderStats() {
-  const slots = getSlots();
-  const bookings = getBookings();
+  const slots = Object.values(allSlots);
+  const bookings = Object.values(allBookings);
   const today = new Date().toISOString().split('T')[0];
-  const todayB = bookings.filter(b => b.date === today).length;
-  const todaySlots = slots.filter(s => s.date === today).length;
-  const revenue = bookings.length; // count-based for now
-
   document.getElementById('statsRow').innerHTML = `
     <div class="stat"><div class="stat-n">${slots.length}</div><div class="stat-l">إجمالي الأوقات</div></div>
     <div class="stat"><div class="stat-n red">${bookings.length}</div><div class="stat-l">إجمالي الحجوزات</div></div>
-    <div class="stat"><div class="stat-n orange">${todayB}</div><div class="stat-l">حجوزات اليوم</div></div>
-    <div class="stat"><div class="stat-n blue">${Math.max(0, slots.length - bookings.length)}</div><div class="stat-l">أوقات متاحة</div></div>
+    <div class="stat"><div class="stat-n orange">${bookings.filter(b=>b.date===today).length}</div><div class="stat-l">حجوزات اليوم</div></div>
+    <div class="stat"><div class="stat-n blue">${Math.max(0,slots.length-bookings.length)}</div><div class="stat-l">أوقات متاحة</div></div>
   `;
 }
 
-// ══════════════════════════════════════
-// SLOT MANAGEMENT
-// ══════════════════════════════════════
-function addSlot() {
-  const court = document.getElementById('aC').value;
-  const date = document.getElementById('aD').value;
-  const from = document.getElementById('aF').value;
-  const to = document.getElementById('aT').value;
-  if (!date || !from || !to) { toast('⚠️ يرجى تعبئة جميع الحقول', true); return; }
-  if (from >= to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية', true); return; }
-
-  let slots = getSlots();
-  if (slots.find(s => s.court === court && s.date === date && s.from === from)) {
-    toast('⚠️ هذا الوقت موجود بالفعل', true); return;
-  }
-  slots.push({ id: 's' + Date.now(), court, date, from, to });
-  saveSlots(slots);
-  // Advance time
-  const [h, m] = to.split(':').map(Number);
-  const nh = h + 1;
-  if (nh < 24) {
-    document.getElementById('aF').value = to;
-    document.getElementById('aT').value = (nh < 10 ? '0' + nh : nh) + ':' + (m < 10 ? '0' + m : m);
-  }
-  renderAll();
-  toast('✅ تم إضافة الوقت بنجاح');
-}
-
-function addBulkSlots() {
-  const courtSel = document.getElementById('bkCourt').value;
-  const date = document.getElementById('bkDate').value;
-  const from = document.getElementById('bkFrom').value;
-  const to = document.getElementById('bkTo').value;
-  const dur = parseInt(document.getElementById('bkDur').value) || 60;
-  if (!date || !from || !to) { toast('⚠️ يرجى تعبئة جميع الحقول', true); return; }
-
-  const courts = courtSel === 'both' ? ['1', '2'] : [courtSel];
-  let slots = getSlots();
-  let added = 0;
-
-  const [fh, fm] = from.split(':').map(Number);
-  const [th, tm] = to.split(':').map(Number);
-  let curMins = fh * 60 + fm;
-  const endMins = th * 60 + tm;
-
-  while (curMins + dur <= endMins) {
-    const hF = Math.floor(curMins / 60);
-    const mF = curMins % 60;
-    const hT = Math.floor((curMins + dur) / 60);
-    const mT = (curMins + dur) % 60;
-    const fromStr = `${hF < 10 ? '0' + hF : hF}:${mF < 10 ? '0' + mF : mF}`;
-    const toStr = `${hT < 10 ? '0' + hT : hT}:${mT < 10 ? '0' + mT : mT}`;
-
-    courts.forEach(court => {
-      if (!slots.find(s => s.court === court && s.date === date && s.from === fromStr)) {
-        slots.push({ id: 's' + Date.now() + Math.random(), court, date, from: fromStr, to: toStr });
-        added++;
-      }
-    });
-    curMins += dur;
-  }
-
-  saveSlots(slots);
-  renderAll();
-  toast(`✅ تم إضافة ${added} وقت بنجاح`);
-}
-
-function filterSlots(f, el) {
-  slotFilter = f;
-  el.closest('.adm-card').querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  renderSlots();
-}
-
-function filterBookings(f, el) {
-  bookFilter = f;
-  el.closest('.adm-card').querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  renderBookings();
-}
-
 function renderSlots() {
-  let slots = getSlots();
-  const bookings = getBookings();
-  const today = new Date().toISOString().split('T')[0];
   const el = document.getElementById('slotsList');
-  if (!el) return;
+  const today = new Date().toISOString().split('T')[0];
+  let list = Object.entries(allSlots).sort((a,b)=>(a[1].date+a[1].from)>(b[1].date+b[1].from)?1:-1);
+  if (slotFilter==='1') list=list.filter(([k,s])=>s.court==='1');
+  else if (slotFilter==='2') list=list.filter(([k,s])=>s.court==='2');
+  else if (slotFilter==='free') list=list.filter(([k,s])=>!Object.values(allBookings).find(b=>b.slotId===k));
+  else if (slotFilter==='today') list=list.filter(([k,s])=>s.date===today);
 
-  let list = [...slots].sort((a,b) => (a.date + a.from) > (b.date + b.from) ? 1 : -1);
-  if (slotFilter === '1') list = list.filter(s => s.court === '1');
-  else if (slotFilter === '2') list = list.filter(s => s.court === '2');
-  else if (slotFilter === 'free') list = list.filter(s => !bookings.find(b => b.slotId === s.id));
-  else if (slotFilter === 'today') list = list.filter(s => s.date === today);
-
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="ei">🕐</div>لا توجد أوقات</div>'; return; }
-  el.innerHTML = list.map(s => {
-    const bk = bookings.find(b => b.slotId === s.id);
-    const cn = s.court === '1' ? '🔵 ملعب 1' : '🟣 ملعب 2';
+  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">🕐</div>لا توجد أوقات</div>'; return; }
+  el.innerHTML = list.map(([key,s]) => {
+    const bk = Object.values(allBookings).find(b=>b.slotId===key);
+    const cn = s.court==='1'?'🔵 ملعب 1':'🟣 ملعب 2';
     return `<div class="list-item">
       <div class="li-info">
         <div class="li-court">${cn} · ${fmtDate(s.date)}</div>
         <div class="li-time">${s.from} – ${s.to}</div>
-        ${bk ? `<div class="li-date">👤 ${bk.name}</div>` : ''}
+        ${bk?`<div class="li-court">👤 ${bk.name}</div>`:''}
       </div>
       <div class="li-actions">
-        <span class="${bk ? 'badge-booked' : 'badge-free'}">${bk ? 'محجوز' : 'متاح'}</span>
-        ${!bk ? `<button class="btn-sm btn-sm-r" onclick="confirmDelete('${s.id}')">حذف</button>` : ''}
+        <span class="${bk?'badge-booked':'badge-free'}">${bk?'محجوز':'متاح'}</span>
+        ${!bk?`<button class="btn-sm btn-sm-r" data-del="${key}">حذف</button>`:''}
       </div>
     </div>`;
   }).join('');
+  el.querySelectorAll('[data-del]').forEach(btn => {
+    btn.onclick = () => confirmAction('سيتم حذف هذا الوقت نهائياً. هل أنت متأكد؟', () => {
+      remove(ref(db,'slots/'+btn.dataset.del));
+      toast('🗑️ تم حذف الوقت');
+    });
+  });
 }
 
 function renderBookings() {
-  let bookings = getBookings();
-  const today = new Date().toISOString().split('T')[0];
   const el = document.getElementById('bookList');
-  if (!el) return;
+  const today = new Date().toISOString().split('T')[0];
+  let list = Object.entries(allBookings).sort((a,b)=>b[1].ts-a[1].ts);
+  if (bookFilter==='1') list=list.filter(([k,b])=>b.court==='1');
+  else if (bookFilter==='2') list=list.filter(([k,b])=>b.court==='2');
+  else if (bookFilter==='today') list=list.filter(([k,b])=>b.date===today);
 
-  let list = [...bookings].sort((a,b) => b.ts - a.ts);
-  if (bookFilter === '1') list = list.filter(b => b.court === '1');
-  else if (bookFilter === '2') list = list.filter(b => b.court === '2');
-  else if (bookFilter === 'today') list = list.filter(b => b.date === today);
-
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="ei">📋</div>لا توجد حجوزات بعد</div>'; return; }
-  el.innerHTML = list.map(b => {
-    const cn = b.court === '1' ? '🔵 الملعب الأول' : '🟣 الملعب الثاني';
+  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">📋</div>لا توجد حجوزات بعد</div>'; return; }
+  el.innerHTML = list.map(([key,b]) => {
+    const cn = b.court==='1'?'🔵 الملعب الأول':'🟣 الملعب الثاني';
     return `<div class="book-item">
-      <div>
-        <div class="book-name">${b.name}</div>
-        <div class="book-meta">${cn} · ${fmtDate(b.date)} · ${b.from} – ${b.to}</div>
-      </div>
+      <div><div class="book-name">${b.name}</div><div class="book-meta">${cn} · ${fmtDate(b.date)} · ${b.from} – ${b.to}</div></div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
         <div class="book-phone" dir="ltr">${b.phone}</div>
-        <button class="btn-sm btn-sm-r" onclick="cancelBooking('${b.slotId}')">إلغاء</button>
+        <button class="btn-sm btn-sm-r" data-cancel="${key}">إلغاء</button>
       </div>
     </div>`;
   }).join('');
-}
-
-// ══════════════════════════════════════
-// WORK HOURS & SCHEDULE
-// ══════════════════════════════════════
-const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const dayShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
-let selectedWorkDays = [0,1,2,3,4,5,6];
-
-function loadSettingsUI() {
-  const s = getSettings();
-  document.getElementById('sOpenTime').value = s.openTime || '08:00';
-  document.getElementById('sCloseTime').value = s.closeTime || '23:00';
-  selectedWorkDays = s.workDays !== undefined ? s.workDays : [0,1,2,3,4,5,6];
-  if (s.venueName) document.getElementById('venueName').value = s.venueName;
-  if (s.venuePrice) document.getElementById('venuePrice').value = s.venuePrice;
-  buildDaysSelector();
-}
-
-function buildDaysSelector() {
-  const el = document.getElementById('daysSelector');
-  el.innerHTML = dayNames.map((name, i) => {
-    const on = selectedWorkDays.includes(i);
-    return `<div class="day-toggle ${on ? 'on' : 'off'}" onclick="toggleDay(${i},this)">${dayShort[i]}</div>`;
-  }).join('');
-}
-
-function toggleDay(i, el) {
-  if (selectedWorkDays.includes(i)) {
-    selectedWorkDays = selectedWorkDays.filter(d => d !== i);
-    el.className = 'day-toggle off';
-  } else {
-    selectedWorkDays.push(i);
-    selectedWorkDays.sort();
-    el.className = 'day-toggle on';
-  }
-}
-
-function saveWorkHours() {
-  const s = getSettings();
-  s.openTime = document.getElementById('sOpenTime').value;
-  s.closeTime = document.getElementById('sCloseTime').value;
-  s.workDays = selectedWorkDays;
-  saveSettings(s);
-  renderSchedulePreview();
-  toast('✅ تم حفظ أوقات العمل بنجاح');
-}
-
-function saveVenueSettings() {
-  const s = getSettings();
-  s.venueName = document.getElementById('venueName').value.trim();
-  s.venuePrice = document.getElementById('venuePrice').value.trim();
-  saveSettings(s);
-  toast('✅ تم حفظ الإعدادات');
-}
-
-// ══════════════════════════════════════
-// HOLIDAYS
-// ══════════════════════════════════════
-function getHolidays() {
-  const s = getSettings();
-  return s.holidays || [];
-}
-
-function addHoliday() {
-  const date = document.getElementById('hDate').value;
-  const name = document.getElementById('hName').value.trim() || 'إجازة';
-  if (!date) { toast('⚠️ يرجى اختيار التاريخ', true); return; }
-
-  const s = getSettings();
-  if (!s.holidays) s.holidays = [];
-  if (s.holidays.find(h => h.date === date)) { toast('⚠️ هذا التاريخ مُضاف بالفعل', true); return; }
-  s.holidays.push({ date, name });
-  saveSettings(s);
-  renderHolidays();
-  renderSchedulePreview();
-  toast('🔴 تم تعيين يوم الإجازة بنجاح');
-}
-
-function removeHoliday(date) {
-  const s = getSettings();
-  s.holidays = (s.holidays || []).filter(h => h.date !== date);
-  saveSettings(s);
-  renderHolidays();
-  renderSchedulePreview();
-  toast('✅ تم حذف الإجازة');
-}
-
-function renderHolidays() {
-  const holidays = getHolidays();
-  const el = document.getElementById('holidayList');
-  if (!el) return;
-
-  if (!holidays.length) {
-    el.innerHTML = '<div class="empty" style="padding:16px"><div class="ei">📅</div>لا توجد إجازات مضافة</div>';
-    return;
-  }
-  const sorted = [...holidays].sort((a,b) => a.date > b.date ? 1 : -1);
-  el.innerHTML = sorted.map(h => `
-    <div class="holiday-item">
-      <div>
-        <div class="holiday-name">🔴 ${h.name}</div>
-        <div class="holiday-date">${fmtDate(h.date)}</div>
-      </div>
-      <button class="btn-sm btn-sm-r" onclick="removeHoliday('${h.date}')">حذف</button>
-    </div>
-  `).join('');
-}
-
-function renderSchedulePreview() {
-  const s = getSettings();
-  const workDays = s.workDays !== undefined ? s.workDays : [0,1,2,3,4,5,6];
-  const holidays = (s.holidays || []).map(h => h.date);
-  const el = document.getElementById('schedulePreview');
-  if (!el) return;
-
-  const now = new Date();
-  el.innerHTML = Array.from({length:7}, (_,i) => {
-    const d = new Date(now); d.setDate(now.getDate() + i);
-    const ds = d.toISOString().split('T')[0];
-    const isHoliday = holidays.includes(ds);
-    const isWork = workDays.includes(d.getDay());
-    const isOpen = isWork && !isHoliday;
-    const slots = getSlots().filter(sl => sl.date === ds);
-    const bks = getBookings().filter(b => b.date === ds);
-
-    return `<div style="background:${isOpen ? 'rgba(0,255,135,0.05)' : 'rgba(255,59,59,0.05)'};border:1px solid ${isOpen ? 'rgba(0,255,135,0.15)' : 'rgba(255,59,59,0.15)'};border-radius:14px;padding:14px;text-align:center">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${i===0?'اليوم':dayShort[d.getDay()]}</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:4px">${d.getDate()}</div>
-      <div style="font-size:11px;color:${isOpen?'var(--green)':'var(--red)'};margin-bottom:8px">${isHoliday?'إجازة':isWork?'مفتوح':'مغلق'}</div>
-      <div style="font-size:10px;color:var(--muted)">${slots.length} وقت</div>
-      <div style="font-size:10px;color:var(--red)">${bks.length} حجز</div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════
-// NOTIFICATIONS
-// ══════════════════════════════════════
-function checkNewBookings() {
-  const bookings = getBookings();
-  const notifs = getNotifs();
-
-  if (bookings.length > lastBookCount) {
-    const newOnes = bookings.slice(lastBookCount);
-    newOnes.forEach(b => {
-      const cn = b.court === '1' ? 'الملعب الأول' : 'الملعب الثاني';
-      const title = `حجز جديد من ${b.name}`;
-      const msg = `${cn} · ${fmtDate(b.date)} · ${b.from} – ${b.to}`;
-      showNewBookingAlert(title, msg);
+  el.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.onclick = () => confirmAction('سيتم إلغاء هذا الحجز. هل أنت متأكد؟', () => {
+      remove(ref(db,'bookings/'+btn.dataset.cancel));
+      toast('✅ تم إلغاء الحجز');
     });
-    lastBookCount = bookings.length;
-    renderAll();
-  }
-
-  const newNotifCount = notifs.filter(n => !n.read).length;
-  updateNotifBadge();
+  });
 }
 
-function showNewBookingAlert(title, msg) {
-  const alert = document.getElementById('newBookAlert');
-  document.getElementById('alertTitle').textContent = title;
-  document.getElementById('alertMsg').textContent = msg;
-  alert.classList.add('show');
-  setTimeout(() => alert.classList.remove('show'), 6000);
-
-  // Add to notifs
-  const notifs = getNotifs();
-  notifs.unshift({ title, msg, ts: Date.now(), read: false });
-  if (notifs.length > 100) notifs.pop();
-  saveNotifs(notifs);
-  updateNotifBadge();
-  renderNotifications();
-}
-
-function dismissAlert() {
-  document.getElementById('newBookAlert').classList.remove('show');
-}
-
+// ── NOTIFICATIONS ──
 function updateNotifBadge() {
-  const unread = getNotifs().filter(n => !n.read).length;
+  const unread = Object.values(allNotifs).filter(n=>!n.read).length;
   const badge = document.getElementById('notifBadge');
-  if (unread > 0) {
-    badge.textContent = unread > 99 ? '99+' : unread;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
-}
-
-function markAllRead() {
-  const notifs = getNotifs().map(n => ({ ...n, read: true }));
-  saveNotifs(notifs);
-  updateNotifBadge();
-  renderNotifications();
-  toast('✅ تم تعيين الكل كمقروء');
+  badge.textContent = unread > 99 ? '99+' : unread;
+  badge.className = 'notif-badge' + (unread>0?'':' hidden');
 }
 
 function renderNotifications() {
-  const notifs = getNotifs();
   const el = document.getElementById('notifList');
   if (!el) return;
-
-  if (!notifs.length) {
-    el.innerHTML = '<div class="empty"><div class="ei">🔔</div>لا توجد إشعارات بعد</div>';
-    return;
-  }
-  el.innerHTML = notifs.map((n, i) => `
-    <div class="notif-item ${n.read ? '' : 'unread'}" onclick="readNotif(${i})">
-      <div class="notif-dot ${n.read ? 'read' : ''}"></div>
+  const list = Object.entries(allNotifs).sort((a,b)=>b[1].ts-a[1].ts);
+  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">🔔</div>لا توجد إشعارات بعد</div>'; return; }
+  el.innerHTML = list.map(([key,n]) => `
+    <div class="notif-item ${n.read?'':'unread'}" data-nkey="${key}">
+      <div class="notif-dot ${n.read?'read':''}"></div>
       <div class="notif-content">
         <div class="notif-title">${n.title}</div>
         <div class="notif-msg">${n.msg}</div>
@@ -1117,119 +550,224 @@ function renderNotifications() {
       </div>
     </div>
   `).join('');
+  el.querySelectorAll('[data-nkey]').forEach(item => {
+    item.onclick = () => update(ref(db,'notifications/'+item.dataset.nkey), {read:true});
+  });
 }
 
-function readNotif(i) {
-  const notifs = getNotifs();
-  notifs[i].read = true;
-  saveNotifs(notifs);
-  updateNotifBadge();
-  renderNotifications();
+document.getElementById('markAllReadBtn').onclick = () => {
+  Object.keys(allNotifs).forEach(k => update(ref(db,'notifications/'+k), {read:true}));
+  toast('✅ تم تعيين الكل كمقروء');
+};
+
+// ── WORK HOURS ──
+function loadSettingsUI() {
+  document.getElementById('sOpenTime').value = settings.openTime || '08:00';
+  document.getElementById('sCloseTime').value = settings.closeTime || '23:00';
+  selectedWorkDays = settings.workDays || [0,1,2,3,4,5,6];
+  if (settings.venueName) document.getElementById('venueName').value = settings.venueName;
+  if (settings.venuePrice) document.getElementById('venuePrice').value = settings.venuePrice;
+  buildDaysSelector();
+}
+
+function buildDaysSelector() {
+  document.getElementById('daysSelector').innerHTML = dayFull.map((name,i) => {
+    const on = selectedWorkDays.includes(i);
+    return `<div class="day-toggle ${on?'on':'off'}" data-day="${i}">${dayShort[i]}</div>`;
+  }).join('');
+  document.querySelectorAll('.day-toggle').forEach(el => {
+    el.onclick = () => {
+      const i = parseInt(el.dataset.day);
+      if (selectedWorkDays.includes(i)) { selectedWorkDays=selectedWorkDays.filter(d=>d!==i); el.className='day-toggle off'; }
+      else { selectedWorkDays.push(i); selectedWorkDays.sort(); el.className='day-toggle on'; }
+    };
+  });
+}
+
+function renderHolidays() {
+  const holidays = settings.holidays || {};
+  const el = document.getElementById('holidayList');
+  if (!el) return;
+  const list = Object.entries(holidays).sort((a,b)=>a[1].date>b[1].date?1:-1);
+  if (!list.length) { el.innerHTML='<div class="empty" style="padding:16px"><div class="ei">📅</div>لا توجد إجازات</div>'; return; }
+  el.innerHTML = list.map(([key,h]) => `
+    <div class="holiday-item">
+      <div><div class="holiday-name">🔴 ${h.name}</div><div class="holiday-date">${fmtDate(h.date)}</div></div>
+      <button class="btn-sm btn-sm-r" data-hkey="${key}">حذف</button>
+    </div>
+  `).join('');
+  el.querySelectorAll('[data-hkey]').forEach(btn => {
+    btn.onclick = () => {
+      const s = {...settings}; delete s.holidays[btn.dataset.hkey];
+      set(ref(db,'settings'), s);
+      toast('✅ تم حذف الإجازة');
+    };
+  });
+}
+
+function renderSchedulePreview() {
+  const el = document.getElementById('schedulePreview');
+  if (!el) return;
+  const workDays = settings.workDays || [0,1,2,3,4,5,6];
+  const holidays = Object.values(settings.holidays || {}).map(h=>h.date);
+  const now = new Date();
+  el.innerHTML = Array.from({length:7},(_,i) => {
+    const d = new Date(now); d.setDate(now.getDate()+i);
+    const ds = d.toISOString().split('T')[0];
+    const isH = holidays.includes(ds), isW = workDays.includes(d.getDay());
+    const isOpen = isW && !isH;
+    const slots = Object.values(allSlots).filter(s=>s.date===ds);
+    const bks = Object.values(allBookings).filter(b=>b.date===ds);
+    return `<div style="background:${isOpen?'rgba(0,255,135,0.05)':'rgba(255,59,59,0.05)'};border:1px solid ${isOpen?'rgba(0,255,135,0.15)':'rgba(255,59,59,0.15)'};border-radius:14px;padding:14px;text-align:center">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${i===0?'اليوم':dayShort[d.getDay()]}</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px">${d.getDate()}</div>
+      <div style="font-size:11px;color:${isOpen?'var(--green)':'var(--red)'};margin-bottom:8px">${isH?'إجازة':isW?'مفتوح':'مغلق'}</div>
+      <div style="font-size:10px;color:var(--muted)">${slots.length} وقت · ${bks.length} حجز</div>
+    </div>`;
+  }).join('');
+}
+
+// ── TABS ──
+document.querySelectorAll('.adm-tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));
+    document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('on'));
+    tab.classList.add('on');
+    document.getElementById('panel-'+tab.dataset.tab).classList.add('on');
+  };
+});
+document.getElementById('notifBtn').onclick = () => {
+  document.querySelector('[data-tab="notifs"]').click();
+  Object.keys(allNotifs).forEach(k => update(ref(db,'notifications/'+k), {read:true}));
+};
+
+// ── SLOT FILTERS ──
+document.querySelectorAll('[data-sf]').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('[data-sf]').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on'); slotFilter=btn.dataset.sf; renderSlots();
+  };
+});
+document.querySelectorAll('[data-bf]').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('[data-bf]').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on'); bookFilter=btn.dataset.bf; renderBookings();
+  };
+});
+
+// ── EVENT LISTENERS ──
+function setupEventListeners() {
+  document.getElementById('addSlotBtn').onclick = addSlot;
+  document.getElementById('bulkBtn').onclick = addBulkSlots;
+  document.getElementById('pwdBtn').onclick = changePwd;
+  document.getElementById('clearOldBtn').onclick = () => confirmAction('سيتم حذف جميع الأوقات القديمة. هل أنت متأكد؟', clearOldSlots);
+  document.getElementById('saveHoursBtn').onclick = saveWorkHours;
+  document.getElementById('addHolidayBtn').onclick = addHoliday;
+  document.getElementById('saveVenueBtn').onclick = saveVenueSettings;
+  document.getElementById('confirmNo').onclick = () => document.getElementById('confirmOverlay').classList.add('off');
+}
+
+async function addSlot() {
+  const court=document.getElementById('aC').value, date=document.getElementById('aD').value;
+  const from=document.getElementById('aF').value, to=document.getElementById('aT').value;
+  if (!date||!from||!to) { toast('⚠️ يرجى تعبئة جميع الحقول',true); return; }
+  if (from>=to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية',true); return; }
+  if (Object.values(allSlots).find(s=>s.court===court&&s.date===date&&s.from===from)) { toast('⚠️ هذا الوقت موجود بالفعل',true); return; }
+  await push(ref(db,'slots'), {court,date,from,to});
+  const [h,m]=to.split(':').map(Number), nh=h+1;
+  if (nh<24) { document.getElementById('aF').value=to; document.getElementById('aT').value=(nh<10?'0'+nh:nh)+':'+(m<10?'0'+m:m); }
+  toast('✅ تم إضافة الوقت بنجاح');
+}
+
+async function addBulkSlots() {
+  const courtSel=document.getElementById('bkCourt').value, date=document.getElementById('bkDate').value;
+  const from=document.getElementById('bkFrom').value, to=document.getElementById('bkTo').value;
+  const dur=parseInt(document.getElementById('bkDur').value)||60;
+  if (!date||!from||!to) { toast('⚠️ يرجى تعبئة جميع الحقول',true); return; }
+  const courts=courtSel==='both'?['1','2']:[courtSel];
+  const [fh,fm]=from.split(':').map(Number), [th,tm]=to.split(':').map(Number);
+  let cur=fh*60+fm; const end=th*60+tm; let added=0;
+  while(cur+dur<=end) {
+    const hF=Math.floor(cur/60),mF=cur%60,hT=Math.floor((cur+dur)/60),mT=(cur+dur)%60;
+    const fStr=`${hF<10?'0'+hF:hF}:${mF<10?'0'+mF:mF}`,tStr=`${hT<10?'0'+hT:hT}:${mT<10?'0'+mT:mT}`;
+    for(const court of courts) {
+      if (!Object.values(allSlots).find(s=>s.court===court&&s.date===date&&s.from===fStr)) {
+        await push(ref(db,'slots'),{court,date,from:fStr,to:tStr});
+        added++;
+      }
+    }
+    cur+=dur;
+  }
+  toast(`✅ تم إضافة ${added} وقت بنجاح`);
+}
+
+function changePwd() {
+  const old=document.getElementById('pwdOld').value, nw=document.getElementById('pwdNew').value.trim(), cf=document.getElementById('pwdConf').value;
+  if (old!==getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة',true); return; }
+  if (nw.length<4) { toast('⚠️ كلمة المرور يجب أن تكون 4 أحرف على الأقل',true); return; }
+  if (nw!==cf) { toast('⚠️ كلمة المرور وتأكيدها غير متطابقين',true); return; }
+  localStorage.setItem('adminPass',nw);
+  ['pwdOld','pwdNew','pwdConf'].forEach(id=>document.getElementById(id).value='');
+  toast('✅ تم تغيير كلمة المرور بنجاح');
+}
+
+function clearOldSlots() {
+  const today=new Date().toISOString().split('T')[0];
+  Object.entries(allSlots).forEach(([k,s])=>{ if(s.date<today) remove(ref(db,'slots/'+k)); });
+  toast('✅ تم حذف الأوقات القديمة');
+}
+
+async function saveWorkHours() {
+  const s = { ...settings, openTime:document.getElementById('sOpenTime').value, closeTime:document.getElementById('sCloseTime').value, workDays:selectedWorkDays };
+  await set(ref(db,'settings'), s);
+  toast('✅ تم حفظ أوقات العمل بنجاح');
+}
+
+async function addHoliday() {
+  const date=document.getElementById('hDate').value, name=document.getElementById('hName').value.trim()||'إجازة';
+  if (!date) { toast('⚠️ يرجى اختيار التاريخ',true); return; }
+  const holidays = settings.holidays || {};
+  if (Object.values(holidays).find(h=>h.date===date)) { toast('⚠️ هذا التاريخ مُضاف بالفعل',true); return; }
+  await push(ref(db,'settings/holidays'),{date,name});
+  toast('🔴 تم تعيين يوم الإجازة بنجاح');
+}
+
+async function saveVenueSettings() {
+  const s={...settings, venueName:document.getElementById('venueName').value.trim(), venuePrice:document.getElementById('venuePrice').value.trim()};
+  await set(ref(db,'settings'),s);
+  toast('✅ تم حفظ الإعدادات');
+}
+
+// ── HELPERS ──
+function confirmAction(msg, fn) {
+  document.getElementById('confirmMsg').textContent=msg;
+  document.getElementById('confirmOverlay').classList.remove('off');
+  document.getElementById('confirmYes').onclick=()=>{ fn(); document.getElementById('confirmOverlay').classList.add('off'); };
+}
+
+function fmtDate(s) {
+  if(!s) return '';
+  return new Date(s+'T00:00:00').toLocaleDateString('ar-SA',{weekday:'short',day:'numeric',month:'short'});
 }
 
 function timeAgo(ts) {
-  const diff = (Date.now() - ts) / 1000;
-  if (diff < 60) return 'الآن';
-  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
-  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
+  const diff=(Date.now()-ts)/1000;
+  if(diff<60) return 'الآن';
+  if(diff<3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
+  if(diff<86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
   return `منذ ${Math.floor(diff/86400)} يوم`;
 }
 
-// ══════════════════════════════════════
-// TABS
-// ══════════════════════════════════════
-function switchTab(name) {
-  document.querySelectorAll('.adm-tab').forEach((t,i) => {
-    const tabs = ['slots','schedule','notifs','settings'];
-    t.classList.toggle('on', tabs[i] === name);
-  });
-  document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('on'));
-  const panel = document.getElementById('panel-' + name);
-  if (panel) panel.classList.add('on');
-
-  if (name === 'notifs') { markAllRead(); }
-  if (name === 'schedule') { renderHolidays(); renderSchedulePreview(); }
+function toast(msg, err=false) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast on'+(err?' err':'');
+  setTimeout(()=>t.className='toast',3200);
 }
 
-// ══════════════════════════════════════
-// DELETE / CANCEL
-// ══════════════════════════════════════
-function confirmDelete(id) {
-  document.getElementById('confirmMsg').textContent = 'سيتم حذف هذا الوقت نهائياً. هل أنت متأكد؟';
-  document.getElementById('confirmOverlay').classList.remove('off');
-  document.getElementById('confirmYes').onclick = () => {
-    deleteSlot(id);
-    document.getElementById('confirmOverlay').classList.add('off');
-  };
-}
-
-function deleteSlot(id) {
-  let slots = getSlots().filter(s => s.id !== id);
-  saveSlots(slots);
-  renderAll();
-  toast('🗑️ تم حذف الوقت');
-}
-
-function cancelBooking(slotId) {
-  document.getElementById('confirmMsg').textContent = 'سيتم إلغاء هذا الحجز. هل أنت متأكد؟';
-  document.getElementById('confirmOverlay').classList.remove('off');
-  document.getElementById('confirmYes').onclick = () => {
-    let bookings = getBookings().filter(b => b.slotId !== slotId);
-    saveBookings(bookings);
-    lastBookCount = bookings.length;
-    document.getElementById('confirmOverlay').classList.add('off');
-    renderAll();
-    toast('✅ تم إلغاء الحجز');
-  };
-}
-
-function confirmClearOldSlots() {
-  document.getElementById('confirmMsg').textContent = 'سيتم حذف جميع الأوقات التي مضت. هل أنت متأكد؟';
-  document.getElementById('confirmOverlay').classList.remove('off');
-  document.getElementById('confirmYes').onclick = () => {
-    const today = new Date().toISOString().split('T')[0];
-    let slots = getSlots().filter(s => s.date >= today);
-    saveSlots(slots);
-    document.getElementById('confirmOverlay').classList.add('off');
-    renderAll();
-    toast('✅ تم حذف الأوقات القديمة');
-  };
-}
-
-function confirmClearAll() {
-  document.getElementById('confirmMsg').textContent = '⚠️ سيتم مسح جميع البيانات (الأوقات والحجوزات). هذا لا يمكن التراجع عنه!';
-  document.getElementById('confirmOverlay').classList.remove('off');
-  document.getElementById('confirmYes').onclick = () => {
-    saveSlots([]); saveBookings([]);
-    lastBookCount = 0;
-    document.getElementById('confirmOverlay').classList.add('off');
-    renderAll();
-    toast('✅ تم مسح جميع البيانات');
-  };
-}
-
-// ══════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════
-function fmtDate(s) {
-  if (!s) return '';
-  const d = new Date(s + 'T00:00:00');
-  return d.toLocaleDateString('ar-SA', { weekday:'short', day:'numeric', month:'short' });
-}
-
-function toast(msg, err = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast on' + (err ? ' err' : '');
-  setTimeout(() => t.className = 'toast', 3200);
-}
-
-// ══════════════════════════════════════
-// INIT CHECK
-// ══════════════════════════════════════
+// ── INIT ──
 if (isLoggedIn()) {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('adminPanel').style.display = 'block';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
   initAdmin();
 }
 </script>
