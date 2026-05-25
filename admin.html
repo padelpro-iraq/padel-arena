@@ -179,9 +179,23 @@ select.inp option{background:#0b1a0e}
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <div class="icon">🏸</div>
-      <div class="name">PADEL ARENA</div>
-      <div class="sub">لوحة التحكم</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px;">
+        <svg width="36" height="48" viewBox="0 0 36 48">
+          <ellipse cx="18" cy="16" rx="15" ry="15" fill="#111" stroke="#00c8c8" stroke-width="2"/>
+          <circle cx="12" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="18" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="24" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="12" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="18" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="24" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <rect x="14" y="30" width="8" height="16" rx="4" fill="#111" stroke="#00c8c8" stroke-width="1.5"/>
+        </svg>
+        <div style="display:flex;flex-direction:column;line-height:1.1;text-align:right;">
+          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:22px;color:white;letter-spacing:3px;">PADEL</span>
+          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:22px;color:#aaff00;letter-spacing:4px;">PRO</span>
+        </div>
+      </div>
+      <div class="sub" style="margin-top:4px">لوحة التحكم</div>
     </div>
     <div class="login-title">دخول الأدمن</div>
     <div class="login-sub">أدخل بيانات الدخول للمتابعة</div>
@@ -195,8 +209,23 @@ select.inp option{background:#0b1a0e}
 <div id="adminPanel">
   <header class="adm-header">
     <div class="adm-logo">
-      <div class="icon">🏸</div>
-      <div><div class="name">PADEL ARENA <span class="badge">أدمن</span></div></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <svg width="30" height="42" viewBox="0 0 36 48">
+          <ellipse cx="18" cy="16" rx="15" ry="15" fill="#111" stroke="#00c8c8" stroke-width="2"/>
+          <circle cx="12" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="18" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="24" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="12" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="18" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <circle cx="24" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
+          <rect x="14" y="30" width="8" height="16" rx="4" fill="#111" stroke="#00c8c8" stroke-width="1.5"/>
+        </svg>
+        <div style="display:flex;flex-direction:column;line-height:1.05;">
+          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:17px;color:white;letter-spacing:3px;">PADEL</span>
+          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:17px;color:#aaff00;letter-spacing:4px;">PRO</span>
+        </div>
+      </div>
+      <span class="badge" style="margin-right:8px">أدمن</span>
     </div>
     <div class="header-actions">
       <div class="notif-btn" id="notifBtn" title="الإشعارات">🔔<div class="notif-badge hidden" id="notifBadge">0</div></div>
