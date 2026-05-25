@@ -247,31 +247,47 @@ select.inp option{background:#0b1a0e}
     <div class="adm-panel on" id="panel-slots">
       <div class="adm-grid">
         <div class="adm-card">
-          <div class="card-title"><div class="ci">➕</div> إضافة وقت جديد</div>
+          <div class="card-title"><div class="ci">⚡</div> توليد أوقات تلقائي – 10 أيام</div>
+          <div class="settings-hint" style="margin-bottom:16px">
+            🕐 حدد أوقات العمل وضغط الزر — يتولد كل شيء تلقائياً للـ 10 أيام القادمة
+          </div>
           <div style="display:grid;gap:12px">
-            <div><div class="inp-label">الملعب</div>
-              <select class="inp" id="aC"><option value="1">🔵 الملعب الأول</option><option value="2">🟣 الملعب الثاني</option></select>
+            <div class="form-row">
+              <div><div class="inp-label">وقت الفتح</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
+              <div><div class="inp-label">وقت الإغلاق</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
             </div>
-            <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="aD"></div>
+            <div><div class="inp-label">مدة كل حجز</div>
+              <select class="inp" id="autoDur">
+                <option value="60">ساعة كاملة (60 دقيقة)</option>
+                <option value="90">ساعة ونص (90 دقيقة)</option>
+                <option value="120">ساعتين (120 دقيقة)</option>
+                <option value="30">نص ساعة (30 دقيقة)</option>
+              </select>
+            </div>
+            <div><div class="inp-label">الملاعب</div>
+              <select class="inp" id="autoCourt">
+                <option value="both">كلا الملعبين</option>
+                <option value="1">🔵 الملعب الأول فقط</option>
+                <option value="2">🟢 الملعب الثاني فقط</option>
+              </select>
+            </div>
+            <button class="btn-add" id="autoGenBtn" style="background:linear-gradient(135deg,#00c8c8,#009999)">⚡ توليد الأوقات للـ 10 أيام القادمة</button>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+          <div class="card-title" style="margin-bottom:14px"><div class="ci">➕</div> إضافة وقت محدد</div>
+          <div style="display:grid;gap:12px">
+            <div class="form-row">
+              <div><div class="inp-label">الملعب</div>
+                <select class="inp" id="aC"><option value="1">🔵 الملعب الأول</option><option value="2">🟢 الملعب الثاني</option></select>
+              </div>
+              <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="aD"></div>
+            </div>
             <div class="form-row">
               <div><div class="inp-label">من</div><input type="time" class="inp" id="aF"></div>
               <div><div class="inp-label">إلى</div><input type="time" class="inp" id="aT"></div>
             </div>
-            <button class="btn-add" id="addSlotBtn">➕ إضافة الوقت</button>
-          </div>
-          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
-          <div class="card-title" style="margin-bottom:14px"><div class="ci">⚡</div> إضافة جماعية</div>
-          <div style="display:grid;gap:12px">
-            <div><div class="inp-label">الملعب</div>
-              <select class="inp" id="bkCourt"><option value="1">🔵 الملعب الأول</option><option value="2">🟣 الملعب الثاني</option><option value="both">كلا الملعبين</option></select>
-            </div>
-            <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="bkDate"></div>
-            <div class="time-range-grid">
-              <div><div class="inp-label">من</div><input type="time" class="inp" id="bkFrom" value="08:00"></div>
-              <div><div class="inp-label">إلى</div><input type="time" class="inp" id="bkTo" value="23:00"></div>
-              <div><div class="inp-label">المدة (دقيقة)</div><input type="number" class="inp" id="bkDur" value="60" min="30" max="120" step="30"></div>
-            </div>
-            <button class="btn-add secondary" id="bulkBtn">⚡ إضافة الأوقات تلقائياً</button>
+            <button class="btn-add secondary" id="addSlotBtn">➕ إضافة وقت واحد</button>
           </div>
         </div>
 
@@ -686,14 +702,62 @@ document.querySelectorAll('[data-bf]').forEach(btn => {
 
 // ── EVENT LISTENERS ──
 function setupEventListeners() {
+  document.getElementById('autoGenBtn').onclick = autoGenSlots;
   document.getElementById('addSlotBtn').onclick = addSlot;
-  document.getElementById('bulkBtn').onclick = addBulkSlots;
+
   document.getElementById('pwdBtn').onclick = changePwd;
   document.getElementById('clearOldBtn').onclick = () => confirmAction('سيتم حذف جميع الأوقات القديمة. هل أنت متأكد؟', clearOldSlots);
   document.getElementById('saveHoursBtn').onclick = saveWorkHours;
   document.getElementById('addHolidayBtn').onclick = addHoliday;
   document.getElementById('saveVenueBtn').onclick = saveVenueSettings;
   document.getElementById('confirmNo').onclick = () => document.getElementById('confirmOverlay').classList.add('off');
+}
+
+async function autoGenSlots() {
+  const from = document.getElementById('autoFrom').value;
+  const to = document.getElementById('autoTo').value;
+  const dur = parseInt(document.getElementById('autoDur').value) || 60;
+  const courtSel = document.getElementById('autoCourt').value;
+  if (!from || !to) { toast('⚠️ يرجى تحديد وقت الفتح والإغلاق', true); return; }
+
+  const courts = courtSel === 'both' ? ['1','2'] : [courtSel];
+  const workDays = settings.workDays || [0,1,2,3,4,5,6];
+  const holidays = Object.values(settings.holidays || {}).map(h => h.date);
+
+  const now = new Date();
+  let added = 0;
+  const btn = document.getElementById('autoGenBtn');
+  btn.textContent = '⏳ جاري التوليد...';
+  btn.disabled = true;
+
+  for (let i = 0; i < 10; i++) {
+    const d = new Date(now); d.setDate(now.getDate() + i);
+    const ds = d.toISOString().split('T')[0];
+    // Skip holidays and non-work days
+    if (holidays.includes(ds) || !workDays.includes(d.getDay())) continue;
+
+    const [fh,fm] = from.split(':').map(Number);
+    const [th,tm] = to.split(':').map(Number);
+    let cur = fh*60+fm;
+    const end = th*60+tm;
+
+    while (cur + dur <= end) {
+      const hF=Math.floor(cur/60),mF=cur%60,hT=Math.floor((cur+dur)/60),mT=(cur+dur)%60;
+      const fStr=`${hF<10?'0'+hF:hF}:${mF<10?'0'+mF:mF}`;
+      const tStr=`${hT<10?'0'+hT:hT}:${mT<10?'0'+mT:mT}`;
+      for (const court of courts) {
+        if (!Object.values(allSlots).find(s=>s.court===court&&s.date===ds&&s.from===fStr)) {
+          await push(ref(db,'slots'),{court,date:ds,from:fStr,to:tStr});
+          added++;
+        }
+      }
+      cur += dur;
+    }
+  }
+
+  btn.textContent = '⚡ توليد الأوقات للـ 10 أيام القادمة';
+  btn.disabled = false;
+  toast(`✅ تم توليد ${added} وقت للـ 10 أيام القادمة`);
 }
 
 async function addSlot() {
