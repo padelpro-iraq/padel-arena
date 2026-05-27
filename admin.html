@@ -693,11 +693,13 @@ window.autoGenSlots = async function() {
 
   try {
     await fbPatch('/slots', toWrite);
-    slots = { ...slots, ...toWrite };
+    // Reload from Firebase to get fresh data
+    const fresh = await fbGet('/slots');
+    slots = fresh || {};
     renderAll();
     toast(`✅ تم توليد ${added} وقت بنجاح`);
   } catch(e) {
-    toast('❌ خطأ في الحفظ', true);
+    toast('❌ خطأ في الحفظ: ' + e.message, true);
   }
 
   btn.textContent = '⚡ توليد الأوقات تلقائياً';
@@ -895,8 +897,11 @@ window.clearAllSlots = function() {
   confirmDialog('⚠️ سيتم حذف كل الأوقات والبدء من صفر. الحجوزات القائمة ستبقى.', async () => {
     await fbDelete('/slots');
     slots = {};
+    // Force reload from Firebase to confirm
+    const fresh = await fbGet('/slots');
+    slots = fresh || {};
     renderAll();
-    toast('✅ تم حذف كل الأوقات');
+    toast('✅ تم حذف كل الأوقات — يمكنك التوليد الآن');
   });
 };
 
