@@ -663,20 +663,36 @@ window.autoGenSlots = async function() {
 
     const [fh,fm] = from.split(':').map(Number);
     const [th,tm] = to.split(':').map(Number);
+    
+    // وقت البداية بالدقائق
     let cur = fh*60+fm;
-    const end = th*60+tm;
+    // وقت النهاية - إذا كان أقل من وقت البداية معناه يتجاوز منتصف الليل
+    let end = th*60+tm;
+    if (end <= cur) end += 1440; // أضف 24 ساعة إذا تجاوز منتصف الليل
 
     while (cur + dur <= end) {
-      const hF=Math.floor(cur/60), mF=cur%60;
-      const hT=Math.floor((cur+dur)/60), mT=(cur+dur)%60;
+      // احسب التاريخ الفعلي لهذا الوقت
+      let slotMins = cur;
+      let slotDate = ds;
+      
+      // إذا تجاوز منتصف الليل، استخدم تاريخ اليوم التالي
+      if (slotMins >= 1440) {
+        slotMins -= 1440;
+        const nextD = new Date(d);
+        nextD.setDate(nextD.getDate() + 1);
+        slotDate = nextD.toISOString().split('T')[0];
+      }
+      
+      const hF=Math.floor(slotMins/60), mF=slotMins%60;
+      const endMins = slotMins + dur;
+      const hT=Math.floor(endMins/60), mT=endMins%60;
       const fStr = pad(hF)+':'+pad(mF);
-      const tStr = pad(hT)+':'+pad(mT);
+      const tStr = pad(hT%24)+':'+pad(mT);
 
       for (const court of courts) {
-        const key = 'slot_'+ds.replace(/-/g,'')+'_c'+court+'_'+fStr.replace(':','');
-        // Only add if not already exists
+        const key = 'slot_'+slotDate.replace(/-/g,'')+'_c'+court+'_'+fStr.replace(':','');
         if (!slots[key]) {
-          toWrite[key] = { court, date:ds, from:fStr, to:tStr };
+          toWrite[key] = { court, date:slotDate, from:fStr, to:tStr };
           added++;
         }
       }
