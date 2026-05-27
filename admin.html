@@ -3,737 +3,658 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بادل أرينا | الإدارة</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<title>Padel Pro | الإدارة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Montserrat:wght@900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --green:#00ff87; --dark-green:#00c96b; --black:#030805; --card:#0b1a0e;
-  --border:rgba(0,255,135,0.12); --border-bright:rgba(0,255,135,0.3);
-  --text:#dff0e3; --muted:#5a8a65; --red:#ff3b3b; --orange:#f59e0b; --blue:#3b82f6;
-}
+:root{--teal:#00c8c8;--lime:#aaff00;--black:#04080a;--card:#0b1518;--card2:#0e1c20;--border:rgba(0,200,200,0.12);--text:#e0f0f0;--muted:#5a8a8a;--red:#ff4444;--orange:#f59e0b;}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);min-height:100vh}
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,135,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,0.02) 1px,transparent 1px);background-size:60px 60px}
-.glow{position:absolute;border-radius:50%;filter:blur(130px)}
-.glow-1{width:700px;height:700px;background:rgba(0,255,135,0.07);top:-250px;left:-150px}
-.glow-2{width:600px;height:600px;background:rgba(168,85,247,0.06);bottom:-150px;right:-150px}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,200,0.025) 1px,transparent 1px);background-size:50px 50px}
+.g1{position:absolute;width:600px;height:600px;background:rgba(0,200,200,0.07);top:-200px;left:-100px;border-radius:50%;filter:blur(120px)}
+.g2{position:absolute;width:500px;height:500px;background:rgba(170,255,0,0.04);bottom:-100px;right:-100px;border-radius:50%;filter:blur(120px)}
 
+/* LOGIN */
 #loginScreen{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--black)}
-.login-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:38px 34px;margin:20px;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo .icon{width:70px;height:70px;margin:0 auto 12px;background:linear-gradient(135deg,rgba(0,255,135,0.15),rgba(0,255,135,0.05));border:2px solid rgba(0,255,135,0.25);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px}
-.login-logo .name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--green)}
-.login-logo .sub{font-size:12px;color:var(--muted);margin-top:2px}
-.login-title{font-size:20px;font-weight:800;margin-bottom:4px}
-.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
-.field{margin-bottom:14px}
-.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-.field input,.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
-.field input:focus,.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,255,135,0.08);background:rgba(0,255,135,0.03)}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 32px;width:100%;max-width:360px;margin:20px;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{from{transform:scale(0.88);opacity:0}to{transform:scale(1);opacity:1}}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo .racket{margin:0 auto 10px;display:block}
+.lt1{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;color:#fff;letter-spacing:3px}
+.lt2{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;color:var(--lime);letter-spacing:4px}
+.lsub{font-size:12px;color:var(--muted);margin-top:4px}
+.ltitle{font-size:18px;font-weight:800;margin-bottom:3px}
+.lsub2{font-size:12px;color:var(--muted);margin-bottom:20px}
+.fld{margin-bottom:12px}
+.fld label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
+.inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,200,200,0.1);background:rgba(0,200,200,0.03)}
 select.inp{appearance:none;cursor:pointer}
-select.inp option{background:#0b1a0e}
-.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),var(--dark-green));border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;color:var(--black);cursor:pointer;transition:all 0.22s;margin-top:4px;box-shadow:0 4px 20px rgba(0,255,135,0.25)}
-.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,255,135,0.4)}
-.login-err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;min-height:18px}
+select.inp option{background:#0b1518}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--teal),#009999);border:none;border-radius:10px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:#000;cursor:pointer;margin-top:4px;transition:all 0.2s}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,200,200,0.3)}
+.lerr{color:var(--red);font-size:12px;margin-top:8px;text-align:center;min-height:16px}
 
-#adminPanel{display:none;position:relative;z-index:1}
-.adm-header{padding:14px 36px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,8,5,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.adm-logo{display:flex;align-items:center;gap:12px}
-.adm-logo .icon{width:42px;height:42px;background:linear-gradient(135deg,var(--green),var(--dark-green));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.adm-logo .name{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);letter-spacing:2px}
-.adm-logo .badge{background:rgba(0,255,135,0.1);border:1px solid rgba(0,255,135,0.2);color:var(--green);font-size:10px;padding:3px 9px;border-radius:20px;margin-right:6px}
-.header-actions{display:flex;gap:10px;align-items:center}
-.notif-btn{position:relative;width:40px;height:40px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:18px}
-.notif-btn:hover{border-color:var(--border-bright)}
-.notif-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--red);border-radius:50%;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--black);animation:badgePulse 2s ease infinite}
-@keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.notif-badge.hidden{display:none}
-.btn-logout{padding:8px 16px;background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);border-radius:10px;color:var(--red);font-family:'Cairo',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s}
-.btn-logout:hover{background:var(--red);color:#fff}
-.view-site{padding:8px 16px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Cairo',sans-serif;font-size:13px;text-decoration:none;transition:all 0.2s}
-.view-site:hover{border-color:var(--green);color:var(--green)}
+/* ADMIN */
+#adminPanel{display:none;position:relative;z-index:1;min-height:100vh}
+.adm-header{position:sticky;top:0;z-index:100;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,10,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.h-logo{display:flex;align-items:center;gap:10px}
+.h-badge{background:rgba(0,200,200,0.1);border:1px solid rgba(0,200,200,0.2);color:var(--teal);font-size:10px;padding:3px 9px;border-radius:20px}
+.h-actions{display:flex;gap:8px;align-items:center}
+.hbtn{padding:7px 14px;border-radius:9px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;border:1px solid;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.hbtn-out{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.2);color:var(--red)}
+.hbtn-out:hover{background:var(--red);color:#fff}
+.hbtn-site{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--muted)}
+.hbtn-site:hover{border-color:var(--teal);color:var(--teal)}
+.notif-wrap{position:relative;cursor:pointer}
+.notif-ico{width:36px;height:36px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all 0.2s}
+.notif-ico:hover{border-color:var(--teal)}
+.nbadge{position:absolute;top:-4px;right:-4px;width:17px;height:17px;background:var(--red);border-radius:50%;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--black)}
+.nbadge.hidden{display:none}
 
-.adm-body{padding:30px 36px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;text-align:center;transition:all 0.25s}
-.stat:hover{border-color:var(--border-bright);transform:translateY(-3px)}
-.stat-n{font-size:38px;font-weight:900;color:var(--green);line-height:1}
-.stat-n.red{color:var(--red)} .stat-n.orange{color:var(--orange)} .stat-n.blue{color:var(--blue)}
-.stat-l{font-size:12px;color:var(--muted);margin-top:6px}
+/* STATS */
+.adm-body{padding:24px 28px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all 0.2s}
+.stat:hover{border-color:rgba(0,200,200,0.25);transform:translateY(-2px)}
+.sn{font-size:34px;font-weight:900;line-height:1;color:var(--teal)}
+.sn.r{color:var(--red)}.sn.o{color:var(--orange)}.sn.b{color:#3b82f6}
+.sl{font-size:11px;color:var(--muted);margin-top:5px}
 
-.adm-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
-.adm-tab{padding:12px 24px;font-family:'Cairo',sans-serif;font-size:14px;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-1px}
-.adm-tab:hover{color:var(--text)}
-.adm-tab.on{color:var(--green);border-bottom-color:var(--green);font-weight:700}
-.adm-panel{display:none}
-.adm-panel.on{display:block}
-.adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.adm-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px}
-.adm-card.full{grid-column:1/-1}
-.card-title{font-size:15px;font-weight:700;color:var(--green);margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.card-title .ci{width:32px;height:32px;background:rgba(0,255,135,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.inp-label{font-size:12px;color:var(--muted);margin-bottom:5px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.time-range-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px}
+.tab{padding:11px 22px;font-family:'Cairo',sans-serif;font-size:13px;color:var(--muted);background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;transition:all 0.2s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--teal);border-bottom-color:var(--teal);font-weight:700}
+.panel{display:none}.panel.on{display:block}
 
-.btn-add{padding:12px;width:100%;background:linear-gradient(135deg,var(--green),var(--dark-green));border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--black);cursor:pointer;transition:all 0.22s;box-shadow:0 4px 16px rgba(0,255,135,0.2)}
-.btn-add:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,255,135,0.35)}
-.btn-add.danger{background:linear-gradient(135deg,var(--red),#cc2020);box-shadow:0 4px 16px rgba(255,59,59,0.2)}
-.btn-add.secondary{background:rgba(0,255,135,0.12);border:1px solid rgba(0,255,135,0.25);color:var(--green);box-shadow:none}
-.btn-add.secondary:hover{background:rgba(0,255,135,0.2);box-shadow:none}
-.btn-sm{padding:6px 13px;border-radius:8px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;border:1px solid}
-.btn-sm-g{background:rgba(0,255,135,0.08);border-color:rgba(0,255,135,0.2);color:var(--green)}
-.btn-sm-g:hover{background:var(--green);color:var(--black);border-color:var(--green)}
-.btn-sm-r{background:rgba(255,59,59,0.08);border-color:rgba(255,59,59,0.2);color:var(--red)}
-.btn-sm-r:hover{background:var(--red);color:#fff;border-color:var(--red)}
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.card.full{grid-column:1/-1}
+.ctitle{font-size:14px;font-weight:700;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.ci{width:28px;height:28px;background:rgba(0,200,200,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ilabel{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
-.list{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto}
+/* BUTTONS */
+.btn{padding:11px;width:100%;border:none;border-radius:10px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#009999);color:#000;box-shadow:0 4px 14px rgba(0,200,200,0.2)}
+.btn-teal:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,200,200,0.35)}
+.btn-teal:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.btn-ghost{background:rgba(0,200,200,0.08);border:1px solid rgba(0,200,200,0.2);color:var(--teal)}
+.btn-ghost:hover{background:rgba(0,200,200,0.15)}
+.btn-red{background:linear-gradient(135deg,var(--red),#cc2020);color:#fff;box-shadow:0 4px 14px rgba(255,68,68,0.2)}
+.btn-red:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,68,68,0.35)}
+.bsm{padding:5px 12px;border-radius:7px;font-family:'Cairo',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;border:1px solid}
+.bsm-g{background:rgba(0,200,200,0.07);border-color:rgba(0,200,200,0.2);color:var(--teal)}
+.bsm-g:hover{background:var(--teal);color:#000;border-color:var(--teal)}
+.bsm-r{background:rgba(255,68,68,0.07);border-color:rgba(255,68,68,0.2);color:var(--red)}
+.bsm-r:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* HINT BOX */
+.hint{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--orange);margin-bottom:14px}
+.hint-teal{background:rgba(0,200,200,0.06);border-color:rgba(0,200,200,0.2);color:var(--teal)}
+
+/* LISTS */
+.list{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow-y:auto}
 .list::-webkit-scrollbar{width:3px}
 .list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.list-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border);transition:all 0.2s}
-.list-item:hover{border-color:var(--border-bright)}
-.li-info{display:flex;flex-direction:column;gap:2px}
-.li-court{font-size:11px;color:var(--muted)}
-.li-time{font-size:14px;font-weight:700}
-.li-actions{display:flex;gap:8px;align-items:center}
-.badge-free{background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);color:var(--green);font-size:11px;padding:3px 9px;border-radius:20px}
-.badge-booked{background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);color:var(--red);font-size:11px;padding:3px 9px;border-radius:20px}
-.book-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border);transition:all 0.2s}
-.book-item:hover{border-color:var(--border-bright)}
-.book-name{font-size:15px;font-weight:700}
-.book-meta{font-size:12px;color:var(--muted);margin-top:3px}
-.book-phone{font-size:13px;color:var(--green);font-weight:600;font-family:monospace}
+.litem{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:11px;transition:all 0.2s}
+.litem:hover{border-color:rgba(0,200,200,0.2)}
+.li-l{display:flex;flex-direction:column;gap:2px}
+.li-court{font-size:10px;color:var(--muted)}
+.li-time{font-size:13px;font-weight:700}
+.li-name{font-size:11px;color:var(--teal)}
+.li-r{display:flex;gap:7px;align-items:center}
+.badge-free{background:rgba(0,200,200,0.08);border:1px solid rgba(0,200,200,0.2);color:var(--teal);font-size:10px;padding:2px 9px;border-radius:20px}
+.badge-bk{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:var(--red);font-size:10px;padding:2px 9px;border-radius:20px}
+.ftabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ftab{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s}
+.ftab.on{background:var(--teal);border-color:var(--teal);color:#000;font-weight:700}
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:12px}
 
-.filter-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
-.ftab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s}
-.ftab.on{background:var(--green);border-color:var(--green);color:var(--black);font-weight:700}
-.ftab:hover:not(.on){border-color:var(--green);color:var(--green)}
-.empty{text-align:center;padding:36px 20px;color:var(--muted);font-size:13px}
-.empty .ei{font-size:36px;margin-bottom:10px}
+/* BOOKING LIST */
+.bitem{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:11px;transition:all 0.2s}
+.bitem:hover{border-color:rgba(0,200,200,0.2)}
+.bname{font-size:14px;font-weight:700}
+.bmeta{font-size:11px;color:var(--muted);margin-top:2px}
+.bphone{font-size:12px;color:var(--teal);font-weight:600;font-family:monospace;margin-bottom:4px}
 
-.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-.settings-hint{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--orange);margin-bottom:16px}
-.days-selector{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0 16px}
-.day-toggle{padding:10px 4px;border-radius:11px;text-align:center;border:1px solid var(--border);background:transparent;font-family:'Cairo',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.2s}
-.day-toggle.on{background:rgba(0,255,135,0.12);border-color:rgba(0,255,135,0.3);color:var(--green);font-weight:700}
-.day-toggle.off{background:rgba(255,59,59,0.05);border-color:rgba(255,59,59,0.15);color:rgba(255,59,59,0.5)}
+/* DAYS SELECTOR */
+.days-sel{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:8px 0 14px}
+.day-tog{padding:8px 3px;border-radius:9px;text-align:center;border:1px solid var(--border);background:transparent;font-family:'Cairo',sans-serif;font-size:10px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.day-tog.on{background:rgba(0,200,200,0.1);border-color:rgba(0,200,200,0.3);color:var(--teal);font-weight:700}
+.day-tog.off{background:rgba(255,68,68,0.05);border-color:rgba(255,68,68,0.15);color:rgba(255,68,68,0.4)}
 
-.holiday-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;margin-top:10px}
-.holiday-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.15);border-radius:10px;font-size:13px}
-.holiday-name{color:var(--red);font-weight:600}
-.holiday-date{color:var(--muted);font-size:12px}
+/* HOLIDAY LIST */
+.hlist{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;margin-top:10px}
+.hitem{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(255,68,68,0.04);border:1px solid rgba(255,68,68,0.12);border-radius:9px;font-size:12px}
+.hname{color:var(--red);font-weight:600}
+.hdate{color:var(--muted)}
 
-.notif-list{display:flex;flex-direction:column;gap:10px}
-.notif-item{padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,0.02);display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:all 0.2s}
-.notif-item.unread{border-color:rgba(0,255,135,0.2);background:rgba(0,255,135,0.04)}
-.notif-item:hover{border-color:var(--border-bright)}
-.notif-dot{width:8px;height:8px;background:var(--green);border-radius:50%;flex-shrink:0;margin-top:5px}
-.notif-dot.read{background:var(--muted)}
-.notif-content{flex:1}
-.notif-title{font-size:14px;font-weight:700;margin-bottom:3px}
-.notif-msg{font-size:12px;color:var(--muted)}
-.notif-time{font-size:11px;color:var(--muted);margin-top:4px}
-.pwd-hint{font-size:12px;color:var(--orange);background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:10px 12px;margin-bottom:14px}
+/* SCHEDULE PREVIEW */
+.sch-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.sch-day{border-radius:12px;padding:12px 8px;text-align:center;border:1px solid}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+/* NOTIFS */
+.nlist{display:flex;flex-direction:column;gap:8px}
+.nitem{padding:13px 15px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.02);display:flex;gap:12px;cursor:pointer;transition:all 0.2s}
+.nitem.unread{border-color:rgba(0,200,200,0.2);background:rgba(0,200,200,0.04)}
+.nitem:hover{border-color:rgba(0,200,200,0.25)}
+.ndot{width:7px;height:7px;background:var(--teal);border-radius:50%;flex-shrink:0;margin-top:5px}
+.ndot.read{background:var(--muted)}
+.ntitle{font-size:13px;font-weight:700;margin-bottom:2px}
+.nmsg{font-size:11px;color:var(--muted)}
+.ntime{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* NEW BOOKING ALERT */
+.alert-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-130px);background:linear-gradient(135deg,#0a1c20,#0b1518);border:1px solid rgba(0,200,200,0.35);border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:12px;z-index:250;box-shadow:0 14px 40px rgba(0,0,0,0.6);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);max-width:340px;width:90%}
+.alert-banner.show{transform:translateX(-50%) translateY(0)}
+.alert-ico{font-size:26px;flex-shrink:0}
+.alert-txt strong{color:var(--teal);display:block;font-size:13px;margin-bottom:2px}
+.alert-txt span{font-size:11px;color:var(--muted)}
+.alert-close{margin-right:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer}
+
+/* CONFIRM DIALOG */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
 .overlay.off{display:none}
-.confirm-box{background:var(--card);border:1px solid rgba(255,59,59,0.25);border-radius:22px;padding:30px;max-width:340px;width:100%;text-align:center;animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1)}
-.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.confirm-box p{color:var(--muted);font-size:14px;margin-bottom:22px}
-.confirm-acts{display:flex;gap:10px;justify-content:center}
+.confirm-box{background:var(--card);border:1px solid rgba(255,68,68,0.2);border-radius:20px;padding:28px;max-width:320px;width:100%;text-align:center;animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.confirm-box h3{font-size:17px;font-weight:700;margin-bottom:7px}
+.confirm-box p{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6}
+.confirm-acts{display:flex;gap:8px;justify-content:center}
 
-.new-book-alert{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-150px);background:linear-gradient(135deg,#0f2a14,#0b1a0e);border:1px solid rgba(0,255,135,0.4);border-radius:16px;padding:16px 22px;display:flex;align-items:center;gap:14px;z-index:250;box-shadow:0 16px 50px rgba(0,0,0,0.6);transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1);max-width:360px;width:90%}
-.new-book-alert.show{transform:translateX(-50%) translateY(0)}
-.nba-icon{font-size:30px;flex-shrink:0}
-.nba-text strong{color:var(--green);display:block;font-size:15px;margin-bottom:2px}
-.nba-text span{font-size:12px;color:var(--muted)}
-.nba-close{margin-right:auto;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;line-height:1}
-
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--green);border-radius:14px;padding:13px 24px;font-size:14px;font-weight:700;color:var(--green);z-index:300;transition:transform 0.42s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 10px 40px rgba(0,255,135,0.25);white-space:nowrap}
-.toast.on{transform:translateX(-50%) translateY(0)}
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--teal);border-radius:12px;padding:11px 20px;font-size:13px;font-weight:700;color:var(--teal);z-index:300;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;box-shadow:0 8px 28px rgba(0,200,200,0.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:var(--red);color:var(--red)}
 
+/* PWD */
+.pwd-hint{font-size:11px;color:var(--orange);background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:9px 12px;margin-bottom:12px}
+
 @media(max-width:768px){
-  .adm-header{padding:12px 18px}
-  .adm-body{padding:20px 16px}
+  .adm-header{padding:10px 14px}
+  .adm-body{padding:16px 14px}
   .stats{grid-template-columns:repeat(2,1fr)}
-  .adm-grid{grid-template-columns:1fr}
-  .adm-card.full{grid-column:auto}
-  .settings-grid{grid-template-columns:1fr}
-  .days-selector{grid-template-columns:repeat(4,1fr)}
-  .time-range-grid{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .card.full{grid-column:auto}
+  .days-sel{grid-template-columns:repeat(4,1fr)}
+  .sch-grid{grid-template-columns:repeat(4,1fr)}
+  .row3{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-<div class="bg"><div class="bg-grid"></div><div class="glow glow-1"></div><div class="glow glow-2"></div></div>
+<div class="bg"><div class="bg-grid"></div><div class="g1"></div><div class="g2"></div></div>
 
-<div class="new-book-alert" id="newBookAlert">
-  <div class="nba-icon">🔔</div>
-  <div class="nba-text"><strong id="alertTitle">حجز جديد!</strong><span id="alertMsg"></span></div>
-  <button class="nba-close" id="alertClose">✕</button>
+<!-- ALERT BANNER -->
+<div class="alert-banner" id="alertBanner">
+  <div class="alert-ico">🔔</div>
+  <div class="alert-txt"><strong id="alertTitle">حجز جديد!</strong><span id="alertMsg"></span></div>
+  <button class="alert-close" id="alertClose">✕</button>
 </div>
 
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px;">
-        <svg width="36" height="48" viewBox="0 0 36 48">
-          <ellipse cx="18" cy="16" rx="15" ry="15" fill="#111" stroke="#00c8c8" stroke-width="2"/>
-          <circle cx="12" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="18" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="24" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="12" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="18" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="24" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <rect x="14" y="30" width="8" height="16" rx="4" fill="#111" stroke="#00c8c8" stroke-width="1.5"/>
-        </svg>
-        <div style="display:flex;flex-direction:column;line-height:1.1;text-align:right;">
-          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:22px;color:white;letter-spacing:3px;">PADEL</span>
-          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:22px;color:#aaff00;letter-spacing:4px;">PRO</span>
-        </div>
+      <svg class="racket" width="44" height="58" viewBox="0 0 44 58">
+        <ellipse cx="22" cy="20" rx="18" ry="18" fill="#0f1f22" stroke="#00c8c8" stroke-width="2"/>
+        <circle cx="14" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="22" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="30" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="14" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="22" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="30" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <rect x="16" y="36" width="12" height="20" rx="6" fill="#0f1f22" stroke="#00c8c8" stroke-width="1.5"/>
+      </svg>
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:4px">
+        <span class="lt1">PADEL</span><span class="lt2">PRO</span>
       </div>
-      <div class="sub" style="margin-top:4px">لوحة التحكم</div>
+      <div class="lsub">لوحة التحكم</div>
     </div>
-    <div class="login-title">دخول الأدمن</div>
-    <div class="login-sub">أدخل بيانات الدخول للمتابعة</div>
-    <div class="field"><label>اسم المستخدم</label><input id="loginUser" type="text" placeholder="admin" autocomplete="username"></div>
-    <div class="field"><label>كلمة المرور</label><input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <div class="ltitle">تسجيل الدخول</div>
+    <div class="lsub2">أدخل بياناتك للمتابعة</div>
+    <div class="fld"><label>المستخدم</label><input class="inp" id="lu" type="text" placeholder="admin" autocomplete="username"></div>
+    <div class="fld"><label>كلمة المرور</label><input class="inp" id="lp" type="password" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="btn-login" id="loginBtn">🔐 دخول</button>
-    <div class="login-err" id="loginErr"></div>
+    <div class="lerr" id="lerr"></div>
   </div>
 </div>
 
+<!-- ADMIN PANEL -->
 <div id="adminPanel">
   <header class="adm-header">
-    <div class="adm-logo">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <svg width="30" height="42" viewBox="0 0 36 48">
-          <ellipse cx="18" cy="16" rx="15" ry="15" fill="#111" stroke="#00c8c8" stroke-width="2"/>
-          <circle cx="12" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="18" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="24" cy="12" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="12" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="18" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <circle cx="24" cy="18" r="2.5" fill="#1a1a1a" stroke="#00c8c8" stroke-width="0.8"/>
-          <rect x="14" y="30" width="8" height="16" rx="4" fill="#111" stroke="#00c8c8" stroke-width="1.5"/>
-        </svg>
-        <div style="display:flex;flex-direction:column;line-height:1.05;">
-          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:17px;color:white;letter-spacing:3px;">PADEL</span>
-          <span style="font-family:Montserrat,Cairo,sans-serif;font-weight:900;font-size:17px;color:#aaff00;letter-spacing:4px;">PRO</span>
-        </div>
+    <div class="h-logo">
+      <svg width="26" height="34" viewBox="0 0 44 58">
+        <ellipse cx="22" cy="20" rx="18" ry="18" fill="#0f1f22" stroke="#00c8c8" stroke-width="2"/>
+        <circle cx="14" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="22" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="30" cy="15" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="14" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="22" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <circle cx="30" cy="22" r="2.5" fill="#0f1f22" stroke="#00c8c8" stroke-width="0.9"/>
+        <rect x="16" y="36" width="12" height="20" rx="6" fill="#0f1f22" stroke="#00c8c8" stroke-width="1.5"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;line-height:1">
+        <span style="font-family:Montserrat,sans-serif;font-weight:900;font-size:14px;color:#fff;letter-spacing:2px">PADEL <span style="color:var(--lime)">PRO</span></span>
       </div>
-      <span class="badge" style="margin-right:8px">أدمن</span>
+      <span class="h-badge">أدمن</span>
     </div>
-    <div class="header-actions">
-      <div class="notif-btn" id="notifBtn" title="الإشعارات">🔔<div class="notif-badge hidden" id="notifBadge">0</div></div>
-      <a class="view-site" href="index.html" target="_blank">👁️ الموقع</a>
-      <button class="btn-logout" id="logoutBtn">خروج</button>
+    <div class="h-actions">
+      <div class="notif-wrap" id="notifWrap">
+        <div class="notif-ico">🔔</div>
+        <div class="nbadge hidden" id="nbadge">0</div>
+      </div>
+      <a class="hbtn hbtn-site" href="index.html" target="_blank">👁️ الموقع</a>
+      <button class="hbtn hbtn-out" id="logoutBtn">خروج</button>
     </div>
   </header>
 
   <div class="adm-body">
+    <!-- STATS -->
     <div class="stats" id="statsRow"></div>
-    <div class="adm-tabs">
-      <button class="adm-tab on" data-tab="slots">⏰ الأوقات والحجوزات</button>
-      <button class="adm-tab" data-tab="schedule">📅 جدول العمل</button>
-      <button class="adm-tab" data-tab="notifs">🔔 الإشعارات</button>
-      <button class="adm-tab" data-tab="settings">⚙️ الإعدادات</button>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab on" data-tab="slots">⏰ الأوقات</button>
+      <button class="tab" data-tab="bookings">📋 الحجوزات</button>
+      <button class="tab" data-tab="schedule">📅 جدول العمل</button>
+      <button class="tab" data-tab="notifs">🔔 الإشعارات</button>
+      <button class="tab" data-tab="settings">⚙️ الإعدادات</button>
     </div>
 
-    <!-- SLOTS TAB -->
-    <div class="adm-panel on" id="panel-slots">
-      <div class="adm-grid">
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">⚡</div> توليد أوقات تلقائي – 10 أيام</div>
-          <div class="settings-hint" style="margin-bottom:16px">
-            🕐 حدد أوقات العمل وضغط الزر — يتولد كل شيء تلقائياً للـ 10 أيام القادمة
-          </div>
-          <div style="display:grid;gap:12px">
-            <div class="form-row">
-              <div><div class="inp-label">وقت الفتح</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
-              <div><div class="inp-label">وقت الإغلاق</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
+    <!-- ══ SLOTS TAB ══ -->
+    <div class="panel on" id="panel-slots">
+      <div class="grid2">
+        <!-- AUTO GENERATE -->
+        <div class="card">
+          <div class="ctitle"><div class="ci">⚡</div> توليد أوقات شهر كامل تلقائياً</div>
+          <div class="hint hint-teal">اضبط الإعدادات وضغط الزر — يتولد كل شيء تلقائياً مع تجاهل الإجازات وأيام الإغلاق</div>
+          <div style="display:grid;gap:11px">
+            <div class="row2">
+              <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
+              <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
             </div>
-            <div><div class="inp-label">مدة كل حجز</div>
+            <div><div class="ilabel">مدة كل حجز</div>
               <select class="inp" id="autoDur">
-                <option value="60">ساعة كاملة (60 دقيقة)</option>
+                <option value="60">ساعة (60 دقيقة)</option>
                 <option value="90">ساعة ونص (90 دقيقة)</option>
                 <option value="120">ساعتين (120 دقيقة)</option>
                 <option value="30">نص ساعة (30 دقيقة)</option>
               </select>
             </div>
-            <div><div class="inp-label">الملاعب</div>
+            <div><div class="ilabel">الملاعب</div>
               <select class="inp" id="autoCourt">
                 <option value="both">كلا الملعبين</option>
                 <option value="1">🔵 الملعب الأول فقط</option>
                 <option value="2">🟢 الملعب الثاني فقط</option>
               </select>
             </div>
-            <button class="btn-add" id="autoGenBtn" onclick="autoGenSlots()" style="background:linear-gradient(135deg,#00c8c8,#009999)">⚡ توليد الأوقات للـ 10 أيام القادمة</button>
+            <div><div class="ilabel">عدد الأيام القادمة</div>
+              <select class="inp" id="autoDays">
+                <option value="10">10 أيام</option>
+                <option value="14">14 يوم</option>
+                <option value="30" selected>شهر كامل (30 يوم)</option>
+                <option value="60">شهرين</option>
+              </select>
+            </div>
+            <button class="btn btn-teal" id="autoGenBtn">⚡ توليد الأوقات تلقائياً</button>
+            <button class="btn btn-red" id="clearAllSlotsBtn" style="font-size:13px">🗑️ حذف كل الأوقات والبدء من جديد</button>
           </div>
+        </div>
 
-          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
-          <div class="card-title" style="margin-bottom:14px"><div class="ci">➕</div> إضافة وقت محدد</div>
-          <div style="display:grid;gap:12px">
-            <div class="form-row">
-              <div><div class="inp-label">الملعب</div>
+        <!-- ADD SINGLE SLOT -->
+        <div class="card">
+          <div class="ctitle"><div class="ci">➕</div> إضافة وقت محدد</div>
+          <div style="display:grid;gap:11px">
+            <div class="row2">
+              <div><div class="ilabel">الملعب</div>
                 <select class="inp" id="aC"><option value="1">🔵 الملعب الأول</option><option value="2">🟢 الملعب الثاني</option></select>
               </div>
-              <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="aD"></div>
+              <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="aD"></div>
             </div>
-            <div class="form-row">
-              <div><div class="inp-label">من</div><input type="time" class="inp" id="aF"></div>
-              <div><div class="inp-label">إلى</div><input type="time" class="inp" id="aT"></div>
+            <div class="row2">
+              <div><div class="ilabel">من</div><input type="time" class="inp" id="aF"></div>
+              <div><div class="ilabel">إلى</div><input type="time" class="inp" id="aT"></div>
             </div>
-            <button class="btn-add secondary" id="addSlotBtn" onclick="addSlot()">➕ إضافة وقت واحد</button>
+            <button class="btn btn-ghost" id="addSlotBtn">➕ إضافة وقت واحد</button>
           </div>
-        </div>
 
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">🔑</div> تغيير كلمة المرور</div>
-          <div style="display:grid;gap:12px">
-            <div class="pwd-hint">💡 كلمة المرور الافتراضية: <strong>admin123</strong></div>
-            <div><div class="inp-label">كلمة المرور الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
-            <div><div class="inp-label">كلمة المرور الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
-            <div><div class="inp-label">تأكيد</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
-            <button class="btn-add secondary" id="pwdBtn">🔒 تحديث كلمة المرور</button>
-          </div>
-          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
-          <div class="card-title" style="margin-bottom:14px"><div class="ci">🗑️</div> إدارة البيانات</div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
+          <div class="ctitle" style="margin-bottom:12px"><div class="ci">🔑</div> تغيير كلمة المرور</div>
+          <div class="pwd-hint">💡 الافتراضية: <strong>admin123</strong></div>
           <div style="display:grid;gap:10px">
-            <button class="btn-add danger" id="clearOldBtn">🗑️ حذف الأوقات القديمة</button>
+            <div><div class="ilabel">الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
+            <div><div class="ilabel">الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
+            <div><div class="ilabel">تأكيد</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
+            <button class="btn btn-ghost" id="pwdBtn">🔒 تحديث كلمة المرور</button>
           </div>
         </div>
 
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">🕐</div> الأوقات المضافة</div>
-          <div class="filter-tabs">
-            <button class="ftab on" data-sf="all">الكل</button>
+        <!-- SLOTS LIST -->
+        <div class="card full">
+          <div class="ctitle"><div class="ci">🕐</div> الأوقات المضافة <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:8px" id="slotsCount"></span></div>
+          <div class="ftabs">
+            <button class="ftab on" data-sf="today">اليوم</button>
+            <button class="ftab" data-sf="tomorrow">غداً</button>
+            <button class="ftab" data-sf="week">هذا الأسبوع</button>
+            <button class="ftab" data-sf="all">الكل</button>
+            <button class="ftab" data-sf="free">متاحة</button>
             <button class="ftab" data-sf="1">ملعب 1</button>
             <button class="ftab" data-sf="2">ملعب 2</button>
-            <button class="ftab" data-sf="free">متاحة</button>
-            <button class="ftab" data-sf="today">اليوم</button>
           </div>
           <div class="list" id="slotsList"></div>
         </div>
+      </div>
+    </div>
 
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">📋</div> الحجوزات</div>
-          <div class="filter-tabs">
-            <button class="ftab on" data-bf="all">الكل</button>
-            <button class="ftab" data-bf="1">ملعب 1</button>
-            <button class="ftab" data-bf="2">ملعب 2</button>
-            <button class="ftab" data-bf="today">اليوم</button>
+    <!-- ══ BOOKINGS TAB ══ -->
+    <div class="panel" id="panel-bookings">
+      <div class="card full">
+        <div class="ctitle"><div class="ci">📋</div> الحجوزات <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:8px" id="booksCount"></span></div>
+        <div class="ftabs">
+          <button class="ftab on" data-bf="today">اليوم</button>
+          <button class="ftab" data-bf="upcoming">القادمة</button>
+          <button class="ftab" data-bf="all">الكل</button>
+          <button class="ftab" data-bf="1">ملعب 1</button>
+          <button class="ftab" data-bf="2">ملعب 2</button>
+        </div>
+        <div class="list" id="bookList"></div>
+      </div>
+    </div>
+
+    <!-- ══ SCHEDULE TAB ══ -->
+    <div class="panel" id="panel-schedule">
+      <div class="grid2">
+        <div class="card">
+          <div class="ctitle"><div class="ci">🕐</div> أوقات العمل</div>
+          <div class="hint">هذه الأوقات تظهر لموقع الزبائن وتؤثر على التوليد التلقائي</div>
+          <div class="row2" style="margin-bottom:12px">
+            <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="sOpen" value="08:00"></div>
+            <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="sClose" value="23:00"></div>
           </div>
-          <div class="list" id="bookList"></div>
+          <div class="ilabel" style="margin-bottom:6px">أيام العمل (اضغط لتفعيل/إيقاف)</div>
+          <div class="days-sel" id="daysSel"></div>
+          <button class="btn btn-teal" id="saveHoursBtn">💾 حفظ أوقات العمل</button>
         </div>
-      </div>
-    </div>
 
-    <!-- SCHEDULE TAB -->
-    <div class="adm-panel" id="panel-schedule">
-      <div class="adm-grid">
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">🕐</div> أوقات العمل</div>
-          <div class="settings-hint">⚠️ هذه الأوقات تظهر في موقع الزبائن</div>
-          <div class="settings-grid">
-            <div><div class="inp-label">وقت الفتح</div><input type="time" class="inp" id="sOpenTime" value="08:00"></div>
-            <div><div class="inp-label">وقت الإغلاق</div><input type="time" class="inp" id="sCloseTime" value="23:00"></div>
+        <div class="card">
+          <div class="ctitle"><div class="ci">🔴</div> إجازات وأيام مغلقة</div>
+          <div style="display:grid;gap:10px;margin-bottom:14px">
+            <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="hDate"></div>
+            <div><div class="ilabel">اسم الإجازة</div><input type="text" class="inp" id="hName" placeholder="مثال: العيد الوطني"></div>
+            <button class="btn btn-ghost" id="addHolidayBtn">🔴 إضافة يوم إجازة</button>
           </div>
-          <div class="inp-label" style="margin-bottom:8px">أيام العمل</div>
-          <div class="days-selector" id="daysSelector"></div>
-          <button class="btn-add" id="saveHoursBtn">💾 حفظ أوقات العمل</button>
+          <div class="hlist" id="holidayList"></div>
         </div>
-        <div class="adm-card">
-          <div class="card-title"><div class="ci">🔴</div> إضافة يوم إجازة</div>
-          <div style="display:grid;gap:12px">
-            <div><div class="inp-label">التاريخ</div><input type="date" class="inp" id="hDate"></div>
-            <div><div class="inp-label">اسم الإجازة</div><input type="text" class="inp" id="hName" placeholder="مثال: العيد الوطني"></div>
-            <button class="btn-add" id="addHolidayBtn">🔴 تعيين يوم إجازة</button>
-          </div>
-          <div class="card-title" style="margin-top:20px;margin-bottom:12px"><div class="ci">📅</div> الإجازات</div>
-          <div class="holiday-list" id="holidayList"></div>
-        </div>
-        <div class="adm-card full">
-          <div class="card-title"><div class="ci">📊</div> نظرة عامة – 7 أيام</div>
-          <div id="schedulePreview" style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px"></div>
+
+        <div class="card full">
+          <div class="ctitle"><div class="ci">📊</div> نظرة عامة – الأسبوع القادم</div>
+          <div class="sch-grid" id="schPreview"></div>
         </div>
       </div>
     </div>
 
-    <!-- NOTIFS TAB -->
-    <div class="adm-panel" id="panel-notifs">
-      <div class="adm-card full">
-        <div class="card-title" style="justify-content:space-between">
-          <div style="display:flex;align-items:center;gap:10px"><div class="ci">🔔</div> الإشعارات</div>
-          <button class="btn-sm btn-sm-g" id="markAllReadBtn">✓ تعيين الكل كمقروء</button>
+    <!-- ══ NOTIFS TAB ══ -->
+    <div class="panel" id="panel-notifs">
+      <div class="card full">
+        <div class="ctitle" style="justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px"><div class="ci">🔔</div> الإشعارات</div>
+          <button class="bsm bsm-g" id="markAllBtn">✓ تعيين الكل كمقروء</button>
         </div>
-        <div class="notif-list" id="notifList"></div>
+        <div class="nlist" id="notifList"></div>
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
-    <div class="adm-panel" id="panel-settings">
-      <div class="adm-card full">
-        <div class="card-title"><div class="ci">⚙️</div> إعدادات عامة</div>
-        <div class="settings-grid">
-          <div><div class="inp-label">اسم المكان</div><input type="text" class="inp" id="venueName" placeholder="بادل أرينا"></div>
-          <div><div class="inp-label">السعر</div><input type="text" class="inp" id="venuePrice" placeholder="50 ريال/ساعة"></div>
+    <!-- ══ SETTINGS TAB ══ -->
+    <div class="panel" id="panel-settings">
+      <div class="card full">
+        <div class="ctitle"><div class="ci">⚙️</div> إعدادات عامة</div>
+        <div class="row2" style="margin-bottom:14px">
+          <div><div class="ilabel">اسم المكان</div><input type="text" class="inp" id="vName" placeholder="Padel Pro"></div>
+          <div><div class="ilabel">السعر (اختياري)</div><input type="text" class="inp" id="vPrice" placeholder="50 ريال/ساعة"></div>
         </div>
-        <button class="btn-add" style="max-width:220px" id="saveVenueBtn">💾 حفظ</button>
+        <button class="btn btn-ghost" style="max-width:200px" id="saveVenueBtn">💾 حفظ</button>
       </div>
     </div>
+
   </div>
 </div>
 
+<!-- CONFIRM -->
 <div class="overlay off" id="confirmOverlay">
   <div class="confirm-box">
     <h3>⚠️ تأكيد</h3>
-    <p id="confirmMsg">هل أنت متأكد؟</p>
+    <p id="confirmMsg"></p>
     <div class="confirm-acts">
-      <button class="btn-sm btn-sm-r" id="confirmYes">نعم، تأكيد</button>
-      <button class="btn-sm btn-sm-g" id="confirmNo">إلغاء</button>
+      <button class="bsm bsm-r" id="confirmYes">نعم، تأكيد</button>
+      <button class="bsm bsm-g" id="confirmNo">إلغاء</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, push, set, remove, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+// ══════════════════════════════════
+// FIREBASE REST API (no SDK needed)
+// ══════════════════════════════════
+const DB = 'https://padel-arena-7b02b-default-rtdb.firebaseio.com';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDxdWkv2BZr0KQbUtpua5ZJeQJLYdQoeCw",
-  authDomain: "padel-arena-7b02b.firebaseapp.com",
-  databaseURL: "https://padel-arena-7b02b-default-rtdb.firebaseio.com",
-  projectId: "padel-arena-7b02b",
-  storageBucket: "padel-arena-7b02b.firebasestorage.app",
-  messagingSenderId: "1027464661619",
-  appId: "1:1027464661619:web:197906b62d2eef0ec4f806"
-};
+async function fbGet(path) {
+  const r = await fetch(DB + path + '.json');
+  return r.json();
+}
+async function fbSet(path, data) {
+  await fetch(DB + path + '.json', { method:'PUT', body: JSON.stringify(data) });
+}
+async function fbPatch(path, data) {
+  await fetch(DB + path + '.json', { method:'PATCH', body: JSON.stringify(data) });
+}
+async function fbDelete(path) {
+  await fetch(DB + path + '.json', { method:'DELETE' });
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// ── AUTH ──
-const DEFAULT_PASS = 'admin123', DEFAULT_USER = 'admin';
-function getPass() { return localStorage.getItem('adminPass') || DEFAULT_PASS; }
-function getUser() { return localStorage.getItem('adminUser') || DEFAULT_USER; }
-function isLoggedIn() { return sessionStorage.getItem('adminAuth') === '1'; }
+// ══════════════════════════════════
+// AUTH
+// ══════════════════════════════════
+function getPass() { return localStorage.getItem('adminPass') || 'admin123'; }
+function getUser() { return localStorage.getItem('adminUser') || 'admin'; }
+function isLoggedIn() { return sessionStorage.getItem('auth') === '1'; }
 
 document.getElementById('loginBtn').onclick = doLogin;
-document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-document.getElementById('logoutBtn').onclick = () => { sessionStorage.removeItem('adminAuth'); location.reload(); };
+document.getElementById('lp').onkeydown = e => { if(e.key==='Enter') doLogin(); };
+document.getElementById('logoutBtn').onclick = () => { sessionStorage.removeItem('auth'); location.reload(); };
 
 function doLogin() {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value;
   if (u === getUser() && p === getPass()) {
-    sessionStorage.setItem('adminAuth','1');
+    sessionStorage.setItem('auth','1');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
-    initAdmin();
+    init();
   } else {
-    const err = document.getElementById('loginErr');
-    err.textContent = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
-    setTimeout(() => err.textContent='', 3000);
+    const el = document.getElementById('lerr');
+    el.textContent = '❌ بيانات الدخول غير صحيحة';
+    setTimeout(() => el.textContent='', 3000);
   }
 }
 
-// ── DATA STATE ──
-let allSlots = {}, allBookings = {}, allNotifs = {}, settings = {};
-let slotFilter = 'all', bookFilter = 'all';
-let selectedWorkDays = [0,1,2,3,4,5,6];
-const dayShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
-const dayFull = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+let slots = {}, bookings = {}, notifs = {}, settings = {};
+let slotFilter = 'today', bookFilter = 'today';
+let selWorkDays = [0,1,2,3,4,5,6];
+const DAY_SHORT = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+let lastNotifCount = 0;
 
-function initAdmin() {
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+async function init() {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('aD').value = today;
   document.getElementById('aF').value = '08:00';
   document.getElementById('aT').value = '09:00';
-  document.getElementById('bkDate').value = today;
   document.getElementById('hDate').value = today;
 
-  // Firebase listeners
-  onValue(ref(db,'slots'), snap => { allSlots = snap.val() || {}; renderAll(); });
-  onValue(ref(db,'bookings'), snap => { allBookings = snap.val() || {}; renderAll(); });
-  onValue(ref(db,'settings'), snap => {
-    settings = snap.val() || {};
-    loadSettingsUI();
-    renderSchedulePreview();
-    renderHolidays();
-  });
-  onValue(ref(db,'notifications'), snap => {
-    allNotifs = snap.val() || {};
-    updateNotifBadge();
-    renderNotifications();
-    checkNewNotifs();
-  });
+  await loadAll();
+  setupUI();
 
-  setupEventListeners();
+  // Poll every 15 seconds for new bookings/notifications
+  setInterval(loadAll, 15000);
 }
 
-let lastNotifCount = 0;
-function checkNewNotifs() {
-  const notifs = Object.values(allNotifs);
-  const unread = notifs.filter(n => !n.read);
+async function loadAll() {
+  [slots, bookings, notifs, settings] = await Promise.all([
+    fbGet('/slots').then(d=>d||{}),
+    fbGet('/bookings').then(d=>d||{}),
+    fbGet('/notifications').then(d=>d||{}),
+    fbGet('/settings').then(d=>d||{})
+  ]);
+
+  // Check for new notifications
+  const unread = Object.values(notifs).filter(n=>!n.read);
   if (unread.length > lastNotifCount && lastNotifCount > 0) {
     const latest = unread.sort((a,b)=>b.ts-a.ts)[0];
     showAlert(latest.title, latest.msg);
   }
   lastNotifCount = unread.length;
+
+  renderAll();
+  loadSettingsUI();
+  renderHolidays();
+  renderSchedule();
+  renderNotifs();
 }
 
-function showAlert(title, msg) {
-  document.getElementById('alertTitle').textContent = title;
-  document.getElementById('alertMsg').textContent = msg;
-  document.getElementById('newBookAlert').classList.add('show');
-  setTimeout(() => document.getElementById('newBookAlert').classList.remove('show'), 6000);
+function renderAll() {
+  renderStats();
+  renderSlots();
+  renderBookings();
+  updateNotifBadge();
 }
-document.getElementById('alertClose').onclick = () => document.getElementById('newBookAlert').classList.remove('show');
 
-// ── RENDER ──
-function renderAll() { renderStats(); renderSlots(); renderBookings(); }
-
+// ══════════════════════════════════
+// STATS
+// ══════════════════════════════════
 function renderStats() {
-  const slots = Object.values(allSlots);
-  const bookings = Object.values(allBookings);
+  const sv = Object.values(slots);
+  const bv = Object.values(bookings);
   const today = new Date().toISOString().split('T')[0];
+  const todayB = bv.filter(b=>b.date===today).length;
+  const free = sv.filter(s=>!bv.some(b=>b.slotId===Object.keys(slots).find(k=>slots[k]===s))).length;
+
   document.getElementById('statsRow').innerHTML = `
-    <div class="stat"><div class="stat-n">${slots.length}</div><div class="stat-l">إجمالي الأوقات</div></div>
-    <div class="stat"><div class="stat-n red">${bookings.length}</div><div class="stat-l">إجمالي الحجوزات</div></div>
-    <div class="stat"><div class="stat-n orange">${bookings.filter(b=>b.date===today).length}</div><div class="stat-l">حجوزات اليوم</div></div>
-    <div class="stat"><div class="stat-n blue">${Math.max(0,slots.length-bookings.length)}</div><div class="stat-l">أوقات متاحة</div></div>
+    <div class="stat"><div class="sn">${sv.length}</div><div class="sl">إجمالي الأوقات</div></div>
+    <div class="stat"><div class="sn r">${bv.length}</div><div class="sl">إجمالي الحجوزات</div></div>
+    <div class="stat"><div class="sn o">${todayB}</div><div class="sl">حجوزات اليوم</div></div>
+    <div class="stat"><div class="sn b">${Object.values(notifs).filter(n=>!n.read).length}</div><div class="sl">إشعارات جديدة</div></div>
   `;
 }
 
+// ══════════════════════════════════
+// SLOTS
+// ══════════════════════════════════
 function renderSlots() {
   const el = document.getElementById('slotsList');
   const today = new Date().toISOString().split('T')[0];
-  let list = Object.entries(allSlots).sort((a,b)=>(a[1].date+a[1].from)>(b[1].date+b[1].from)?1:-1);
-  if (slotFilter==='1') list=list.filter(([k,s])=>s.court==='1');
-  else if (slotFilter==='2') list=list.filter(([k,s])=>s.court==='2');
-  else if (slotFilter==='free') list=list.filter(([k,s])=>!Object.values(allBookings).find(b=>b.slotId===k));
-  else if (slotFilter==='today') list=list.filter(([k,s])=>s.date===today);
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
+  const weekEnd = new Date(); weekEnd.setDate(weekEnd.getDate()+7);
+  const weekEndStr = weekEnd.toISOString().split('T')[0];
 
-  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">🕐</div>لا توجد أوقات</div>'; return; }
-  el.innerHTML = list.map(([key,s]) => {
-    const bk = Object.values(allBookings).find(b=>b.slotId===key);
-    const cn = s.court==='1'?'🔵 ملعب 1':'🟣 ملعب 2';
-    return `<div class="list-item">
-      <div class="li-info">
-        <div class="li-court">${cn} · ${fmtDate(s.date)}</div>
+  let entries = Object.entries(slots).sort((a,b)=>(a[1].date+a[1].from)>(b[1].date+b[1].from)?1:-1);
+
+  if (slotFilter==='today') entries = entries.filter(([k,s])=>s.date===today);
+  else if (slotFilter==='tomorrow') entries = entries.filter(([k,s])=>s.date===tomorrowStr);
+  else if (slotFilter==='week') entries = entries.filter(([k,s])=>s.date>=today&&s.date<=weekEndStr);
+  else if (slotFilter==='free') entries = entries.filter(([k,s])=>!Object.values(bookings).some(b=>b.slotId===k));
+  else if (slotFilter==='1') entries = entries.filter(([k,s])=>s.court==='1');
+  else if (slotFilter==='2') entries = entries.filter(([k,s])=>s.court==='2');
+  // 'all' = no filter
+
+  document.getElementById('slotsCount').textContent = `(${entries.length})`;
+
+  if (!entries.length) { el.innerHTML='<div class="empty">🕐 لا توجد أوقات في هذا الفلتر</div>'; return; }
+
+  el.innerHTML = entries.map(([key,s]) => {
+    const bk = Object.values(bookings).find(b=>b.slotId===key);
+    const cn = s.court==='1'?'🔵 ملعب 1':'🟢 ملعب 2';
+    return `<div class="litem">
+      <div class="li-l">
+        <div class="li-court">${cn} · ${fmt(s.date)}</div>
         <div class="li-time">${s.from} – ${s.to}</div>
-        ${bk?`<div class="li-court">👤 ${bk.name}</div>`:''}
+        ${bk?`<div class="li-name">👤 ${bk.name} · ${bk.phone}</div>`:''}
       </div>
-      <div class="li-actions">
-        <span class="${bk?'badge-booked':'badge-free'}">${bk?'محجوز':'متاح'}</span>
-        ${!bk?`<button class="btn-sm btn-sm-r" data-del="${key}">حذف</button>`:''}
+      <div class="li-r">
+        <span class="${bk?'badge-bk':'badge-free'}">${bk?'محجوز':'متاح'}</span>
+        ${!bk?`<button class="bsm bsm-r" onclick="delSlot('${key}')">حذف</button>`:''}
+        ${bk?`<button class="bsm bsm-r" onclick="cancelBook('${Object.keys(bookings).find(k=>bookings[k].slotId===key)}')">إلغاء</button>`:''}
       </div>
     </div>`;
   }).join('');
-  el.querySelectorAll('[data-del]').forEach(btn => {
-    btn.onclick = () => confirmAction('سيتم حذف هذا الوقت نهائياً. هل أنت متأكد؟', () => {
-      remove(ref(db,'slots/'+btn.dataset.del));
-      toast('🗑️ تم حذف الوقت');
-    });
-  });
 }
 
+// ══════════════════════════════════
+// BOOKINGS
+// ══════════════════════════════════
 function renderBookings() {
   const el = document.getElementById('bookList');
   const today = new Date().toISOString().split('T')[0];
-  let list = Object.entries(allBookings).sort((a,b)=>b[1].ts-a[1].ts);
-  if (bookFilter==='1') list=list.filter(([k,b])=>b.court==='1');
-  else if (bookFilter==='2') list=list.filter(([k,b])=>b.court==='2');
-  else if (bookFilter==='today') list=list.filter(([k,b])=>b.date===today);
 
-  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">📋</div>لا توجد حجوزات بعد</div>'; return; }
-  el.innerHTML = list.map(([key,b]) => {
-    const cn = b.court==='1'?'🔵 الملعب الأول':'🟣 الملعب الثاني';
-    return `<div class="book-item">
-      <div><div class="book-name">${b.name}</div><div class="book-meta">${cn} · ${fmtDate(b.date)} · ${b.from} – ${b.to}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-        <div class="book-phone" dir="ltr">${b.phone}</div>
-        <button class="btn-sm btn-sm-r" data-cancel="${key}">إلغاء</button>
+  let entries = Object.entries(bookings).sort((a,b)=>b[1].ts-a[1].ts);
+  if (bookFilter==='today') entries = entries.filter(([k,b])=>b.date===today);
+  else if (bookFilter==='upcoming') entries = entries.filter(([k,b])=>b.date>=today);
+  else if (bookFilter==='1') entries = entries.filter(([k,b])=>b.court==='1');
+  else if (bookFilter==='2') entries = entries.filter(([k,b])=>b.court==='2');
+
+  document.getElementById('booksCount').textContent = `(${entries.length})`;
+
+  if (!entries.length) { el.innerHTML='<div class="empty">📋 لا توجد حجوزات في هذا الفلتر</div>'; return; }
+
+  el.innerHTML = entries.map(([key,b]) => {
+    const cn = b.court==='1'?'🔵 الملعب الأول':'🟢 الملعب الثاني';
+    return `<div class="bitem">
+      <div>
+        <div class="bname">${b.name}</div>
+        <div class="bmeta">${cn} · ${fmt(b.date)} · ${b.from} – ${b.to}</div>
+      </div>
+      <div style="text-align:left">
+        <div class="bphone" dir="ltr">${b.phone}</div>
+        <button class="bsm bsm-r" onclick="cancelBook('${key}')">إلغاء الحجز</button>
       </div>
     </div>`;
   }).join('');
-  el.querySelectorAll('[data-cancel]').forEach(btn => {
-    btn.onclick = () => confirmAction('سيتم إلغاء هذا الحجز. هل أنت متأكد؟', () => {
-      remove(ref(db,'bookings/'+btn.dataset.cancel));
-      toast('✅ تم إلغاء الحجز');
-    });
-  });
 }
 
-// ── NOTIFICATIONS ──
-function updateNotifBadge() {
-  const unread = Object.values(allNotifs).filter(n=>!n.read).length;
-  const badge = document.getElementById('notifBadge');
-  badge.textContent = unread > 99 ? '99+' : unread;
-  badge.className = 'notif-badge' + (unread>0?'':' hidden');
-}
-
-function renderNotifications() {
-  const el = document.getElementById('notifList');
-  if (!el) return;
-  const list = Object.entries(allNotifs).sort((a,b)=>b[1].ts-a[1].ts);
-  if (!list.length) { el.innerHTML='<div class="empty"><div class="ei">🔔</div>لا توجد إشعارات بعد</div>'; return; }
-  el.innerHTML = list.map(([key,n]) => `
-    <div class="notif-item ${n.read?'':'unread'}" data-nkey="${key}">
-      <div class="notif-dot ${n.read?'read':''}"></div>
-      <div class="notif-content">
-        <div class="notif-title">${n.title}</div>
-        <div class="notif-msg">${n.msg}</div>
-        <div class="notif-time">${timeAgo(n.ts)}</div>
-      </div>
-    </div>
-  `).join('');
-  el.querySelectorAll('[data-nkey]').forEach(item => {
-    item.onclick = () => update(ref(db,'notifications/'+item.dataset.nkey), {read:true});
-  });
-}
-
-document.getElementById('markAllReadBtn').onclick = () => {
-  Object.keys(allNotifs).forEach(k => update(ref(db,'notifications/'+k), {read:true}));
-  toast('✅ تم تعيين الكل كمقروء');
-};
-
-// ── WORK HOURS ──
-function loadSettingsUI() {
-  document.getElementById('sOpenTime').value = settings.openTime || '08:00';
-  document.getElementById('sCloseTime').value = settings.closeTime || '23:00';
-  selectedWorkDays = settings.workDays || [0,1,2,3,4,5,6];
-  if (settings.venueName) document.getElementById('venueName').value = settings.venueName;
-  if (settings.venuePrice) document.getElementById('venuePrice').value = settings.venuePrice;
-  buildDaysSelector();
-}
-
-function buildDaysSelector() {
-  document.getElementById('daysSelector').innerHTML = dayFull.map((name,i) => {
-    const on = selectedWorkDays.includes(i);
-    return `<div class="day-toggle ${on?'on':'off'}" data-day="${i}">${dayShort[i]}</div>`;
-  }).join('');
-  document.querySelectorAll('.day-toggle').forEach(el => {
-    el.onclick = () => {
-      const i = parseInt(el.dataset.day);
-      if (selectedWorkDays.includes(i)) { selectedWorkDays=selectedWorkDays.filter(d=>d!==i); el.className='day-toggle off'; }
-      else { selectedWorkDays.push(i); selectedWorkDays.sort(); el.className='day-toggle on'; }
-    };
-  });
-}
-
-function renderHolidays() {
-  const holidays = settings.holidays || {};
-  const el = document.getElementById('holidayList');
-  if (!el) return;
-  const list = Object.entries(holidays).sort((a,b)=>a[1].date>b[1].date?1:-1);
-  if (!list.length) { el.innerHTML='<div class="empty" style="padding:16px"><div class="ei">📅</div>لا توجد إجازات</div>'; return; }
-  el.innerHTML = list.map(([key,h]) => `
-    <div class="holiday-item">
-      <div><div class="holiday-name">🔴 ${h.name}</div><div class="holiday-date">${fmtDate(h.date)}</div></div>
-      <button class="btn-sm btn-sm-r" data-hkey="${key}">حذف</button>
-    </div>
-  `).join('');
-  el.querySelectorAll('[data-hkey]').forEach(btn => {
-    btn.onclick = () => {
-      const s = {...settings}; delete s.holidays[btn.dataset.hkey];
-      set(ref(db,'settings'), s);
-      toast('✅ تم حذف الإجازة');
-    };
-  });
-}
-
-function renderSchedulePreview() {
-  const el = document.getElementById('schedulePreview');
-  if (!el) return;
-  const workDays = settings.workDays || [0,1,2,3,4,5,6];
-  const holidays = Object.values(settings.holidays || {}).map(h=>h.date);
-  const now = new Date();
-  el.innerHTML = Array.from({length:7},(_,i) => {
-    const d = new Date(now); d.setDate(now.getDate()+i);
-    const ds = d.toISOString().split('T')[0];
-    const isH = holidays.includes(ds), isW = workDays.includes(d.getDay());
-    const isOpen = isW && !isH;
-    const slots = Object.values(allSlots).filter(s=>s.date===ds);
-    const bks = Object.values(allBookings).filter(b=>b.date===ds);
-    return `<div style="background:${isOpen?'rgba(0,255,135,0.05)':'rgba(255,59,59,0.05)'};border:1px solid ${isOpen?'rgba(0,255,135,0.15)':'rgba(255,59,59,0.15)'};border-radius:14px;padding:14px;text-align:center">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${i===0?'اليوم':dayShort[d.getDay()]}</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:4px">${d.getDate()}</div>
-      <div style="font-size:11px;color:${isOpen?'var(--green)':'var(--red)'};margin-bottom:8px">${isH?'إجازة':isW?'مفتوح':'مغلق'}</div>
-      <div style="font-size:10px;color:var(--muted)">${slots.length} وقت · ${bks.length} حجز</div>
-    </div>`;
-  }).join('');
-}
-
-// ── TABS ──
-document.querySelectorAll('.adm-tab').forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));
-    document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('on'));
-    tab.classList.add('on');
-    document.getElementById('panel-'+tab.dataset.tab).classList.add('on');
-  };
-});
-document.getElementById('notifBtn').onclick = () => {
-  document.querySelector('[data-tab="notifs"]').click();
-  Object.keys(allNotifs).forEach(k => update(ref(db,'notifications/'+k), {read:true}));
-};
-
-// ── SLOT FILTERS ──
-document.querySelectorAll('[data-sf]').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('[data-sf]').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on'); slotFilter=btn.dataset.sf; renderSlots();
-  };
-});
-document.querySelectorAll('[data-bf]').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('[data-bf]').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on'); bookFilter=btn.dataset.bf; renderBookings();
-  };
-});
-
-// ── EVENT LISTENERS ──
-function setupEventListeners() {
-  document.getElementById('autoGenBtn').onclick = autoGenSlots;
-  document.getElementById('addSlotBtn').onclick = addSlot;
-
-  document.getElementById('pwdBtn').onclick = changePwd;
-  document.getElementById('clearOldBtn').onclick = () => confirmAction('سيتم حذف جميع الأوقات القديمة. هل أنت متأكد؟', clearOldSlots);
-  document.getElementById('saveHoursBtn').onclick = saveWorkHours;
-  document.getElementById('addHolidayBtn').onclick = addHoliday;
-  document.getElementById('saveVenueBtn').onclick = saveVenueSettings;
-  document.getElementById('confirmNo').onclick = () => document.getElementById('confirmOverlay').classList.add('off');
-}
-
-async function autoGenSlots() {
-  const DB_URL = 'https://padel-arena-7b02b-default-rtdb.firebaseio.com';
+// ══════════════════════════════════
+// AUTO GENERATE
+// ══════════════════════════════════
+window.autoGenSlots = async function() {
   const from = document.getElementById('autoFrom').value || '08:00';
   const to   = document.getElementById('autoTo').value   || '23:00';
   const dur  = parseInt(document.getElementById('autoDur').value) || 60;
   const courtSel = document.getElementById('autoCourt').value || 'both';
+  const days = parseInt(document.getElementById('autoDays').value) || 30;
 
   const courts = courtSel === 'both' ? ['1','2'] : [courtSel];
-  const workDays = (settings && settings.workDays) ? settings.workDays : [0,1,2,3,4,5,6];
-  const holidays = settings && settings.holidays ? Object.values(settings.holidays).map(h=>h.date) : [];
+  const workDays = settings.workDays || [0,1,2,3,4,5,6];
+  const holidays = settings.holidays ? Object.values(settings.holidays).map(h=>h.date) : [];
 
   const btn = document.getElementById('autoGenBtn');
   btn.textContent = '⏳ جاري التوليد...';
   btn.disabled = true;
 
-  // Build all slots object to push at once (faster)
   const toWrite = {};
   const now = new Date();
   let added = 0;
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < days; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
     const ds = d.toISOString().split('T')[0];
@@ -748,14 +669,13 @@ async function autoGenSlots() {
     while (cur + dur <= end) {
       const hF=Math.floor(cur/60), mF=cur%60;
       const hT=Math.floor((cur+dur)/60), mT=(cur+dur)%60;
-      const fStr = (hF<10?'0'+hF:hF)+':'+(mF<10?'0'+mF:mF);
-      const tStr = (hT<10?'0'+hT:hT)+':'+(mT<10?'0'+mT:mT);
+      const fStr = pad(hF)+':'+pad(mF);
+      const tStr = pad(hT)+':'+pad(mT);
 
       for (const court of courts) {
-        // Check not already exists
-        const exists = Object.values(allSlots).some(s=>s.court===court&&s.date===ds&&s.from===fStr);
-        if (!exists) {
-          const key = 's' + ds.replace(/-/g,'') + court + fStr.replace(':','');
+        const key = 'slot_'+ds.replace(/-/g,'')+'_c'+court+'_'+fStr.replace(':','');
+        // Only add if not already exists
+        if (!slots[key]) {
           toWrite[key] = { court, date:ds, from:fStr, to:tStr };
           added++;
         }
@@ -765,154 +685,325 @@ async function autoGenSlots() {
   }
 
   if (added === 0) {
-    toast('⚠️ كل الأوقات موجودة بالفعل أو لا توجد أيام عمل', true);
-    btn.textContent = '⚡ توليد الأوقات للـ 10 أيام القادمة';
+    toast('⚠️ كل الأوقات موجودة بالفعل', true);
+    btn.textContent = '⚡ توليد الأوقات تلقائياً';
     btn.disabled = false;
     return;
   }
 
-  // Write all at once using REST API (bypass any SDK issues)
   try {
-    const res = await fetch(DB_URL + '/slots.json', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(toWrite)
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    toast('✅ تم توليد ' + added + ' وقت للـ 10 أيام القادمة');
+    await fbPatch('/slots', toWrite);
+    slots = { ...slots, ...toWrite };
+    renderAll();
+    toast(`✅ تم توليد ${added} وقت بنجاح`);
   } catch(e) {
-    toast('❌ خطأ في الحفظ: ' + e.message, true);
+    toast('❌ خطأ في الحفظ', true);
   }
 
-  btn.textContent = '⚡ توليد الأوقات للـ 10 أيام القادمة';
+  btn.textContent = '⚡ توليد الأوقات تلقائياً';
   btn.disabled = false;
-}
+};
 
-async function addSlot() {
-  const DB_URL = 'https://padel-arena-7b02b-default-rtdb.firebaseio.com';
+window.addSlot = async function() {
   const court = document.getElementById('aC').value;
   const date  = document.getElementById('aD').value;
   const from  = document.getElementById('aF').value;
   const to    = document.getElementById('aT').value;
   if (!date||!from||!to) { toast('⚠️ يرجى تعبئة جميع الحقول',true); return; }
   if (from>=to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية',true); return; }
-  if (Object.values(allSlots).some(s=>s.court===court&&s.date===date&&s.from===from)) { toast('⚠️ هذا الوقت موجود بالفعل',true); return; }
 
-  const key = 's'+date.replace(/-/g,'')+court+from.replace(':','');
-  try {
-    const res = await fetch(DB_URL+'/slots/'+key+'.json', {
-      method:'PUT',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({court,date,from,to})
-    });
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    const [h,m]=to.split(':').map(Number), nh=h+1;
-    if (nh<24) { document.getElementById('aF').value=to; document.getElementById('aT').value=(nh<10?'0'+nh:nh)+':'+(m<10?'0'+m:m); }
-    toast('✅ تم إضافة الوقت بنجاح');
-  } catch(e) { toast('❌ خطأ: '+e.message,true); }
+  const key = 'slot_'+date.replace(/-/g,'')+'_c'+court+'_'+from.replace(':','');
+  if (slots[key]) { toast('⚠️ هذا الوقت موجود بالفعل',true); return; }
+
+  await fbSet('/slots/'+key, {court,date,from,to});
+  slots[key] = {court,date,from,to};
+
+  // Advance time
+  const [h,m]=to.split(':').map(Number), nh=h+1;
+  if (nh<24) { document.getElementById('aF').value=to; document.getElementById('aT').value=pad(nh)+':'+pad(m); }
+  renderAll();
+  toast('✅ تم إضافة الوقت بنجاح');
+};
+
+window.delSlot = function(key) {
+  confirmDialog('سيتم حذف هذا الوقت نهائياً', async () => {
+    await fbDelete('/slots/'+key);
+    delete slots[key];
+    renderAll();
+    toast('🗑️ تم حذف الوقت');
+  });
+};
+
+window.cancelBook = function(key) {
+  confirmDialog('سيتم إلغاء هذا الحجز نهائياً', async () => {
+    await fbDelete('/bookings/'+key);
+    delete bookings[key];
+    renderAll();
+    toast('✅ تم إلغاء الحجز');
+  });
+};
+
+// ══════════════════════════════════
+// WORK HOURS & HOLIDAYS
+// ══════════════════════════════════
+function loadSettingsUI() {
+  document.getElementById('sOpen').value = settings.openTime || '08:00';
+  document.getElementById('sClose').value = settings.closeTime || '23:00';
+  selWorkDays = settings.workDays || [0,1,2,3,4,5,6];
+  if (settings.venueName) document.getElementById('vName').value = settings.venueName;
+  if (settings.venuePrice) document.getElementById('vPrice').value = settings.venuePrice;
+  buildDaysSel();
 }
 
-async function addBulkSlots() {
-  const courtSel=document.getElementById('bkCourt').value, date=document.getElementById('bkDate').value;
-  const from=document.getElementById('bkFrom').value, to=document.getElementById('bkTo').value;
-  const dur=parseInt(document.getElementById('bkDur').value)||60;
-  if (!date||!from||!to) { toast('⚠️ يرجى تعبئة جميع الحقول',true); return; }
-  const courts=courtSel==='both'?['1','2']:[courtSel];
-  const [fh,fm]=from.split(':').map(Number), [th,tm]=to.split(':').map(Number);
-  let cur=fh*60+fm; const end=th*60+tm; let added=0;
-  while(cur+dur<=end) {
-    const hF=Math.floor(cur/60),mF=cur%60,hT=Math.floor((cur+dur)/60),mT=(cur+dur)%60;
-    const fStr=`${hF<10?'0'+hF:hF}:${mF<10?'0'+mF:mF}`,tStr=`${hT<10?'0'+hT:hT}:${mT<10?'0'+mT:mT}`;
-    for(const court of courts) {
-      if (!Object.values(allSlots).find(s=>s.court===court&&s.date===date&&s.from===fStr)) {
-        await push(ref(db,'slots'),{court,date,from:fStr,to:tStr});
-        added++;
-      }
-    }
-    cur+=dur;
-  }
-  toast(`✅ تم إضافة ${added} وقت بنجاح`);
+function buildDaysSel() {
+  document.getElementById('daysSel').innerHTML = DAY_SHORT.map((n,i) => {
+    const on = selWorkDays.includes(i);
+    return `<div class="day-tog ${on?'on':'off'}" onclick="toggleDay(${i},this)">${n}</div>`;
+  }).join('');
 }
 
-function changePwd() {
-  const old=document.getElementById('pwdOld').value, nw=document.getElementById('pwdNew').value.trim(), cf=document.getElementById('pwdConf').value;
-  if (old!==getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة',true); return; }
-  if (nw.length<4) { toast('⚠️ كلمة المرور يجب أن تكون 4 أحرف على الأقل',true); return; }
-  if (nw!==cf) { toast('⚠️ كلمة المرور وتأكيدها غير متطابقين',true); return; }
-  localStorage.setItem('adminPass',nw);
-  ['pwdOld','pwdNew','pwdConf'].forEach(id=>document.getElementById(id).value='');
-  toast('✅ تم تغيير كلمة المرور بنجاح');
-}
+window.toggleDay = function(i, el) {
+  if (selWorkDays.includes(i)) { selWorkDays=selWorkDays.filter(d=>d!==i); el.className='day-tog off'; }
+  else { selWorkDays.push(i); selWorkDays.sort(); el.className='day-tog on'; }
+};
 
-function clearOldSlots() {
-  const today=new Date().toISOString().split('T')[0];
-  Object.entries(allSlots).forEach(([k,s])=>{ if(s.date<today) remove(ref(db,'slots/'+k)); });
-  toast('✅ تم حذف الأوقات القديمة');
-}
+window.saveWorkHours = async function() {
+  const s = { ...settings, openTime: document.getElementById('sOpen').value, closeTime: document.getElementById('sClose').value, workDays: selWorkDays };
+  await fbSet('/settings', s);
+  settings = s;
+  renderSchedule();
+  toast('✅ تم حفظ أوقات العمل');
+};
 
-async function saveWorkHours() {
-  const s = { ...settings, openTime:document.getElementById('sOpenTime').value, closeTime:document.getElementById('sCloseTime').value, workDays:selectedWorkDays };
-  await set(ref(db,'settings'), s);
-  toast('✅ تم حفظ أوقات العمل بنجاح');
-}
+window.addHoliday = async function() {
+  const date = document.getElementById('hDate').value;
+  const name = document.getElementById('hName').value.trim() || 'إجازة';
+  if (!date) { toast('⚠️ اختر التاريخ',true); return; }
+  if (!settings.holidays) settings.holidays = {};
+  const vals = Object.values(settings.holidays);
+  if (vals.some(h=>h.date===date)) { toast('⚠️ هذا التاريخ مُضاف بالفعل',true); return; }
+  const key = 'h_'+date.replace(/-/g,'');
+  settings.holidays[key] = {date,name};
+  await fbSet('/settings/holidays/'+key, {date,name});
+  renderHolidays();
+  renderSchedule();
+  toast('🔴 تم إضافة يوم الإجازة');
+};
 
-async function addHoliday() {
-  const date=document.getElementById('hDate').value, name=document.getElementById('hName').value.trim()||'إجازة';
-  if (!date) { toast('⚠️ يرجى اختيار التاريخ',true); return; }
+window.removeHoliday = async function(key) {
+  await fbDelete('/settings/holidays/'+key);
+  delete settings.holidays[key];
+  renderHolidays();
+  renderSchedule();
+  toast('✅ تم حذف الإجازة');
+};
+
+function renderHolidays() {
+  const el = document.getElementById('holidayList');
+  if (!el) return;
   const holidays = settings.holidays || {};
-  if (Object.values(holidays).find(h=>h.date===date)) { toast('⚠️ هذا التاريخ مُضاف بالفعل',true); return; }
-  await push(ref(db,'settings/holidays'),{date,name});
-  toast('🔴 تم تعيين يوم الإجازة بنجاح');
+  const list = Object.entries(holidays).sort((a,b)=>a[1].date>b[1].date?1:-1);
+  if (!list.length) { el.innerHTML='<div class="empty" style="padding:12px">لا توجد إجازات</div>'; return; }
+  el.innerHTML = list.map(([key,h])=>`
+    <div class="hitem">
+      <div><div class="hname">🔴 ${h.name}</div><div class="hdate">${fmt(h.date)}</div></div>
+      <button class="bsm bsm-r" onclick="removeHoliday('${key}')">حذف</button>
+    </div>`).join('');
 }
 
-async function saveVenueSettings() {
-  const s={...settings, venueName:document.getElementById('venueName').value.trim(), venuePrice:document.getElementById('venuePrice').value.trim()};
-  await set(ref(db,'settings'),s);
+function renderSchedule() {
+  const el = document.getElementById('schPreview');
+  if (!el) return;
+  const wDays = settings.workDays || [0,1,2,3,4,5,6];
+  const hDays = settings.holidays ? Object.values(settings.holidays).map(h=>h.date) : [];
+  const now = new Date();
+
+  el.innerHTML = Array.from({length:7},(_,i)=>{
+    const d = new Date(now); d.setDate(now.getDate()+i);
+    const ds = d.toISOString().split('T')[0];
+    const isH = hDays.includes(ds), isW = wDays.includes(d.getDay());
+    const open = isW && !isH;
+    const sv = Object.values(slots).filter(s=>s.date===ds);
+    const bv = Object.values(bookings).filter(b=>b.date===ds);
+    return `<div class="sch-day" style="background:${open?'rgba(0,200,200,0.05)':'rgba(255,68,68,0.05)'};border-color:${open?'rgba(0,200,200,0.15)':'rgba(255,68,68,0.15)'}">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px">${i===0?'اليوم':DAY_SHORT[d.getDay()]}</div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:4px">${d.getDate()}</div>
+      <div style="font-size:10px;color:${open?'var(--teal)':'var(--red)'};margin-bottom:6px">${isH?'إجازة':isW?'مفتوح':'مغلق'}</div>
+      <div style="font-size:9px;color:var(--muted)">${sv.length} وقت</div>
+      <div style="font-size:9px;color:var(--red)">${bv.length} حجز</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════
+function updateNotifBadge() {
+  const unread = Object.values(notifs).filter(n=>!n.read).length;
+  const badge = document.getElementById('nbadge');
+  badge.textContent = unread > 99 ? '99+' : unread;
+  badge.className = 'nbadge' + (unread>0?'':' hidden');
+}
+
+function renderNotifs() {
+  const el = document.getElementById('notifList');
+  if (!el) return;
+  const list = Object.entries(notifs).sort((a,b)=>b[1].ts-a[1].ts);
+  if (!list.length) { el.innerHTML='<div class="empty">🔔 لا توجد إشعارات</div>'; return; }
+  el.innerHTML = list.map(([key,n])=>`
+    <div class="nitem ${n.read?'':'unread'}" onclick="readNotif('${key}')">
+      <div class="ndot ${n.read?'read':''}"></div>
+      <div>
+        <div class="ntitle">${n.title}</div>
+        <div class="nmsg">${n.msg}</div>
+        <div class="ntime">${timeAgo(n.ts)}</div>
+      </div>
+    </div>`).join('');
+}
+
+window.readNotif = async function(key) {
+  await fbPatch('/notifications/'+key, {read:true});
+  if (notifs[key]) notifs[key].read = true;
+  updateNotifBadge();
+  renderNotifs();
+};
+
+window.markAllRead = async function() {
+  const patch = {};
+  Object.keys(notifs).forEach(k => patch[k+'/read'] = true);
+  for (const k of Object.keys(notifs)) {
+    await fbPatch('/notifications/'+k, {read:true});
+    notifs[k].read = true;
+  }
+  updateNotifBadge();
+  renderNotifs();
+  toast('✅ تم تعيين الكل كمقروء');
+};
+
+// ══════════════════════════════════
+// ALERT & CLEAR
+// ══════════════════════════════════
+function showAlert(title, msg) {
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertMsg').textContent = msg;
+  document.getElementById('alertBanner').classList.add('show');
+  setTimeout(()=>document.getElementById('alertBanner').classList.remove('show'), 6000);
+}
+document.getElementById('alertClose').onclick = ()=>document.getElementById('alertBanner').classList.remove('show');
+
+window.clearAllSlots = function() {
+  confirmDialog('⚠️ سيتم حذف كل الأوقات والبدء من صفر. الحجوزات القائمة ستبقى.', async () => {
+    await fbDelete('/slots');
+    slots = {};
+    renderAll();
+    toast('✅ تم حذف كل الأوقات');
+  });
+};
+
+// ══════════════════════════════════
+// PASSWORD
+// ══════════════════════════════════
+window.changePwd = function() {
+  const old=document.getElementById('pwdOld').value, nw=document.getElementById('pwdNew').value.trim(), cf=document.getElementById('pwdConf').value;
+  if (old !== getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة',true); return; }
+  if (nw.length < 4) { toast('⚠️ كلمة المرور قصيرة جداً',true); return; }
+  if (nw !== cf) { toast('⚠️ كلمتا المرور غير متطابقتين',true); return; }
+  localStorage.setItem('adminPass', nw);
+  ['pwdOld','pwdNew','pwdConf'].forEach(id=>document.getElementById(id).value='');
+  toast('✅ تم تغيير كلمة المرور');
+};
+
+window.saveVenueSettings = async function() {
+  const s = { ...settings, venueName: document.getElementById('vName').value.trim(), venuePrice: document.getElementById('vPrice').value.trim() };
+  await fbSet('/settings', s);
+  settings = s;
   toast('✅ تم حفظ الإعدادات');
+};
+
+// ══════════════════════════════════
+// UI SETUP
+// ══════════════════════════════════
+function setupUI() {
+  // Tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+      tab.classList.add('on');
+      document.getElementById('panel-'+tab.dataset.tab).classList.add('on');
+    };
+  });
+
+  // Notif click -> notifs tab
+  document.getElementById('notifWrap').onclick = () => {
+    document.querySelector('[data-tab="notifs"]').click();
+  };
+
+  // Slot filters
+  document.querySelectorAll('[data-sf]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-sf]').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      slotFilter = btn.dataset.sf;
+      renderSlots();
+    };
+  });
+
+  // Booking filters
+  document.querySelectorAll('[data-bf]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-bf]').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      bookFilter = btn.dataset.bf;
+      renderBookings();
+    };
+  });
+
+  // Buttons
+  document.getElementById('autoGenBtn').onclick = window.autoGenSlots;
+  document.getElementById('clearAllSlotsBtn').onclick = window.clearAllSlots;
+  document.getElementById('addSlotBtn').onclick = window.addSlot;
+  document.getElementById('pwdBtn').onclick = window.changePwd;
+  document.getElementById('saveHoursBtn').onclick = window.saveWorkHours;
+  document.getElementById('addHolidayBtn').onclick = window.addHoliday;
+  document.getElementById('saveVenueBtn').onclick = window.saveVenueSettings;
+  document.getElementById('markAllBtn').onclick = window.markAllRead;
+  document.getElementById('confirmNo').onclick = ()=>document.getElementById('confirmOverlay').classList.add('off');
 }
 
-// ── HELPERS ──
-function confirmAction(msg, fn) {
-  document.getElementById('confirmMsg').textContent=msg;
-  document.getElementById('confirmOverlay').classList.remove('off');
-  document.getElementById('confirmYes').onclick=()=>{ fn(); document.getElementById('confirmOverlay').classList.add('off'); };
-}
-
-function fmtDate(s) {
-  if(!s) return '';
-  return new Date(s+'T00:00:00').toLocaleDateString('ar-SA',{weekday:'short',day:'numeric',month:'short'});
-}
-
+// ══════════════════════════════════
+// HELPERS
+// ══════════════════════════════════
+function pad(n) { return n < 10 ? '0'+n : ''+n; }
+function fmt(d) { if(!d)return''; return new Date(d+'T00:00:00').toLocaleDateString('ar-SA',{weekday:'short',day:'numeric',month:'short'}); }
 function timeAgo(ts) {
-  const diff=(Date.now()-ts)/1000;
-  if(diff<60) return 'الآن';
-  if(diff<3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
-  if(diff<86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
-  return `منذ ${Math.floor(diff/86400)} يوم`;
+  const s=(Date.now()-ts)/1000;
+  if(s<60)return'الآن';
+  if(s<3600)return`منذ ${Math.floor(s/60)} دقيقة`;
+  if(s<86400)return`منذ ${Math.floor(s/3600)} ساعة`;
+  return`منذ ${Math.floor(s/86400)} يوم`;
 }
-
 function toast(msg, err=false) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast on'+(err?' err':'');
-  setTimeout(()=>t.className='toast',3200);
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='toast show'+(err?' err':'');
+  setTimeout(()=>el.className='toast',3200);
+}
+function confirmDialog(msg, fn) {
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmOverlay').classList.remove('off');
+  document.getElementById('confirmYes').onclick = () => {
+    document.getElementById('confirmOverlay').classList.add('off');
+    fn();
+  };
 }
 
-// ── EXPOSE TO GLOBAL SCOPE ──
-window.autoGenSlots = autoGenSlots;
-window.addSlot = addSlot;
-window.addBulkSlots = addBulkSlots;
-window.changePwd = changePwd;
-window.saveWorkHours = saveWorkHours;
-window.addHoliday = addHoliday;
-window.saveVenueSettings = saveVenueSettings;
-window.doLogin = doLogin;
-window.logout = () => { sessionStorage.removeItem('adminAuth'); location.reload(); };
-
-// ── INIT ──
+// ══════════════════════════════════
+// START
+// ══════════════════════════════════
 if (isLoggedIn()) {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('adminPanel').style.display='block';
-  initAdmin();
+  init();
 }
 </script>
 </body>
