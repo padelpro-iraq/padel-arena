@@ -271,7 +271,7 @@ select.inp option{background:#0b1a0e}
                 <option value="2">🟢 الملعب الثاني فقط</option>
               </select>
             </div>
-            <button class="btn-add" id="autoGenBtn" style="background:linear-gradient(135deg,#00c8c8,#009999)">⚡ توليد الأوقات للـ 10 أيام القادمة</button>
+            <button class="btn-add" id="autoGenBtn" onclick="autoGenSlots()" style="background:linear-gradient(135deg,#00c8c8,#009999)">⚡ توليد الأوقات للـ 10 أيام القادمة</button>
           </div>
 
           <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
@@ -287,7 +287,7 @@ select.inp option{background:#0b1a0e}
               <div><div class="inp-label">من</div><input type="time" class="inp" id="aF"></div>
               <div><div class="inp-label">إلى</div><input type="time" class="inp" id="aT"></div>
             </div>
-            <button class="btn-add secondary" id="addSlotBtn">➕ إضافة وقت واحد</button>
+            <button class="btn-add secondary" id="addSlotBtn" onclick="addSlot()">➕ إضافة وقت واحد</button>
           </div>
         </div>
 
@@ -714,6 +714,7 @@ function setupEventListeners() {
 }
 
 async function autoGenSlots() {
+  console.log('autoGenSlots called');
   const from = document.getElementById('autoFrom').value;
   const to = document.getElementById('autoTo').value;
   const dur = parseInt(document.getElementById('autoDur').value) || 60;
@@ -856,6 +857,17 @@ function toast(msg, err=false) {
   t.textContent=msg; t.className='toast on'+(err?' err':'');
   setTimeout(()=>t.className='toast',3200);
 }
+
+// ── EXPOSE TO GLOBAL SCOPE ──
+window.autoGenSlots = autoGenSlots;
+window.addSlot = addSlot;
+window.addBulkSlots = addBulkSlots;
+window.changePwd = changePwd;
+window.saveWorkHours = saveWorkHours;
+window.addHoliday = addHoliday;
+window.saveVenueSettings = saveVenueSettings;
+window.doLogin = doLogin;
+window.logout = () => { sessionStorage.removeItem('adminAuth'); location.reload(); };
 
 // ── INIT ──
 if (isLoggedIn()) {
