@@ -551,26 +551,26 @@ function renderCourt(court) {
 
   const dur = courtDur[court] || 60;
 
-  // Get slots for this court & date, sorted by time
-  // Handle midnight crossing: slots after midnight belong to "next day" but shown under previous day's date
-  let daySlots = Object.entries(slots)
-    .filter(([k,s]) => s.court === court && s.date === selDate)
-    .sort((a,b) => {
-      // Sort by time, treating 00:00-05:00 as after 23:59
-      const ta = timeToMins(a[1].from);
-      const tb = timeToMins(b[1].from);
-      const aa = ta < 360 ? ta + 1440 : ta; // treat 0-6am as next day
-      const bb = tb < 360 ? tb + 1440 : tb;
-      return aa - bb;
-    });
+  // كل يوم يعرض فترتين:
+  // فترة 1: 00:00 → 02:00 (بداية اليوم — فجر)
+  // فترة 2: 09:00 → 23:00 (بقية اليوم)
+  // الفترة 03:00-08:59 مغلقة ولا تُعرض
 
-  // Filter by selected duration: only show slots where dur hours are available
-  daySlots = daySlots.filter(([k,s]) => {
-    const startMins = timeToMins(s.from);
-    const endMins = startMins + dur;
-    // check all slots in the chain are free
-    return true; // show all, multi-slot handled at booking
-  });
+  const allDaySlots = Object.entries(slots)
+    .filter(([k,s]) => s.court === court && s.date === selDate);
+
+  // فجر (00:00 → 02:59)
+  const fajrSlots = allDaySlots
+    .filter(([k,s]) => timeToMins(s.from) < 3*60)
+    .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
+
+  // نهار وليل (09:00 → 23:59)
+  const dayNightSlots = allDaySlots
+    .filter(([k,s]) => timeToMins(s.from) >= 9*60)
+    .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
+
+  // الترتيب: فجر أول، ثم نهار/ليل
+  let daySlots = [...fajrSlots, ...dayNightSlots];
 
   if (!daySlots.length) {
     el.innerHTML='<div class="no-slots">⏳ لا توجد أوقات لهذا اليوم</div>';

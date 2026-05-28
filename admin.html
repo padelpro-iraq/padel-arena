@@ -654,6 +654,10 @@ window.autoGenSlots = async function() {
   const now = new Date();
   let added = 0;
 
+  // كل يوم يحتوي فترتين:
+  // فترة 1: 00:00 → 02:00 (فجر — بداية اليوم)
+  // فترة 2: 09:00 → 23:00 (صباح وليل)
+  // الفترة 03:00 → 08:59 مغلقة — لا يُولد فيها أوقات
   for (let i = 0; i < days; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
@@ -661,42 +665,30 @@ window.autoGenSlots = async function() {
 
     if (holidays.includes(ds) || !workDays.includes(d.getDay())) continue;
 
-    const [fh,fm] = from.split(':').map(Number);
-    const [th,tm] = to.split(':').map(Number);
-    
-    // وقت البداية بالدقائق
-    let cur = fh*60+fm;
-    // وقت النهاية - إذا كان أقل من وقت البداية معناه يتجاوز منتصف الليل
-    let end = th*60+tm;
-    if (end <= cur) end += 1440; // أضف 24 ساعة إذا تجاوز منتصف الليل
+    // الفترتان المفتوحتان
+    const periods = [
+      { start: 0 * 60, end: 3 * 60 },    // 00:00 → 03:00
+      { start: 9 * 60, end: 24 * 60 },   // 09:00 → 24:00 (= 00:00 اليوم التالي)
+    ];
 
-    while (cur + dur <= end) {
-      // احسب التاريخ الفعلي لهذا الوقت
-      let slotMins = cur;
-      let slotDate = ds;
-      
-      // إذا تجاوز منتصف الليل، استخدم تاريخ اليوم التالي
-      if (slotMins >= 1440) {
-        slotMins -= 1440;
-        const nextD = new Date(d);
-        nextD.setDate(nextD.getDate() + 1);
-        slotDate = nextD.toISOString().split('T')[0];
-      }
-      
-      const hF=Math.floor(slotMins/60), mF=slotMins%60;
-      const endMins = slotMins + dur;
-      const hT=Math.floor(endMins/60), mT=endMins%60;
-      const fStr = pad(hF)+':'+pad(mF);
-      const tStr = pad(hT%24)+':'+pad(mT);
+    for (const period of periods) {
+      let cur = period.start;
+      while (cur + dur <= period.end) {
+        const hF = Math.floor(cur / 60) % 24, mF = cur % 60;
+        const fStr = pad(hF) + ':' + pad(mF);
+        const toM = cur + dur;
+        const hT = Math.floor(toM / 60) % 24, mT = toM % 60;
+        const tStr = pad(hT) + ':' + pad(mT);
 
-      for (const court of courts) {
-        const key = 'slot_'+slotDate.replace(/-/g,'')+'_c'+court+'_'+fStr.replace(':','');
-        if (!slots[key]) {
-          toWrite[key] = { court, date:slotDate, from:fStr, to:tStr };
-          added++;
+        for (const court of courts) {
+          const key = 'slot_' + ds.replace(/-/g,'') + '_c' + court + '_' + fStr.replace(':','');
+          if (!slots[key]) {
+            toWrite[key] = { court, date: ds, from: fStr, to: tStr };
+            added++;
+          }
         }
+        cur += dur;
       }
-      cur += dur;
     }
   }
 
