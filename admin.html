@@ -1081,9 +1081,32 @@ window.doManualBook = async function() {
     slots[slotKey] = {court, date, from, to};
   }
 
-  // Check not already booked
+  // Check not already booked (exact slot match)
   const alreadyBooked = Object.values(bookings).some(b=>b.slotId===slotKey);
   if (alreadyBooked) { toast('⚠️ هذا الوقت محجوز بالفعل',true); return; }
+
+  // Check for time overlap on the same court and date
+  const newFrom = timeToMins(from);
+  const newTo   = timeToMins(to);
+  const hasOverlap = Object.values(bookings).some(b => {
+    if (b.court !== court || b.date !== date) return false;
+    const bFrom = timeToMins(b.from);
+    const bTo   = timeToMins(b.to);
+    // Overlap if new interval intersects existing interval
+    return newFrom < bTo && newTo > bFrom;
+  });
+  if (hasOverlap) { toast('⚠️ يوجد تزاحم مع حجز آخر في نفس الوقت والملعب',true); return; }
+
+  // Also check for slot overlap (slots without bookings that conflict)
+  const slotOverlap = Object.entries(slots).some(([sk, sl]) => {
+    if (sl.court !== court || sl.date !== date || sk === slotKey) return false;
+    const sFrom = timeToMins(sl.from);
+    const sTo   = timeToMins(sl.to);
+    // Only flag if this slot is actually booked
+    const isBooked = Object.values(bookings).some(b => b.slotId === sk);
+    return isBooked && newFrom < sTo && newTo > sFrom;
+  });
+  if (slotOverlap) { toast('⚠️ يوجد تزاحم مع حجز آخر في نفس الوقت والملعب',true); return; }
 
   const bookingData = {
     slotId: slotKey, court, date, from, to,
