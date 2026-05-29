@@ -27,7 +27,7 @@ body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);mi
 .lsub2{font-size:12px;color:var(--muted);margin-bottom:20px}
 .fld{margin-bottom:12px}
 .fld label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
-.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:all 0.2s;min-width:0;box-sizing:border-box}
+.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
 .inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,200,200,0.1);background:rgba(0,200,200,0.03)}
 select.inp{appearance:none;cursor:pointer}
 select.inp option{background:#0b1518}
@@ -75,7 +75,7 @@ select.inp option{background:#0b1518}
 .ctitle{font-size:14px;font-weight:700;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .ci{width:28px;height:28px;background:rgba(0,200,200,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .ilabel{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
 /* BUTTONS */
@@ -305,9 +305,9 @@ select.inp option{background:#0b1518}
               </div>
               <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="mDate"></div>
             </div>
-            <div class="row2">
-              <div><div class="ilabel">من</div><input type="time" class="inp" id="mFrom"></div>
-              <div><div class="ilabel">إلى</div><input type="time" class="inp" id="mTo"></div>
+            <div style="display:flex;gap:10px">
+              <div style="flex:1;min-width:0"><div class="ilabel">من</div><input type="time" class="inp" id="mFrom" style="width:100%;box-sizing:border-box"></div>
+              <div style="flex:1;min-width:0"><div class="ilabel">إلى</div><input type="time" class="inp" id="mTo" style="width:100%;box-sizing:border-box"></div>
             </div>
             <div><div class="ilabel">اسم الزبون</div><input type="text" class="inp" id="mName" placeholder="الاسم الكامل"></div>
             <div><div class="ilabel">رقم الجوال</div><input type="tel" class="inp" id="mPhone" placeholder="07xxxxxxxxx" dir="ltr"></div>
@@ -1081,32 +1081,9 @@ window.doManualBook = async function() {
     slots[slotKey] = {court, date, from, to};
   }
 
-  // Check not already booked (exact slot match)
+  // Check not already booked
   const alreadyBooked = Object.values(bookings).some(b=>b.slotId===slotKey);
   if (alreadyBooked) { toast('⚠️ هذا الوقت محجوز بالفعل',true); return; }
-
-  // Check for time overlap on the same court and date
-  const newFrom = timeToMins(from);
-  const newTo   = timeToMins(to);
-  const hasOverlap = Object.values(bookings).some(b => {
-    if (b.court !== court || b.date !== date) return false;
-    const bFrom = timeToMins(b.from);
-    const bTo   = timeToMins(b.to);
-    // Overlap if new interval intersects existing interval
-    return newFrom < bTo && newTo > bFrom;
-  });
-  if (hasOverlap) { toast('⚠️ يوجد تزاحم مع حجز آخر في نفس الوقت والملعب',true); return; }
-
-  // Also check for slot overlap (slots without bookings that conflict)
-  const slotOverlap = Object.entries(slots).some(([sk, sl]) => {
-    if (sl.court !== court || sl.date !== date || sk === slotKey) return false;
-    const sFrom = timeToMins(sl.from);
-    const sTo   = timeToMins(sl.to);
-    // Only flag if this slot is actually booked
-    const isBooked = Object.values(bookings).some(b => b.slotId === sk);
-    return isBooked && newFrom < sTo && newTo > sFrom;
-  });
-  if (slotOverlap) { toast('⚠️ يوجد تزاحم مع حجز آخر في نفس الوقت والملعب',true); return; }
 
   const bookingData = {
     slotId: slotKey, court, date, from, to,
