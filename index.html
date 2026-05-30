@@ -683,6 +683,18 @@ async function doBook(withWa) {
   if (!name) { toast('⚠️ أدخل اسمك الكامل', true); return; }
   if (!phone) { toast('⚠️ أدخل رقم الجوال', true); return; }
 
+  // منع نفس الرقم من الحجز أكثر من مرة في نفس اليوم
+  const phoneClean = phone.replace(/\D/g,'');
+  const dupPhone = Object.values(bookings).find(b =>
+    b.date === pending.date && b.phone && b.phone.replace(/\D/g,'') === phoneClean
+  );
+  if (dupPhone) {
+    toast('⚠️ هذا الرقم عنده حجز بالفعل في هذا اليوم', true);
+    document.getElementById('btnConfirm').disabled = false;
+    document.getElementById('btnConfirm').textContent = '✅ تأكيد الحجز';
+    return;
+  }
+
   document.getElementById('btnConfirm').disabled = true;
   document.getElementById('btnConfirm').textContent = '⏳ جاري الحجز...';
 

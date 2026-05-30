@@ -309,9 +309,9 @@ select.inp option{background:#0b1518}
     <!-- TABS -->
     <div class="tabs" id="tabsBar">
       <button class="tab on" data-tab="bookings">الحجوزات</button>
+      <button class="tab" data-tab="board">لوحة الملاعب</button>
       <button class="tab" data-tab="manual">حجز يدوي</button>
       <button class="tab" data-tab="slots">الأوقات</button>
-      <button class="tab" data-tab="board">لوحة الملاعب</button>
       <button class="tab" data-tab="notifs">الإشعارات</button>
       <button class="tab" data-tab="settings">الإعدادات</button>
     </div>
@@ -340,12 +340,12 @@ select.inp option{background:#0b1518}
 
             <div style="display:flex;flex-direction:column;gap:5px">
               <div class="ilabel">من</div>
-              <input type="time" class="inp" id="mFrom" style="width:100%;box-sizing:border-box" oninput="calcMTo()">
+              <input type="time" class="inp" id="mFrom" style="width:100%;box-sizing:border-box" oninput="calcMTo();calcMPrice()">
             </div>
 
             <div style="display:flex;flex-direction:column;gap:5px">
               <div class="ilabel">المدة</div>
-              <select class="inp" id="mDur" style="width:100%;box-sizing:border-box" onchange="calcMTo()">
+              <select class="inp" id="mDur" style="width:100%;box-sizing:border-box" onchange="calcMTo();calcMPrice()">
                 <option value="60">ساعة (60 دقيقة)</option>
                 <option value="90">ساعة ونص (90 دقيقة)</option>
                 <option value="120">ساعتين (120 دقيقة)</option>
@@ -369,8 +369,9 @@ select.inp option{background:#0b1518}
             </div>
 
             <div style="display:flex;flex-direction:column;gap:5px">
-              <div class="ilabel">السعر (د.ع)</div>
-              <input type="number" class="inp" id="mPrice" placeholder="40000" style="width:100%;box-sizing:border-box">
+              <div class="ilabel">السعر (د.ع) — يحسب تلقائياً</div>
+              <input type="number" class="inp" id="mPrice" placeholder="يحسب تلقائياً" style="width:100%;box-sizing:border-box">
+              <div id="mPriceHint" style="font-size:11px;color:var(--teal);margin-top:2px"></div>
             </div>
 
             <button class="btn btn-teal" id="manualBookBtn" style="width:100%;box-sizing:border-box;margin-top:4px">✅ تأكيد الحجز اليدوي</button>
@@ -473,7 +474,6 @@ select.inp option{background:#0b1518}
         <div class="ftabs">
           <button class="ftab on" data-bf="all">الكل</button>
           <button class="ftab" data-bf="today">اليوم</button>
-          <button class="ftab" data-bf="upcoming">القادمة</button>
           <button class="ftab" data-bf="1">ملعب 1</button>
           <button class="ftab" data-bf="2">ملعب 2</button>
           <button class="ftab" data-bf="3">بادل بول</button>
@@ -541,6 +541,7 @@ select.inp option{background:#0b1518}
           <div style="display:grid;gap:12px;margin-bottom:14px">
             <div><div class="ilabel">اسم المكان</div><input type="text" class="inp" id="vName" placeholder="Padel Pro"></div>
             <div><div class="ilabel">رقم واتساب الحجز</div><input type="tel" class="inp" id="vWaNumber" placeholder="9647xxxxxxxxx" dir="ltr"></div>
+            <div><div class="ilabel">حساب إنستقرام</div><input type="text" class="inp" id="vInsta" placeholder="padelpro_iq" dir="ltr"></div>
             <div><div class="ilabel">السعر (اختياري)</div><input type="text" class="inp" id="vPrice" placeholder="50 ريال/ساعة"></div>
           </div>
           <div><div class="ilabel">تذكير واتساب قبل الحجز</div>
@@ -685,6 +686,7 @@ async function init() {
   document.getElementById('mDate').value = today;
   document.getElementById('mFrom').value = '08:00';
   calcMTo();
+  calcMPrice();
   document.getElementById('aF').value = '08:00';
   calcAT();
   document.getElementById('hDate').value = today;
@@ -780,8 +782,8 @@ function renderSlots() {
     return `<div class="litem">
       <div class="li-l">
         <div class="li-court">${cn} · ${fmt(s.date)}</div>
-        <div class="li-time">${s.from} – ${s.to}</div>
-        ${bk?`<div class="li-name">👤 ${bk.name} · ${bk.phone}</div>`:''}
+        <div class="li-time">${to12(s.from)} – ${to12(s.to)}</div>
+        ${bk?`<div class="li-name">👤 ${bk.name} · <span dir="ltr">${bk.phone}</span></div>`:''}
       </div>
       <div class="li-r">
         <span class="${bk?'badge-bk':'badge-free'}">${bk?'محجوز':'متاح'}</span>
@@ -822,12 +824,15 @@ function renderBookings() {
       : `<button class="bsm" style="background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)" onclick="markArrival('${key}')">🏃 وصل اللاعب</button>`;
     const delayInfo = delayed ? `<span style="color:#f97316;font-size:11px;margin-right:6px">⏰ تأخر ${delayMins} دقيقة</span>` : '';
     return `<div class="bitem">
-      <div style="flex:1">
-        <div class="bname">${b.name}${b.manual?'<span style="font-size:10px;background:rgba(0,200,200,0.2);color:var(--teal);padding:2px 6px;border-radius:4px;margin-right:6px">يدوي</span>':''}</div>
-        <div class="bmeta">${cn} · ${fmt(b.date)} · ${b.from} – ${b.to}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <div class="bname" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.name}</div>
+          ${b.manual?'<span style="font-size:10px;background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:20px;border:1px solid rgba(245,158,11,0.3);flex-shrink:0">يدوي</span>':''}
+        </div>
+        <div class="bmeta">${cn} · ${fmt(b.date)} · ${to12(b.from)} – ${to12(b.to)}</div>
         <div style="margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${arrivalInfo}${delayInfo}</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;margin-right:10px">
         <div class="bphone" dir="ltr">${b.phone}</div>
         <button class="bsm bsm-r" onclick="cancelBook('${key}')">إلغاء</button>
       </div>
@@ -975,6 +980,8 @@ function loadSettingsUI() {
   }
   if (settings.reminderHrs !== undefined) document.getElementById('vReminderHrs').value = settings.reminderHrs;
   buildDaysSel();
+  // تحديث السعر التلقائي بعد تحميل الإعدادات
+  calcMPrice();
 }
 
 function buildDaysSel() {
@@ -1167,6 +1174,12 @@ window.doManualBook = async function() {
   if (!date||!from||!to||!name||!phone) { toast('⚠️ أكمل جميع الحقول',true); return; }
   if (from >= to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية',true); return; }
 
+  // ✅ منع حجز أوقات ماضية
+  const today = new Date().toISOString().split('T')[0];
+  const nowMins = new Date().getHours()*60 + new Date().getMinutes();
+  if (date < today) { toast('⚠️ لا يمكن الحجز في تاريخ ماضٍ',true); return; }
+  if (date === today && timeToMins(from) < nowMins) { toast('⚠️ لا يمكن الحجز في وقت مضى',true); return; }
+
   // Create or find slot — and create hourly sub-slots for board display
   const slotKey = 'slot_'+date.replace(/-/g,'')+'_c'+court+'_'+from.replace(':','');
   if (!slots[slotKey]) {
@@ -1199,6 +1212,8 @@ window.doManualBook = async function() {
   );
   if (conflict) { toast('⚠️ يوجد تعارض مع حجز آخر في نفس الوقت',true); return; }
 
+  const cName = court==='1'?'ملعب 1':court==='2'?'ملعب 2':'Padbol';
+
   const bookingData = {
     slotId: slotKey, subSlotIds: subSlotKeys, court, date, from, to,
     name, phone, price, manual: true, ts: Date.now()
@@ -1207,16 +1222,27 @@ window.doManualBook = async function() {
   await fbSet('/bookings/'+newKey, bookingData);
   bookings[newKey] = bookingData;
 
-  // Notify
+  // Firebase notification
   await fbPost('/notifications', {
     title: `📝 حجز يدوي – ${name}`,
-    msg: `${court==='1'?'ملعب 1':court==='2'?'ملعب 2':'Padbol'} · ${fmt(date)} · ${from} – ${to} · ${price.toLocaleString()} د.ع`,
+    msg: `${cName} · ${fmt(date)} · ${from} – ${to} · ${price.toLocaleString()} د.ع`,
     ts: Date.now(), read: false
   });
+
+  // ✅ ntfy push notification
+  try {
+    const ntfyTitle = encodeURIComponent(`📝 حجز يدوي - ${name}`);
+    const ntfyMsg = `${cName}\n📅 ${fmt(date)}\n⏰ ${from} - ${to}\n👤 ${name} | ${phone}\n💰 ${price.toLocaleString()} د.ع`;
+    await fetch(`https://ntfy.sh/padelpro_bookings_x9k2?title=${ntfyTitle}&priority=high&tags=memo,tennis`, {
+      method: 'POST', mode: 'no-cors', body: ntfyMsg
+    });
+  } catch(e) {}
 
   renderAll();
   renderManualBookings();
   ['mName','mPhone','mPrice'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mPriceHint').textContent = '';
+  calcMPrice();
   toast('✅ تم الحجز اليدوي بنجاح');
 };
 
@@ -1233,7 +1259,7 @@ function renderManualBookings() {
       <div class="li-l">
         <div class="li-court">${b.court==='1'?'🔵 ملعب 1':b.court==='2'?'🟢 ملعب 2':'🟠 Padbol'} · ${fmt(b.date)}</div>
         <div class="li-time">${b.from} – ${b.to}</div>
-        <div class="li-name">👤 ${b.name} · ${b.phone}</div>
+        <div class="li-name">👤 ${b.name} · <span dir="ltr">${b.phone}</span></div>
       </div>
       <div class="li-r">
         <span class="badge-bk">يدوي</span>
@@ -1275,7 +1301,7 @@ function renderBoard() {
       const cls = bk ? (bk.manual ? 'manual' : 'booked') : 'free';
       const label = bk ? (bk.name.length > 10 ? bk.name.slice(0,10)+'…' : bk.name) : 'متاح';
       return `<div class="board-slot ${cls}">
-        <div class="board-slot-time">${s.from}</div>
+        <div class="board-slot-time">${to12(s.from)}</div>
         <div class="board-slot-name">${label}</div>
       </div>`;
     }).join('');
@@ -1444,11 +1470,33 @@ function calcMTo() {
   const toM = total % 60;
   document.getElementById('mTo').value = pad(toH) + ':' + pad(toM);
 }
-window.calcMTo = calcMTo;
+function calcMPrice() {
+  const dur = parseInt(document.getElementById('mDur').value || '60');
+  const pricePerHour = parseInt(settings.venuePrice) || 0;
+  if (!pricePerHour) { document.getElementById('mPriceHint').textContent = ''; return; }
+  const hours = dur / 60;
+  const total = Math.round(pricePerHour * hours);
+  document.getElementById('mPrice').value = total;
+  document.getElementById('mPriceHint').textContent = `${pricePerHour.toLocaleString()} د.ع × ${hours} ساعة = ${total.toLocaleString()} د.ع`;
+}
+window.calcMPrice = calcMPrice;
 
 function pad(n) { return n < 10 ? '0'+n : ''+n; }
 function timeToMins(t) { const [h,m]=t.split(':').map(Number); return h*60+m; }
-function fmt(d) { if(!d)return''; return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
+function fmt(d) {
+  if(!d) return '';
+  const dt = new Date(d+'T00:00:00');
+  const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  return `${days[dt.getDay()]} ${dt.getDate()} ${months[dt.getMonth()]}`;
+}
+function to12(t) {
+  if(!t) return '';
+  const [h,m] = t.split(':').map(Number);
+  const suffix = h < 12 ? 'ص' : 'م';
+  const h12 = h % 12 || 12;
+  return `${h12}:${pad(m)} ${suffix}`;
+}
 function timeAgo(ts) {
   const s=(Date.now()-ts)/1000;
   if(s<60)return'الآن';
