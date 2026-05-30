@@ -53,7 +53,7 @@ select.inp option{background:#0b1518}
 .nbadge.hidden{display:none}
 
 /* STATS */
-.adm-body{padding:16px 14px}
+.adm-body{padding:16px 14px;padding-top:8px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all 0.2s}
 .stat:hover{border-color:rgba(0,200,200,0.25);transform:translateY(-2px)}
@@ -62,7 +62,9 @@ select.inp option{background:#0b1518}
 .sl{font-size:11px;color:var(--muted);margin-top:5px}
 
 /* TABS */
-.tabs{display:flex!important;flex-direction:row!important;border-bottom:1px solid var(--border);margin-bottom:22px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0;flex-wrap:nowrap!important;position:sticky!important;top:52px!important;z-index:90!important;background:var(--black)!important;padding:0 14px}
+.tabs{display:flex!important;flex-direction:row!important;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0;flex-wrap:nowrap!important;position:fixed!important;top:52px!important;left:0!important;right:0!important;width:100%!important;z-index:95!important;background:var(--black)!important;padding:0 14px;box-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs-spacer{height:48px;margin-bottom:22px;display:block}
 .tab{display:inline-flex!important;flex-direction:row!important;align-items:center!important;padding:10px 12px!important;font-family:'Cairo',sans-serif!important;font-size:12px!important;color:var(--muted);background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;margin-bottom:-1px;cursor:pointer;transition:all 0.2s;white-space:nowrap!important;flex-shrink:0!important;width:auto!important;height:auto!important}
 .tab:hover{color:var(--text)}
 .tab.on{color:var(--teal);border-bottom-color:var(--teal);font-weight:700}
@@ -175,14 +177,14 @@ select.inp option{background:#0b1518}
 
 @media(max-width:768px){
   .adm-header{padding:10px 14px}
-  .adm-body{padding:16px 14px}
+  .adm-body{padding:16px 14px;padding-top:8px}
   .stats{grid-template-columns:repeat(2,1fr)}
   .grid2{grid-template-columns:1fr}
   .card.full{grid-column:auto}
   .days-sel{grid-template-columns:repeat(4,1fr)}
   .sch-grid{grid-template-columns:repeat(4,1fr)}
   .row3{grid-template-columns:1fr 1fr}
-  .tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;overflow-x:auto!important;position:sticky!important;top:52px!important;z-index:90!important;background:var(--black)!important;padding:0!important}
+  .tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;position:fixed!important;top:52px!important;left:0!important;right:0!important;width:100%!important;z-index:95!important;background:var(--black)!important;padding:0!important}
   .tab{display:block!important;flex-direction:unset!important;width:auto!important;padding:10px 14px!important;font-size:12px!important;white-space:nowrap!important;flex-shrink:0!important}
   .h-logo svg{height:28px!important}
   .h-actions{gap:4px!important}
@@ -267,7 +269,7 @@ select.inp option{background:#0b1518}
     <div class="stats" id="statsRow"></div>
 
     <!-- TABS -->
-    <div class="tabs">
+    <div class="tabs" id="tabsBar">
       <button class="tab on" data-tab="bookings">الحجوزات</button>
       <button class="tab" data-tab="manual">حجز يدوي</button>
       <button class="tab" data-tab="slots">الأوقات</button>
@@ -275,6 +277,7 @@ select.inp option{background:#0b1518}
       <button class="tab" data-tab="notifs">الإشعارات</button>
       <button class="tab" data-tab="settings">الإعدادات</button>
     </div>
+    <div class="tabs-spacer"></div>
 
     <!-- ══ MANUAL BOOKING TAB ══ -->
     <div class="panel" id="panel-manual">
@@ -396,20 +399,18 @@ select.inp option{background:#0b1518}
               <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="aD"></div>
             </div>
             <div class="row2">
-              <div><div class="ilabel">من</div><input type="time" class="inp" id="aF"></div>
-              <div><div class="ilabel">إلى</div><input type="time" class="inp" id="aT"></div>
+              <div><div class="ilabel">من</div><input type="time" class="inp" id="aF" oninput="calcAT()"></div>
+              <div><div class="ilabel">المدة</div>
+                <select class="inp" id="aDur" onchange="calcAT()">
+                  <option value="60">ساعة (60 د)</option>
+                  <option value="90">ساعة ونص (90 د)</option>
+                  <option value="120">ساعتين (120 د)</option>
+                  <option value="180">3 ساعات</option>
+                </select>
+              </div>
             </div>
+            <div><div class="ilabel">إلى (تلقائي)</div><input type="time" class="inp" id="aT" readonly style="opacity:0.7"></div>
             <button class="btn btn-ghost" id="addSlotBtn">➕ إضافة وقت واحد</button>
-          </div>
-
-          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
-          <div class="ctitle" style="margin-bottom:12px"><div class="ci">🔑</div> تغيير كلمة المرور</div>
-          <div class="pwd-hint">💡 الافتراضية: <strong>admin123</strong></div>
-          <div style="display:grid;gap:10px">
-            <div><div class="ilabel">الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
-            <div><div class="ilabel">الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
-            <div><div class="ilabel">تأكيد</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
-            <button class="btn btn-ghost" id="pwdBtn">🔒 تحديث كلمة المرور</button>
           </div>
         </div>
 
@@ -612,7 +613,7 @@ async function init() {
   document.getElementById('mFrom').value = '08:00';
   calcMTo();
   document.getElementById('aF').value = '08:00';
-  document.getElementById('aT').value = '09:00';
+  calcAT();
   document.getElementById('hDate').value = today;
 
   await loadAll();
@@ -852,9 +853,9 @@ window.addSlot = async function() {
   await fbSet('/slots/'+key, {court,date,from,to});
   slots[key] = {court,date,from,to};
 
-  // Advance time
-  const [h,m]=to.split(':').map(Number), nh=h+1;
-  if (nh<24) { document.getElementById('aF').value=to; document.getElementById('aT').value=pad(nh)+':'+pad(m); }
+  // Advance time by duration
+  document.getElementById('aF').value=to;
+  calcAT();
   renderAll();
   toast('✅ تم إضافة الوقت بنجاح');
 };
@@ -1215,6 +1216,19 @@ function setupUI() {
 // ══════════════════════════════════
 // HELPERS
 // ══════════════════════════════════
+// Auto-calculate slot "to" time
+function calcAT() {
+  const from = document.getElementById('aF').value;
+  const dur = parseInt(document.getElementById('aDur').value || '60');
+  if (!from) return;
+  const [h, m] = from.split(':').map(Number);
+  const total = h * 60 + m + dur;
+  const toH = Math.floor(total / 60) % 24;
+  const toM = total % 60;
+  document.getElementById('aT').value = pad(toH) + ':' + pad(toM);
+}
+window.calcAT = calcAT;
+
 // Auto-calculate "to" time based on "from" + duration
 function calcMTo() {
   const from = document.getElementById('mFrom').value;
