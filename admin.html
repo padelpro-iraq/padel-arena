@@ -626,14 +626,14 @@ function getPin() { return settings.adminPass || '1234'; }
 function isLoggedIn() { return sessionStorage.getItem('auth') === '1'; }
 
 let pinBuffer = '';
-function pinPress(d) {
+window.pinPress = function(d) {
   if (pinBuffer.length >= 4) return;
   pinBuffer += d;
   updatePinDots();
   if (pinBuffer.length === 4) setTimeout(doLogin, 180);
-}
-function pinDel() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); }
-function pinClear() { pinBuffer = ''; updatePinDots(); }
+};
+window.pinDel = function() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); };
+window.pinClear = function() { pinBuffer = ''; updatePinDots(); };
 function updatePinDots() {
   for (let i=0;i<4;i++) {
     const el = document.getElementById('pd'+i);
