@@ -322,9 +322,10 @@ select.inp option{background:#0b1518}
         <div class="card">
           <div class="ctitle"><div class="ci">📝</div> حجز يدوي جديد</div>
           <div class="hint hint-teal">احجز وقتاً مباشرة بدون موافقة الزبون</div>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
 
-            <div style="display:flex;flex-direction:column;gap:5px">
+            <!-- ١ الملعب -->
+            <div>
               <div class="ilabel">الملعب</div>
               <select class="inp" id="mCourt" style="width:100%;box-sizing:border-box">
                 <option value="1">🔵 الملعب الأول – بادل</option>
@@ -333,45 +334,59 @@ select.inp option{background:#0b1518}
               </select>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
+            <!-- ٢ التاريخ -->
+            <div>
               <div class="ilabel">التاريخ</div>
               <input type="date" class="inp" id="mDate" style="width:100%;box-sizing:border-box">
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div class="ilabel">من</div>
-              <input type="time" class="inp" id="mFrom" style="width:100%;box-sizing:border-box" oninput="calcMTo();calcMPrice()">
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:5px">
+            <!-- ٣ المدة / العرض -->
+            <div>
               <div class="ilabel">المدة</div>
-              <select class="inp" id="mDur" style="width:100%;box-sizing:border-box" onchange="calcMTo();calcMPrice()">
-                <option value="60">ساعة (60 دقيقة)</option>
-                <option value="90">ساعة ونص (90 دقيقة)</option>
-                <option value="120">ساعتين (120 دقيقة)</option>
-                <option value="180">3 ساعات</option>
-              </select>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px">
+                <button type="button" class="dur-btn on" data-dur="60" data-price="40000"
+                  style="padding:12px 6px;border-radius:10px;border:2px solid var(--teal);background:rgba(0,200,200,0.15);color:var(--teal);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s"
+                  onclick="selectDur(this)">ساعة<br><span style="font-size:11px;font-weight:400">40 ألف</span></button>
+                <button type="button" class="dur-btn" data-dur="120" data-price="75000"
+                  style="padding:12px 6px;border-radius:10px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--txt);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s"
+                  onclick="selectDur(this)">ساعتين<br><span style="font-size:11px;font-weight:400">75 ألف</span></button>
+                <button type="button" class="dur-btn" data-dur="180" data-price="110000"
+                  style="padding:12px 6px;border-radius:10px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--txt);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s"
+                  onclick="selectDur(this)">3 ساعات<br><span style="font-size:11px;font-weight:400">110 ألف</span></button>
+              </div>
+              <input type="hidden" id="mDur" value="60">
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div class="ilabel">إلى (يحسب تلقائياً)</div>
-              <input type="time" class="inp" id="mTo" style="width:100%;box-sizing:border-box;opacity:0.7" readonly>
+            <!-- ٤ وقت البداية -->
+            <div>
+              <div class="ilabel">وقت البداية</div>
+              <input type="time" class="inp" id="mFrom" style="width:100%;box-sizing:border-box" onchange="updateMTo()" oninput="updateMTo()">
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
+            <!-- ٥ وقت النهاية (تلقائي) -->
+            <div>
+              <div class="ilabel">وقت النهاية</div>
+              <div style="background:rgba(0,200,200,0.07);border:1.5px solid rgba(0,200,200,0.25);border-radius:10px;padding:13px 14px;font-size:16px;font-weight:700;color:var(--teal);text-align:center" id="mToDisplay">اختر وقت البداية</div>
+              <input type="hidden" id="mTo">
+            </div>
+
+            <!-- ٦ اسم الزبون -->
+            <div>
               <div class="ilabel">اسم الزبون</div>
               <input type="text" class="inp" id="mName" placeholder="الاسم الكامل" style="width:100%;box-sizing:border-box">
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
+            <!-- ٧ رقم الجوال -->
+            <div>
               <div class="ilabel">رقم الجوال</div>
               <input type="tel" class="inp" id="mPhone" placeholder="07xxxxxxxxx" dir="ltr" style="width:100%;box-sizing:border-box">
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div class="ilabel">السعر (د.ع) — يحسب تلقائياً</div>
-              <input type="number" class="inp" id="mPrice" placeholder="يحسب تلقائياً" style="width:100%;box-sizing:border-box">
-              <div id="mPriceHint" style="font-size:11px;color:var(--teal);margin-top:2px"></div>
+            <!-- ٨ السعر (تلقائي) -->
+            <div>
+              <div class="ilabel">السعر</div>
+              <div style="background:rgba(180,241,57,0.08);border:1.5px solid rgba(180,241,57,0.25);border-radius:10px;padding:13px 14px;font-size:18px;font-weight:700;color:var(--lime);text-align:center" id="mPriceDisplay">40 ألف د.ع</div>
+              <input type="hidden" id="mPrice" value="40000">
             </div>
 
             <button class="btn btn-teal" id="manualBookBtn" style="width:100%;box-sizing:border-box;margin-top:4px">✅ تأكيد الحجز اليدوي</button>
@@ -685,8 +700,7 @@ async function init() {
   document.getElementById('aD').value = today;
   document.getElementById('mDate').value = today;
   document.getElementById('mFrom').value = '08:00';
-  calcMTo();
-  calcMPrice();
+  updateMTo();
   document.getElementById('aF').value = '08:00';
   calcAT();
   document.getElementById('hDate').value = today;
@@ -829,7 +843,7 @@ function renderBookings() {
           <div class="bname" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.name}</div>
           ${b.manual?'<span style="font-size:10px;background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:20px;border:1px solid rgba(245,158,11,0.3);flex-shrink:0">يدوي</span>':''}
         </div>
-        <div class="bmeta">${cn} · ${fmt(b.date)} · ${to12(b.from)} – ${to12(b.to)}</div>
+        <div class="bmeta">${cn} · ${fmt(b.date)} · ${to12(b.from)} – ${to12(b.to)}${b.price ? ` · <span style="color:var(--lime);font-weight:700">${b.price/1000} ألف</span>` : ''}</div>
         <div style="margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${arrivalInfo}${delayInfo}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;margin-right:10px">
@@ -1258,7 +1272,7 @@ function renderManualBookings() {
     <div class="litem">
       <div class="li-l">
         <div class="li-court">${b.court==='1'?'🔵 ملعب 1':b.court==='2'?'🟢 ملعب 2':'🟠 Padbol'} · ${fmt(b.date)}</div>
-        <div class="li-time">${b.from} – ${b.to}</div>
+        <div class="li-time">${to12(b.from)} – ${to12(b.to)}${b.price ? ` · <span style="color:var(--lime)">${b.price/1000} ألف</span>` : ''}</div>
         <div class="li-name">👤 ${b.name} · <span dir="ltr">${b.phone}</span></div>
       </div>
       <div class="li-r">
@@ -1460,26 +1474,42 @@ function calcAT() {
 window.calcAT = calcAT;
 
 // Auto-calculate "to" time based on "from" + duration
-function calcMTo() {
-  const from = document.getElementById('mFrom').value;
+function selectDur(btn) {
+  document.querySelectorAll('.dur-btn').forEach(b => {
+    b.style.border = '2px solid rgba(255,255,255,0.1)';
+    b.style.background = 'rgba(255,255,255,0.04)';
+    b.style.color = 'var(--txt)';
+  });
+  btn.style.border = '2px solid var(--teal)';
+  btn.style.background = 'rgba(0,200,200,0.15)';
+  btn.style.color = 'var(--teal)';
+  document.getElementById('mDur').value = btn.dataset.dur;
+  document.getElementById('mPrice').value = btn.dataset.price;
+  const thousands = parseInt(btn.dataset.price) / 1000;
+  document.getElementById('mPriceDisplay').textContent = thousands + ' ألف د.ع';
+  updateMTo();
+}
+window.selectDur = selectDur;
+
+function updateMTo() {
+  const fromVal = document.getElementById('mFrom').value;
   const dur = parseInt(document.getElementById('mDur').value || '60');
-  if (!from) return;
-  const [h, m] = from.split(':').map(Number);
+  const display = document.getElementById('mToDisplay');
+  if (!fromVal) { display.textContent = 'اختر وقت البداية'; return; }
+  const parts = fromVal.split(':');
+  const h = parseInt(parts[0]) || 0;
+  const m = parseInt(parts[1]) || 0;
   const total = h * 60 + m + dur;
   const toH = Math.floor(total / 60) % 24;
   const toM = total % 60;
-  document.getElementById('mTo').value = pad(toH) + ':' + pad(toM);
+  const toVal = pad(toH) + ':' + pad(toM);
+  document.getElementById('mTo').value = toVal;
+  display.textContent = to12(toVal);
 }
-function calcMPrice() {
-  const dur = parseInt(document.getElementById('mDur').value || '60');
-  const pricePerHour = parseInt(settings.venuePrice) || 0;
-  if (!pricePerHour) { document.getElementById('mPriceHint').textContent = ''; return; }
-  const hours = dur / 60;
-  const total = Math.round(pricePerHour * hours);
-  document.getElementById('mPrice').value = total;
-  document.getElementById('mPriceHint').textContent = `${pricePerHour.toLocaleString()} د.ع × ${hours} ساعة = ${total.toLocaleString()} د.ع`;
-}
-window.calcMPrice = calcMPrice;
+window.updateMTo = updateMTo;
+
+function calcMTo() { updateMTo(); }
+function calcMPrice() {}
 
 function pad(n) { return n < 10 ? '0'+n : ''+n; }
 function timeToMins(t) { const [h,m]=t.split(':').map(Number); return h*60+m; }
@@ -1492,7 +1522,9 @@ function fmt(d) {
 }
 function to12(t) {
   if(!t) return '';
-  const [h,m] = t.split(':').map(Number);
+  const parts = t.split(':');
+  const h = parseInt(parts[0]) || 0;
+  const m = parseInt(parts[1]) || 0;
   const suffix = h < 12 ? 'ص' : 'م';
   const h12 = h % 12 || 12;
   return `${h12}:${pad(m)} ${suffix}`;
