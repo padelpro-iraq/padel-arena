@@ -436,6 +436,7 @@ select.inp option{background:#0b1518}
             </div>
             <button class="btn btn-teal" id="autoGenBtn">⚡ توليد الأوقات تلقائياً</button>
             <button class="btn btn-red" id="clearAllSlotsBtn" style="font-size:13px">🗑️ حذف كل الأوقات والبدء من جديد</button>
+            <button class="btn btn-ghost" onclick="manualClean()" style="font-size:13px">🧹 تنظيف البيانات القديمة (أكثر من 7 أيام)</button>
           </div>
         </div>
 
@@ -1132,6 +1133,55 @@ window.clearAllSlots = function() {
     slots = fresh || {};
     renderAll();
     toast('✅ تم حذف كل الأوقات — يمكنك التوليد الآن');
+  });
+};
+
+// ══════════════════════════════════
+// تنظيف تلقائي للبيانات القديمة
+// ══════════════════════════════════
+async function cleanOldData() {
+  // احذف كل slots وbookings أقدم من 7 أيام
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 7);
+  const cutoffStr = cutoff.toISOString().split('T')[0];
+
+  try {
+    // جيب كل البيانات القديمة
+    const [oldSlots, oldBookings] = await Promise.all([
+      fetch(`${DB}/slots.json?orderBy="date"&endAt="${cutoffStr}"`).then(r=>r.json()).catch(()=>({})),
+      fetch(`${DB}/bookings.json?orderBy="date"&endAt="${cutoffStr}"`).then(r=>r.json()).catch(()=>({}))
+    ]);
+
+    let deleted = 0;
+
+    if (oldSlots && typeof oldSlots === 'object') {
+      for (const key of Object.keys(oldSlots)) {
+        await fbDelete('/slots/' + key);
+        deleted++;
+      }
+    }
+    if (oldBookings && typeof oldBookings === 'object') {
+      for (const key of Object.keys(oldBookings)) {
+        await fbDelete('/bookings/' + key);
+        deleted++;
+      }
+    }
+
+    if (deleted > 0) console.log(`🧹 تم حذف ${deleted} سجل قديم تلقائياً`);
+  } catch(e) {
+    console.warn('خطأ في التنظيف التلقائي:', e);
+  }
+}
+
+// تنظيف عند فتح الأدمن + كل 24 ساعة
+cleanOldData();
+setInterval(cleanOldData, 24 * 60 * 60 * 1000);
+
+window.manualClean = function() {
+  confirmDialog('سيتم حذف كل الأوقات والحجوزات الأقدم من 7 أيام. هل تريد المتابعة؟', async () => {
+    toast('⏳ جاري التنظيف...');
+    await cleanOldData();
+    toast('✅ تم تنظيف البيانات القديمة بنجاح');
   });
 };
 
