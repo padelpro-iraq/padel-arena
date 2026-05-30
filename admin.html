@@ -8,7 +8,7 @@
 <style>
 :root{--teal:#00c8c8;--lime:#aaff00;--black:#04080a;--card:#0b1518;--card2:#0e1c20;--border:rgba(0,200,200,0.12);--text:#e0f0f0;--muted:#5a8a8a;--red:#ff4444;--orange:#f59e0b;}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);min-height:100vh;overflow-x:hidden;width:100%}
+body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);min-height:100vh}
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 .bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,200,0.025) 1px,transparent 1px);background-size:50px 50px}
 .g1{position:absolute;width:600px;height:600px;background:rgba(0,200,200,0.07);top:-200px;left:-100px;border-radius:50%;filter:blur(120px)}
@@ -16,9 +16,9 @@ body{font-family:'Cairo',sans-serif;background:var(--black);color:var(--text);mi
 
 /* LOGIN */
 #loginScreen{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--black)}
-.login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 32px;width:100%;max-width:360px;margin:20px;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px 32px;width:100%;max-width:380px;margin:20px;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes popIn{from{transform:scale(0.88);opacity:0}to{transform:scale(1);opacity:1}}
-.login-logo{text-align:center;margin-bottom:24px}
+.login-logo{text-align:center;margin-bottom:32px}
 .login-logo .racket{margin:0 auto 10px;display:block}
 .lt1{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;color:#fff;letter-spacing:3px}
 .lt2{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;color:var(--lime);letter-spacing:4px}
@@ -53,8 +53,8 @@ select.inp option{background:#0b1518}
 .nbadge.hidden{display:none}
 
 /* STATS */
-.adm-body{padding:24px 28px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.adm-body{padding:16px 14px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all 0.2s}
 .stat:hover{border-color:rgba(0,200,200,0.25);transform:translateY(-2px)}
 .sn{font-size:34px;font-weight:900;line-height:1;color:var(--teal)}
@@ -63,8 +63,7 @@ select.inp option{background:#0b1518}
 
 /* TABS */
 .tabs{display:flex!important;flex-direction:row!important;border-bottom:1px solid var(--border);margin-bottom:22px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0;flex-wrap:nowrap!important;position:relative;z-index:1}
-.tabs::-webkit-scrollbar{display:none}
-.tab{display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;padding:10px 12px!important;font-family:'Cairo',sans-serif!important;font-size:12px!important;color:var(--muted);background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;margin-bottom:-1px;cursor:pointer;transition:all 0.2s;white-space:nowrap!important;flex-shrink:1!important;width:auto!important;height:auto!important;flex:1 1 auto!important}
+.tab{display:inline-flex!important;flex-direction:row!important;align-items:center!important;padding:10px 12px!important;font-family:'Cairo',sans-serif!important;font-size:12px!important;color:var(--muted);background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;margin-bottom:-1px;cursor:pointer;transition:all 0.2s;white-space:nowrap!important;flex-shrink:0!important;width:auto!important;height:auto!important}
 .tab:hover{color:var(--text)}
 .tab.on{color:var(--teal);border-bottom-color:var(--teal);font-weight:700}
 .panel{display:none}.panel.on{display:block}
@@ -175,38 +174,19 @@ select.inp option{background:#0b1518}
 .pwd-hint{font-size:11px;color:var(--orange);background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:9px 12px;margin-bottom:12px}
 
 @media(max-width:768px){
-  .adm-header{padding:10px 10px;gap:6px}
-  .adm-header .h-logo span:not(.h-badge){display:none}
-  .h-actions{gap:5px}
-  .hbtn{padding:6px 10px;font-size:11px}
-  .adm-body{padding:12px 10px}
-  .stats{grid-template-columns:repeat(2,1fr);gap:8px}
-  .stat{padding:14px 10px}
-  .sn{font-size:28px}
+  .adm-header{padding:10px 14px}
+  .adm-body{padding:16px 14px}
+  .stats{grid-template-columns:repeat(2,1fr)}
   .grid2{grid-template-columns:1fr}
   .card.full{grid-column:auto}
-  .card{padding:16px 14px}
   .days-sel{grid-template-columns:repeat(4,1fr)}
   .sch-grid{grid-template-columns:repeat(4,1fr)}
-  .row2{grid-template-columns:1fr 1fr!important}
   .row3{grid-template-columns:1fr 1fr}
-  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .tabs::-webkit-scrollbar{display:none}
-  .tab{padding:10px 12px;font-size:11px}
-  .ftabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
-  .ftabs::-webkit-scrollbar{display:none}
-  .bitem{flex-direction:column;align-items:flex-start;gap:8px}
-  .bitem>div:last-child{flex-direction:row;align-items:center;width:100%;justify-content:space-between}
-  .litem{flex-wrap:wrap;gap:6px}
-  .li-r{flex-wrap:wrap}
-  .alert-banner{width:calc(100% - 20px);max-width:calc(100% - 20px)}
-}
-@media(max-width:480px){
-  .tab{padding:9px 6px!important;font-size:10px!important}
-}
-@media(max-width:400px){
-  .stats{grid-template-columns:1fr 1fr}
-  .h-badge{display:none}
+  .tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;overflow-x:auto!important;position:sticky!important;top:52px!important;z-index:20!important;background:var(--bg)!important}
+  .tab{display:block!important;flex-direction:unset!important;width:auto!important;padding:10px 14px!important;font-size:12px!important;white-space:nowrap!important;flex-shrink:0!important}
+  .h-logo svg{height:28px!important}
+  .h-actions{gap:4px!important}
+  .hbtn{padding:5px 8px!important;font-size:11px!important}
 }
 </style>
 </head>
@@ -224,7 +204,7 @@ select.inp option{background:#0b1518}
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <svg height="70" viewBox="0 0 1284 522" xmlns="http://www.w3.org/2000/svg">
+      <svg height="90" viewBox="0 0 1284 522" xmlns="http://www.w3.org/2000/svg">
     <g
        id="g2"
        transform="translate(-8.534712,34.138847)">
@@ -242,8 +222,7 @@ select.inp option{background:#0b1518}
     </div>
     <div class="ltitle">تسجيل الدخول</div>
     <div class="lsub2">أدخل بياناتك للمتابعة</div>
-    
-    <div class="fld"><label>رمز الدخول</label><input class="inp" id="lp" type="number" placeholder="أدخل الرمز" autocomplete="current-password" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="fld"><label>كلمة المرور</label><input class="inp" id="lp" type="password" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="btn-login" id="loginBtn">🔐 دخول</button>
     <div class="lerr" id="lerr"></div>
   </div>
@@ -300,7 +279,7 @@ select.inp option{background:#0b1518}
           <div class="ctitle"><div class="ci">📝</div> حجز يدوي جديد</div>
           <div class="hint hint-teal">احجز وقتاً مباشرة بدون موافقة الزبون</div>
           <div style="display:grid;gap:11px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="row2">
               <div><div class="ilabel">الملعب</div>
                 <select class="inp" id="mCourt">
                   <option value="1">🔵 الملعب الأول – بادل</option>
@@ -310,7 +289,7 @@ select.inp option{background:#0b1518}
               </div>
               <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="mDate"></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="row2">
               <div><div class="ilabel">من</div><input type="time" class="inp" id="mFrom"></div>
               <div><div class="ilabel">إلى</div><input type="time" class="inp" id="mTo"></div>
             </div>
@@ -335,7 +314,7 @@ select.inp option{background:#0b1518}
           <div class="ctitle"><div class="ci">⚡</div> توليد أوقات شهر كامل تلقائياً</div>
           <div class="hint hint-teal">اضبط الإعدادات وضغط الزر — يتولد كل شيء تلقائياً مع تجاهل الإجازات وأيام الإغلاق</div>
           <div style="display:grid;gap:11px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="row2">
               <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
               <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
             </div>
@@ -373,13 +352,13 @@ select.inp option{background:#0b1518}
         <div class="card">
           <div class="ctitle"><div class="ci">➕</div> إضافة وقت محدد</div>
           <div style="display:grid;gap:11px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="row2">
               <div><div class="ilabel">الملعب</div>
                 <select class="inp" id="aC"><option value="1">🔵 الملعب الأول</option><option value="2">🟢 الملعب الثاني</option><option value="3">🟠 Padbol</option></select>
               </div>
               <div><div class="ilabel">التاريخ</div><input type="date" class="inp" id="aD"></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="row2">
               <div><div class="ilabel">من</div><input type="time" class="inp" id="aF"></div>
               <div><div class="ilabel">إلى</div><input type="time" class="inp" id="aT"></div>
             </div>
@@ -388,11 +367,11 @@ select.inp option{background:#0b1518}
 
           <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
           <div class="ctitle" style="margin-bottom:12px"><div class="ci">🔑</div> تغيير كلمة المرور</div>
-          <div class="pwd-hint">💡 الرمز الافتراضي: <strong>1234</strong></div>
+          <div class="pwd-hint">💡 الافتراضية: <strong>admin123</strong></div>
           <div style="display:grid;gap:10px">
-            <div><div class="ilabel">الرمز الحالي</div><input type="number" class="inp" id="pwdOld" placeholder="الرمز الحالي" inputmode="numeric"></div>
-            <div><div class="ilabel">الرمز الجديد</div><input type="number" class="inp" id="pwdNew" placeholder="رمز جديد" inputmode="numeric"></div>
-            <div><div class="ilabel">تأكيد الرمز</div><input type="number" class="inp" id="pwdConf" placeholder="تأكيد الرمز" inputmode="numeric"></div>
+            <div><div class="ilabel">الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
+            <div><div class="ilabel">الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
+            <div><div class="ilabel">تأكيد</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
             <button class="btn btn-ghost" id="pwdBtn">🔒 تحديث كلمة المرور</button>
           </div>
         </div>
@@ -419,8 +398,8 @@ select.inp option{background:#0b1518}
       <div class="card full">
         <div class="ctitle"><div class="ci">📋</div> الحجوزات <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:8px" id="booksCount"></span></div>
         <div class="ftabs">
-          <button class="ftab on" data-bf="today">اليوم</button>
-          <button class="ftab" data-bf="upcoming">القادمة</button>
+          <button class="ftab" data-bf="today">اليوم</button>
+          <button class="ftab on" data-bf="upcoming">القادمة</button>
           <button class="ftab" data-bf="all">الكل</button>
           <button class="ftab" data-bf="1">ملعب 1</button>
           <button class="ftab" data-bf="2">ملعب 2</button>
@@ -457,7 +436,7 @@ select.inp option{background:#0b1518}
         <div class="card">
           <div class="ctitle"><div class="ci">🕐</div> أوقات العمل</div>
           <div class="hint">هذه الأوقات تؤثر على التوليد التلقائي وموقع الزبائن</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div class="row2" style="margin-bottom:12px">
             <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="sOpen" value="08:00"></div>
             <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="sClose" value="23:00"></div>
           </div>
@@ -490,14 +469,14 @@ select.inp option{background:#0b1518}
 
         <!-- كلمة المرور الموحدة -->
         <div class="card">
-          <div class="ctitle"><div class="ci">🔐</div> كلمة مرور الأدمن (موحدة لكل الأجهزة)</div>
-          <div class="hint hint-teal">الرمز محفوظ في Firebase — يتغير على كل الأجهزة فور تعديله</div>
+          <div class="ctitle"><div class="ci">🔐</div> كلمة المرور (موحدة لكل الأجهزة)</div>
+          <div class="hint hint-teal">الدخول برقم السر فقط — محفوظ في Firebase لكل الأجهزة</div>
           <div style="display:grid;gap:10px;margin-bottom:14px">
-            <div><div class="ilabel">الرمز الحالي</div><input type="number" class="inp" id="pwdOld" placeholder="أدخل الرمز الحالي" inputmode="numeric"></div>
-            <div><div class="ilabel">الرمز الجديد</div><input type="number" class="inp" id="pwdNew" placeholder="رمز جديد (أرقام)" inputmode="numeric"></div>
-            <div><div class="ilabel">تأكيد الرمز</div><input type="number" class="inp" id="pwdConf" placeholder="أعد الرمز الجديد" inputmode="numeric"></div>
+            <div><div class="ilabel">كلمة المرور الحالية</div><input type="password" class="inp" id="pwdOld" placeholder="••••••••"></div>
+            <div><div class="ilabel">كلمة المرور الجديدة</div><input type="password" class="inp" id="pwdNew" placeholder="••••••••"></div>
+            <div><div class="ilabel">تأكيد كلمة المرور</div><input type="password" class="inp" id="pwdConf" placeholder="••••••••"></div>
           </div>
-          <button class="btn btn-ghost" style="max-width:200px" id="pwdBtn">🔐 تغيير كلمة المرور</button>
+          <button class="btn btn-teal" style="max-width:220px" id="pwdBtn">🔐 تغيير كلمة المرور</button>
         </div>
 
       </div>
@@ -546,8 +525,8 @@ async function fbPost(path, data) {
 // ══════════════════════════════════
 // AUTH
 // ══════════════════════════════════
-function getPass() { return String(settings.adminPass || '1234'); }
-
+function getPass() { return settings.adminPass || 'admin123'; }
+function getUser() { return settings.adminUser || 'admin'; }
 function isLoggedIn() { return sessionStorage.getItem('auth') === '1'; }
 
 document.getElementById('loginBtn').onclick = doLogin;
@@ -555,16 +534,14 @@ document.getElementById('lp').onkeydown = e => { if(e.key==='Enter') doLogin(); 
 document.getElementById('logoutBtn').onclick = () => { sessionStorage.removeItem('auth'); location.reload(); };
 
 async function doLogin() {
-  
-  const p = String(document.getElementById('lp').value.trim());
+  const p = document.getElementById('lp').value;
   const btn = document.getElementById('loginBtn');
   btn.textContent = '⏳ جاري التحقق...';
   btn.disabled = true;
   // Load settings from Firebase to get latest credentials
   const s = await fbGet('/settings').catch(()=>({}));
   settings = s || {};
-  
-  const validPass = String(settings.adminPass || '1234');
+  const validPass = settings.adminPass || 'admin123';
   if (p === validPass) {
     sessionStorage.setItem('auth','1');
     document.getElementById('loginScreen').style.display = 'none';
@@ -583,7 +560,7 @@ async function doLogin() {
 // STATE
 // ══════════════════════════════════
 let slots = {}, bookings = {}, notifs = {}, settings = {};
-let slotFilter = 'today', bookFilter = 'today';
+let slotFilter = 'today', bookFilter = 'upcoming';
 let selWorkDays = [0,1,2,3,4,5,6];
 const DAY_SHORT = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
 let lastNotifCount = 0;
@@ -1035,9 +1012,9 @@ window.clearAllSlots = function() {
 // PASSWORD
 // ══════════════════════════════════
 window.changePwd = async function() {
-  const old=document.getElementById('pwdOld').value.trim(), nw=document.getElementById('pwdNew').value.trim(), cf=document.getElementById('pwdConf').value.trim();
-  if (String(old) !== getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة',true); return; }
-  if (nw.length < 1) { toast('⚠️ كلمة المرور قصيرة جداً',true); return; }
+  const old=document.getElementById('pwdOld').value, nw=document.getElementById('pwdNew').value.trim(), cf=document.getElementById('pwdConf').value;
+  if (old !== getPass()) { toast('❌ كلمة المرور الحالية غير صحيحة',true); return; }
+  if (nw.length < 4) { toast('⚠️ كلمة المرور قصيرة جداً',true); return; }
   if (nw !== cf) { toast('⚠️ كلمتا المرور غير متطابقتين',true); return; }
   // Save to Firebase - works on all devices
   await fbPatch('/settings', { adminPass: nw });
