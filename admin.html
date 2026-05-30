@@ -352,10 +352,8 @@ select.inp option{background:#0b1518}
           <div class="ctitle"><div class="ci">⚡</div> توليد أوقات شهر كامل تلقائياً</div>
           <div class="hint hint-teal">اضبط الإعدادات وضغط الزر — يتولد كل شيء تلقائياً مع تجاهل الإجازات وأيام الإغلاق</div>
           <div style="display:grid;gap:11px">
-            <div class="row2">
-              <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
-              <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
-            </div>
+            <div><div class="ilabel">من</div><input type="time" class="inp" id="autoFrom" value="08:00"></div>
+            <div><div class="ilabel">إلى</div><input type="time" class="inp" id="autoTo" value="23:00"></div>
             <div><div class="ilabel">مدة كل حجز</div>
               <select class="inp" id="autoDur">
                 <option value="60">ساعة (60 دقيقة)</option>
@@ -465,9 +463,9 @@ select.inp option{background:#0b1518}
         <div class="card">
           <div class="ctitle"><div class="ci">🕐</div> أوقات العمل</div>
           <div class="hint">هذه الأوقات تؤثر على التوليد التلقائي وموقع الزبائن</div>
-          <div class="row2" style="margin-bottom:12px">
-            <div><div class="ilabel">وقت الفتح</div><input type="time" class="inp" id="sOpen" value="08:00"></div>
-            <div><div class="ilabel">وقت الإغلاق</div><input type="time" class="inp" id="sClose" value="23:00"></div>
+          <div style="display:grid;gap:10px;margin-bottom:12px">
+            <div><div class="ilabel">من</div><input type="time" class="inp" id="sOpen" value="08:00"></div>
+            <div><div class="ilabel">إلى</div><input type="time" class="inp" id="sClose" value="23:00"></div>
           </div>
           <div class="ilabel" style="margin-bottom:6px">أيام العمل</div>
           <div class="days-sel" id="daysSel"></div>
