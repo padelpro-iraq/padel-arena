@@ -290,7 +290,7 @@ select.inp option{background:#0b1518}
          id="path2" />
     </g>
   </svg>
-      <span class="h-badge">أدمن</span>
+      <span class="h-badge" id="venueBadge">أدمن</span>
     </div>
     <div class="h-actions">
       <div class="notif-wrap" id="notifWrap">
@@ -471,11 +471,12 @@ select.inp option{background:#0b1518}
       <div class="card full">
         <div class="ctitle"><div class="ci">📋</div> الحجوزات <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:8px" id="booksCount"></span></div>
         <div class="ftabs">
+          <button class="ftab on" data-bf="all">الكل</button>
           <button class="ftab" data-bf="today">اليوم</button>
-          <button class="ftab on" data-bf="upcoming">القادمة</button>
-          <button class="ftab" data-bf="all">الكل</button>
+          <button class="ftab" data-bf="upcoming">القادمة</button>
           <button class="ftab" data-bf="1">ملعب 1</button>
           <button class="ftab" data-bf="2">ملعب 2</button>
+          <button class="ftab" data-bf="3">بادل بول</button>
         </div>
         <div class="list" id="bookList"></div>
       </div>
@@ -550,6 +551,7 @@ select.inp option{background:#0b1518}
               <option value="3">قبل 3 ساعات</option>
             </select>
           </div>
+          <div style="margin-top:8px" id="waLinkWrap"></div>
           <button class="btn btn-ghost" style="max-width:200px" id="saveVenueBtn">💾 حفظ الإعدادات</button>
         </div>
 
@@ -669,7 +671,7 @@ async function doLogin() {
 // STATE
 // ══════════════════════════════════
 let slots = {}, bookings = {}, notifs = {}, settings = {};
-let slotFilter = 'today', bookFilter = 'upcoming';
+let slotFilter = 'today', bookFilter = 'all';
 let selWorkDays = [0,1,2,3,4,5,6];
 const DAY_SHORT = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
 let lastNotifCount = 0;
@@ -802,6 +804,7 @@ function renderBookings() {
   else if (bookFilter==='upcoming') entries = entries.filter(([k,b])=>b.date>=today);
   else if (bookFilter==='1') entries = entries.filter(([k,b])=>b.court==='1');
   else if (bookFilter==='2') entries = entries.filter(([k,b])=>b.court==='2');
+  else if (bookFilter==='3') entries = entries.filter(([k,b])=>b.court==='3');
 
   document.getElementById('booksCount').textContent = `(${entries.length})`;
 
@@ -961,8 +964,15 @@ function loadSettingsUI() {
   document.getElementById('sClose').value = settings.closeTime || '23:00';
   selWorkDays = settings.workDays || [0,1,2,3,4,5,6];
   if (settings.venueName) document.getElementById('vName').value = settings.venueName;
+  // Update header badge with venue name
+  const badge = document.getElementById('venueBadge');
+  if (badge) badge.textContent = settings.venueName || 'أدمن';
   if (settings.venuePrice) document.getElementById('vPrice').value = settings.venuePrice;
-  if (settings.waNumber) document.getElementById('vWaNumber').value = settings.waNumber;
+  if (settings.waNumber) {
+    document.getElementById('vWaNumber').value = settings.waNumber;
+    const waWrap = document.getElementById('waLinkWrap');
+    if (waWrap) waWrap.innerHTML = `<a href="https://wa.me/${settings.waNumber}" target="_blank" style="font-size:12px;color:#4ade80;text-decoration:none;display:inline-flex;align-items:center;gap:5px">📲 فتح واتساب مباشرة ←</a>`;
+  }
   if (settings.reminderHrs !== undefined) document.getElementById('vReminderHrs').value = settings.reminderHrs;
   buildDaysSel();
 }
@@ -1125,6 +1135,10 @@ window.saveVenueSettings = async function() {
   };
   await fbSet('/settings', s);
   settings = s;
+  const badge = document.getElementById('venueBadge');
+  if (badge) badge.textContent = s.venueName || 'أدمن';
+  const waWrap = document.getElementById('waLinkWrap');
+  if (waWrap && waNum) waWrap.innerHTML = `<a href="https://wa.me/${waNum}" target="_blank" style="font-size:12px;color:#4ade80;text-decoration:none;display:inline-flex;align-items:center;gap:5px">📲 فتح واتساب مباشرة ←</a>`;
   toast('✅ تم حفظ الإعدادات');
 };
 
@@ -1153,11 +1167,28 @@ window.doManualBook = async function() {
   if (!date||!from||!to||!name||!phone) { toast('⚠️ أكمل جميع الحقول',true); return; }
   if (from >= to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية',true); return; }
 
-  // Create or find slot
+  // Create or find slot — and create hourly sub-slots for board display
   const slotKey = 'slot_'+date.replace(/-/g,'')+'_c'+court+'_'+from.replace(':','');
   if (!slots[slotKey]) {
     await fbSet('/slots/'+slotKey, {court, date, from, to});
     slots[slotKey] = {court, date, from, to};
+  }
+
+  // Also create intermediate hourly slots so board shows the full duration
+  const fromMinsTotal = timeToMins(from);
+  const toMinsTotal = timeToMins(to);
+  const subSlotKeys = [slotKey];
+  for (let cur = fromMinsTotal + 60; cur < toMinsTotal; cur += 60) {
+    const hh = Math.floor(cur / 60) % 24, mm = cur % 60;
+    const midFrom = pad(hh) + ':' + pad(mm);
+    const midToM = cur + 60;
+    const midTo = pad(Math.floor(midToM/60)%24) + ':' + pad(midToM%60);
+    const subKey = 'slot_'+date.replace(/-/g,'')+'_c'+court+'_'+midFrom.replace(':','');
+    if (!slots[subKey]) {
+      await fbSet('/slots/'+subKey, {court, date, from: midFrom, to: midTo, subOf: slotKey});
+      slots[subKey] = {court, date, from: midFrom, to: midTo, subOf: slotKey};
+    }
+    subSlotKeys.push(subKey);
   }
 
   // Check time conflict (overlap check, not just exact key)
@@ -1169,7 +1200,7 @@ window.doManualBook = async function() {
   if (conflict) { toast('⚠️ يوجد تعارض مع حجز آخر في نفس الوقت',true); return; }
 
   const bookingData = {
-    slotId: slotKey, court, date, from, to,
+    slotId: slotKey, subSlotIds: subSlotKeys, court, date, from, to,
     name, phone, price, manual: true, ts: Date.now()
   };
   const newKey = 'bk_manual_'+Date.now();
@@ -1238,7 +1269,9 @@ function renderBoard() {
       </div>`;
 
     const slotsHtml = courtSlots.map(([key,s]) => {
-      const bk = Object.values(bookings).find(b => b.slotId === key);
+      const bk = Object.values(bookings).find(b =>
+        b.slotId === key || (b.subSlotIds && b.subSlotIds.includes(key))
+      );
       const cls = bk ? (bk.manual ? 'manual' : 'booked') : 'free';
       const label = bk ? (bk.name.length > 10 ? bk.name.slice(0,10)+'…' : bk.name) : 'متاح';
       return `<div class="board-slot ${cls}">
