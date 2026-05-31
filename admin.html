@@ -1360,7 +1360,6 @@ function renderBoard() {
   if (!el) return;
   const dateEl = document.getElementById('boardDate');
   const date = dateEl ? dateEl.value : new Date().toISOString().split('T')[0];
-  const nextD = nextDay(date);
 
   const courts = [
     {id:'1', label:'🔵 الملعب الأول – بادل'},
@@ -1369,17 +1368,9 @@ function renderBoard() {
   ];
 
   el.innerHTML = courts.map(ct => {
-    // slots اليوم (9ص فما فوق)
-    const daySlots = Object.entries(slots)
-      .filter(([k,s]) => s.court === ct.id && s.date === date && !s.subOf && timeToMins(s.from) >= 9*60)
-      .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
-
-    // slots الفجر من اليوم التالي (12ص → 02:59ص) كامتداد لليل
-    const fajrSlots = Object.entries(slots)
-      .filter(([k,s]) => s.court === ct.id && s.date === nextD && !s.subOf && timeToMins(s.from) < 3*60)
-      .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
-
-    const courtSlots = [...daySlots, ...fajrSlots];
+    const courtSlots = Object.entries(slots)
+      .filter(([k,s]) => s.court === ct.id && s.date === date && !s.subOf)
+      .sort((a,b) => a[1].from > b[1].from ? 1 : -1);
 
     if (!courtSlots.length) return `
       <div class="board-court">
@@ -1387,18 +1378,21 @@ function renderBoard() {
         <div style="font-size:12px;color:var(--muted);padding:12px">لا توجد أوقات مضافة لهذا اليوم</div>
       </div>`;
 
-    // حجوزات اليوم + الغد (لتغطية الحجوزات التي تتجاوز منتصف الليل)
+    // جيب كل حجوزات هذا الملعب واليوم
     const courtBookings = Object.values(bookings).filter(b =>
-      b.court === ct.id && (b.date === date || b.date === nextD)
+      b.court === ct.id && b.date === date
     );
 
     const slotsHtml = courtSlots.map(([key,s]) => {
       const slotFrom = timeToMins(s.from);
+      const slotTo   = timeToMins(s.to);
 
+      // تحقق: هل هذا الـ slot يقع ضمن مدة أي حجز؟ (مع دعم تجاوز منتصف الليل)
       const bk = courtBookings.find(b => {
         const bFrom = timeToMins(b.from);
         const bTo   = timeToMins(b.to);
         const dur   = bTo > bFrom ? bTo - bFrom : (1440 - bFrom) + bTo;
+        // تحقق من كل ساعة في الحجز
         for (let e = 0; e < dur; e += 60) {
           const checkMins = (bFrom + e) % 1440;
           const checkDate = (bFrom + e) >= 1440 ? nextDay(b.date) : b.date;
@@ -1409,10 +1403,10 @@ function renderBoard() {
 
       const cls   = bk ? (bk.manual ? 'manual' : 'booked') : 'free';
       const label = bk ? (bk.name.length > 10 ? bk.name.slice(0,10)+'…' : bk.name) : 'متاح';
-      const moon  = s.date === nextD ? ' 🌙' : '';
+      const dur   = bk ? ` · ${(timeToMins(bk.to)-timeToMins(bk.from))/60}س` : '';
       return `<div class="board-slot ${cls}">
-        <div class="board-slot-time">${to12(s.from)}${moon}</div>
-        <div class="board-slot-name">${label}</div>
+        <div class="board-slot-time">${to12(s.from)}</div>
+        <div class="board-slot-name">${label}${dur}</div>
       </div>`;
     }).join('');
 
