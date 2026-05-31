@@ -563,32 +563,32 @@ function renderCourt(court) {
   const dur = courtDur[court] || 60;
 
   // كل يوم يعرض فترتين:
-  // فترة 1: 00:00 → 02:00 (من اليوم التالي — فجر)
-  // فترة 2: 09:00 → 23:59 (اليوم الحالي)
+  // فترة 1: 00:00 → 02:00 (بداية اليوم — فجر)
+  // فترة 2: 09:00 → 23:00 (بقية اليوم)
+  // الفترة 03:00-08:59 مغلقة ولا تُعرض
 
   const nowDate = new Date().toISOString().split('T')[0];
   const nowMins = new Date().getHours()*60 + new Date().getMinutes();
-  const nextD = nextDay(selDate);
-
-  // slots اليوم الحالي (9ص → آخر الليل)
-  const dayNightSlots = Object.entries(slots)
+  const allDaySlots = Object.entries(slots)
     .filter(([k,s]) => {
       if (s.court !== court || s.date !== selDate) return false;
+      // Hide past slots for today
       if (selDate === nowDate && timeToMins(s.from) <= nowMins) return false;
-      return timeToMins(s.from) >= 9*60;
-    })
+      return true;
+    });
+
+  // فجر (00:00 → 02:59)
+  const fajrSlots = allDaySlots
+    .filter(([k,s]) => timeToMins(s.from) < 3*60)
     .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
 
-  // slots الفجر من اليوم التالي (12ص → 02:59ص) تُعرض كامتداد لهذا اليوم
-  const fajrSlots = Object.entries(slots)
-    .filter(([k,s]) => {
-      if (s.court !== court || s.date !== nextD) return false;
-      return timeToMins(s.from) < 3*60;
-    })
+  // نهار وليل (09:00 → 23:59)
+  const dayNightSlots = allDaySlots
+    .filter(([k,s]) => timeToMins(s.from) >= 9*60)
     .sort((a,b) => timeToMins(a[1].from) - timeToMins(b[1].from));
 
-  // الترتيب: نهار/ليل أولاً، ثم الفجر (امتداد ما بعد منتصف الليل)
-  let daySlots = [...dayNightSlots, ...fajrSlots];
+  // الترتيب: فجر أول، ثم نهار/ليل
+  let daySlots = [...fajrSlots, ...dayNightSlots];
 
   if (!daySlots.length) {
     el.innerHTML='<div class="no-slots">⏳ لا توجد أوقات لهذا اليوم</div>';
@@ -601,8 +601,8 @@ function renderCourt(court) {
     const isBooked = Object.values(bookings).some(b=>
       b.slotId===key || (b.allSlots && b.allSlots.includes(key))
     );
-    // For multi-hour: use the slot's actual date (may be next day for fajr)
-    const canBook = !isBooked && canBookDuration(court, s.date, s.from, dur);
+    // For multi-hour: check if enough consecutive slots are free
+    const canBook = !isBooked && canBookDuration(court, selDate, s.from, dur);
     const div = document.createElement('div');
     div.className = 'slot' + ((!canBook || isBooked) ? ' booked' : '');
     if (isBooked) {
