@@ -882,7 +882,7 @@ function renderBookings() {
   const el = document.getElementById('bookList');
   const today = new Date().toISOString().split('T')[0];
 
-  let entries = Object.entries(bookings).sort((a,b)=>b[1].ts-a[1].ts);
+  let entries = Object.entries(bookings).sort((a,b)=>(b[1].date+b[1].from)>(a[1].date+a[1].from)?1:(b[1].date+b[1].from)<(a[1].date+a[1].from)?-1:b[1].ts-a[1].ts);
   if (bookFilter==='today') entries = entries.filter(([k,b])=>b.date===today);
   else if (bookFilter==='upcoming') entries = entries.filter(([k,b])=>b.date>=today);
   else if (bookFilter==='1') entries = entries.filter(([k,b])=>b.court==='1');
@@ -910,7 +910,7 @@ function renderBookings() {
           <div class="bname" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.name}</div>
           ${b.manual?'<span style="font-size:10px;background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:20px;border:1px solid rgba(245,158,11,0.3);flex-shrink:0">يدوي</span>':''}
         </div>
-        <div class="bmeta">${cn} · ${fmt(b.date)} · ${to12(b.from)} – ${to12(b.to)}${b.price ? ` · <span style="color:var(--lime);font-weight:700">${b.price/1000} ألف</span>` : ''}</div>
+        <div class="bmeta">${cn} · ${fmt(b.date)} · ${to12(b.from)} – ${to12(b.to)}${timeToMins(b.to) < timeToMins(b.from) ? ` <span style="color:#f97316;font-size:10px">← ${fmt(nextDay(b.date))}</span>` : ''}${b.price ? ` · <span style="color:var(--lime);font-weight:700">${b.price/1000} ألف</span>` : ''}</div>
         <div style="margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">${arrivalInfo}${delayInfo}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;margin-right:10px">
@@ -1304,9 +1304,9 @@ window.doManualBook = async function() {
 
   if (!date||!from||!to||!name||!phone) { toast('⚠️ أكمل جميع الحقول',true); return; }
 
-  // التحقق من رقم العراقي — 11 رقم يبدأ بـ 077 أو 078
+  // التحقق من رقم العراقي — 11 رقم يبدأ بـ 07
   const phoneClean2 = phone.replace(/\D/g,'');
-  if (!/^07[78]\d{8}$/.test(phoneClean2)) { toast('⚠️ الرقم يجب أن يكون 11 رقم ويبدأ بـ 077 أو 078',true); return; }
+  if (!/^07\d{9}$/.test(phoneClean2)) { toast('⚠️ الرقم يجب أن يكون 11 رقم ويبدأ بـ 07',true); return; }
 
   // ✅ منع حجز أوقات ماضية
   const today = new Date().toISOString().split('T')[0];
@@ -1352,7 +1352,7 @@ window.doManualBook = async function() {
   let curDate = date;
   const durationMins = dur2;
   for (let elapsed = 60; elapsed < durationMins; elapsed += 60) {
-    if (cur >= 1440) { cur -= 1440; curDate = nextDay(date); }
+    if (cur >= 1440) { cur -= 1440; curDate = nextDay(curDate); }
     const hh = Math.floor(cur / 60) % 24, mm = cur % 60;
     const midFrom = pad(hh) + ':' + pad(mm);
     const midToM = cur + 60;
@@ -1404,7 +1404,8 @@ window.doManualBook = async function() {
   // ✅ ntfy push notification
   try {
     const ntfyTitle = encodeURIComponent(`📝 حجز يدوي - ${name}`);
-    const ntfyMsg = `${cName}\n📅 ${fmt(date)}\n⏰ ${to12(from)} - ${to12(to)}\n👤 ${name}\n📞 ${phone}\n💰 ${(price/1000)} ألف د.ع`;
+    const crossMidAdmin = timeToMins(to) < timeToMins(from);
+    const ntfyMsg = `${cName}\n📅 ${fmt(date)}${crossMidAdmin ? ' ← ' + fmt(nextDay(date)) : ''}\n⏰ ${to12(from)} - ${to12(to)}\n👤 ${name}\n📞 ${phone}\n💰 ${(price/1000)} ألف د.ع`;
     await fetch(`https://ntfy.sh/padelpro_bookings_x9k2?title=${ntfyTitle}&priority=high&tags=memo,tennis`, {
       method: 'POST', mode: 'no-cors', body: ntfyMsg
     });
@@ -1835,14 +1836,16 @@ function timeToMins(t) { const [h,m]=t.split(':').map(Number); return h*60+m; }
 function nextDay(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
   d.setDate(d.getDate() + 1);
-  return d.toISOString().split('T')[0];
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 }
 function fmt(d) {
   if(!d) return '';
-  const dt = new Date(d+'T00:00:00');
+  const [y,mo,day] = d.split('-').map(Number);
   const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
   const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-  return `${days[dt.getDay()]} ${dt.getDate()} ${months[dt.getMonth()]}`;
+  // حساب اليوم بدون Date object لتجنب مشاكل timezone
+  const t = new Date(y + '-' + String(mo).padStart(2,'0') + '-' + String(day).padStart(2,'0') + 'T12:00:00');
+  return days[t.getDay()] + ' ' + day + ' ' + months[mo-1] + ' ' + y;
 }
 function to12(t) {
   if(!t) return '';
