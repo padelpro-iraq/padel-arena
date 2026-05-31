@@ -555,8 +555,21 @@ select.inp option{background:#0b1518}
               <input type="tel" class="inp" id="blPhone" placeholder="07xxxxxxxxx" dir="ltr">
             </div>
             <div>
-              <div class="ilabel">سبب الحظر (اختياري)</div>
-              <input type="text" class="inp" id="blReason" placeholder="مثال: إلغاء متكرر">
+              <div class="ilabel">سبب الحظر</div>
+              <select class="inp" id="blReason">
+                <option value="">— اختر السبب —</option>
+                <option value="حجز ولم يحضر">حجز ولم يحضر</option>
+                <option value="إلغاء متكرر">إلغاء متكرر</option>
+                <option value="سلوك غير لائق">سلوك غير لائق</option>
+                <option value="عدم الدفع">عدم الدفع</option>
+                <option value="إزعاج الآخرين">إزعاج الآخرين</option>
+                <option value="أضرار بالمرفق">أضرار بالمرفق</option>
+                <option value="آخر">آخر (اكتب بالخانة أدناه)</option>
+              </select>
+            </div>
+            <div id="blReasonOtherWrap" style="display:none">
+              <div class="ilabel">تفاصيل السبب</div>
+              <input type="text" class="inp" id="blReasonOther" placeholder="اكتب السبب...">
             </div>
             <button class="btn btn-red" id="addBlacklistBtn">🚫 إضافة إلى القائمة السوداء</button>
           </div>
@@ -903,7 +916,7 @@ function renderBookings() {
       <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;margin-right:10px">
         <div class="bphone" dir="ltr">${b.phone}</div>
         <button class="bsm bsm-r" onclick="cancelBook('${key}')">إلغاء</button>
-        <button class="bsm" onclick="addToBlacklist('${b.name.replace(/'/g,"\\'")}','${b.phone}')" style="background:rgba(80,0,0,0.25);color:#ff6b6b;border:1px solid rgba(255,68,68,0.35);font-size:10px;padding:3px 8px">🚫 قائمة سوداء</button>
+        <button class="bsm" onclick="addToBlacklist('${b.name.replace(/'/g,"\\'")}','${b.phone}','${key}')" style="background:rgba(80,0,0,0.25);color:#ff6b6b;border:1px solid rgba(255,68,68,0.35);font-size:10px;padding:3px 8px">🚫 قائمة سوداء</button>
       </div>
     </div>`;
   }).join('');
@@ -1301,6 +1314,25 @@ window.doManualBook = async function() {
   if (date < today) { toast('⚠️ لا يمكن الحجز في تاريخ ماضٍ',true); return; }
   if (date === today && timeToMins(from) < nowMins) { toast('⚠️ لا يمكن الحجز في وقت مضى',true); return; }
 
+  // ✅ التحقق من أوقات العمل
+  const openTime = settings.openTime || '08:00';
+  const closeTime = settings.closeTime || '23:00';
+  const openMins = timeToMins(openTime);
+  const closeMins = timeToMins(closeTime);
+  const fromMinsCheck = timeToMins(from);
+  const toMinsCheck = timeToMins(to);
+  if (fromMinsCheck < openMins || toMinsCheck > closeMins) {
+    toast('⚠️ الحجز خارج أوقات العمل (' + openTime + ' – ' + closeTime + ')', true);
+    return;
+  }
+  // التحقق من أيام العمل
+  const bookDay = new Date(date + 'T12:00:00').getDay();
+  const workDays = settings.workDays || [0,1,2,3,4,5,6];
+  if (!workDays.includes(bookDay)) {
+    toast('⚠️ هذا اليوم ليس ضمن أيام العمل', true);
+    return;
+  }
+
   // حساب النهاية (مع دعم تجاوز منتصف الليل)
   const fromMinsTotal = timeToMins(from);
   const dur2 = parseInt(document.getElementById('mDur').value || '60');
@@ -1570,17 +1602,26 @@ function renderBlacklist() {
     </div>`).join('');
 }
 
-window.addToBlacklist = async function() {
+window.addBlacklistManual = async function() {
   const name = document.getElementById('blName').value.trim();
   const phone = document.getElementById('blPhone').value.trim().replace(/\D/g,'');
-  const reason = document.getElementById('blReason').value.trim();
+  const reasonSel = document.getElementById('blReason').value;
+  const reasonOther = document.getElementById('blReasonOther') ? document.getElementById('blReasonOther').value.trim() : '';
+  const reason = reasonSel === 'آخر' ? reasonOther : reasonSel;
   if (!name || !phone) { toast('⚠️ يرجى إدخال الاسم والرقم', true); return; }
+  if (!reason) { toast('⚠️ يرجى اختيار سبب الحظر', true); return; }
+  const alreadyIn = Object.values(blacklist).some(p => p.phone === phone);
+  if (alreadyIn) { toast('⚠️ هذا الشخص موجود في القائمة السوداء مسبقاً', true); return; }
   const key = 'bl_' + phone + '_' + Date.now();
   const data = { name, phone, reason, date: new Date().toISOString().split('T')[0], ts: Date.now() };
   await fbSet('/blacklist/'+key, data);
   blacklist[key] = data;
   renderBlacklist();
-  ['blName','blPhone','blReason'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('blName').value='';
+  document.getElementById('blPhone').value='';
+  document.getElementById('blReason').value='';
+  const otherWrap = document.getElementById('blReasonOtherWrap');
+  if (otherWrap) otherWrap.style.display='none';
   toast('🚫 تم إضافة الشخص إلى القائمة السوداء');
 };
 
@@ -1625,6 +1666,15 @@ function setupUI() {
     };
   });
 
+  // Blacklist reason dropdown show/hide
+  const blReasonSel = document.getElementById('blReason');
+  if (blReasonSel) {
+    blReasonSel.onchange = function() {
+      const wrap = document.getElementById('blReasonOtherWrap');
+      if (wrap) wrap.style.display = this.value === 'آخر' ? 'block' : 'none';
+    };
+  }
+
   // Notif click -> notifs tab
   document.getElementById('notifWrap').onclick = () => {
     document.querySelector('[data-tab="notifs"]').click();
@@ -1660,7 +1710,7 @@ function setupUI() {
   document.getElementById('saveVenueBtn').onclick = window.saveVenueSettings;
   document.getElementById('markAllBtn').onclick = window.markAllRead;
   document.getElementById('manualBookBtn').onclick = window.doManualBook;
-  document.getElementById('addBlacklistBtn').onclick = window.addToBlacklist;
+  document.getElementById('addBlacklistBtn').onclick = window.addBlacklistManual;
   document.getElementById('waConnectBtn').onclick = function() {
     const r = buildWaMessage();
     if (!r) return;
@@ -1690,23 +1740,37 @@ function setupUI() {
 // ══════════════════════════════════
 // ADD TO BLACKLIST FROM BOOKING
 // ══════════════════════════════════
-window.addToBlacklist = function(name, phone) {
-  // Fill the blacklist form fields
-  document.getElementById('blName').value = name;
-  document.getElementById('blPhone').value = phone;
-  document.getElementById('blReason').value = 'حجز ولم يحضر';
+window.addToBlacklist = async function(name, phone, bookingKey) {
+  // Check if already blacklisted
+  const alreadyIn = Object.values(blacklist).some(p => p.phone === phone.replace(/\D/g,''));
+  if (alreadyIn) {
+    toast('⚠️ هذا الشخص موجود في القائمة السوداء مسبقاً', true);
+    return;
+  }
 
-  // Switch to the blacklist tab using the same mechanism as the rest of the app
-  const blTab = document.querySelector('.tab[data-tab="blacklist"]');
-  if (blTab) blTab.click();
+  confirmDialog(`إضافة "${name}" للقائمة السوداء وإلغاء حجزه؟`, async () => {
+    const cleanPhone = phone.replace(/\D/g,'');
+    const blKey = 'bl_' + cleanPhone + '_' + Date.now();
+    const data = {
+      name,
+      phone: cleanPhone,
+      reason: 'حجز ولم يحضر',
+      date: new Date().toISOString().split('T')[0],
+      ts: Date.now()
+    };
+    await fbSet('/blacklist/' + blKey, data);
+    blacklist[blKey] = data;
 
-  // Scroll to top and focus reason field
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  setTimeout(() => {
-    document.getElementById('blReason').focus();
-  }, 400);
+    // Also cancel the booking automatically
+    if (bookingKey && bookings[bookingKey]) {
+      await fbDelete('/bookings/' + bookingKey);
+      delete bookings[bookingKey];
+    }
 
-  toast('📋 تم نقل بيانات اللاعب — راجع سبب الحظر واضغط إضافة');
+    renderBlacklist();
+    renderAll();
+    toast('🚫 تم إضافة ' + name + ' للقائمة السوداء وإلغاء حجزه');
+  });
 };
 
 // ══════════════════════════════════
