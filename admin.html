@@ -760,7 +760,8 @@ let lastNotifCount = 0;
 // INIT
 // ══════════════════════════════════
 async function init() {
-  const today = new Date().toISOString().split('T')[0];
+  const _d = new Date();
+  const today = _d.getFullYear()+'-'+pad(_d.getMonth()+1)+'-'+pad(_d.getDate());
   document.getElementById('aD').value = today;
   document.getElementById('mDate').value = today;
   document.getElementById('mFrom').value = '08:00';
@@ -1309,19 +1310,24 @@ window.doManualBook = async function() {
   if (!/^07\d{9}$/.test(phoneClean2)) { toast('⚠️ الرقم يجب أن يكون 11 رقم ويبدأ بـ 07',true); return; }
 
   // ✅ منع حجز أوقات ماضية
-  const today = new Date().toISOString().split('T')[0];
+  const _td = new Date();
+  const today = _td.getFullYear()+'-'+pad(_td.getMonth()+1)+'-'+pad(_td.getDate());
   const nowMins = new Date().getHours()*60 + new Date().getMinutes();
   if (date < today) { toast('⚠️ لا يمكن الحجز في تاريخ ماضٍ',true); return; }
   if (date === today && timeToMins(from) < nowMins) { toast('⚠️ لا يمكن الحجز في وقت مضى',true); return; }
 
-  // ✅ التحقق من أوقات العمل
-  const openTime = settings.openTime || '08:00';
-  const closeTime = settings.closeTime || '23:00';
+  // ✅ التحقق من أوقات العمل (مع دعم الإغلاق بعد منتصف الليل)
+  const openTime = settings.openTime || '09:00';
+  const closeTime = settings.closeTime || '02:00';
   const openMins = timeToMins(openTime);
   const closeMins = timeToMins(closeTime);
   const fromMinsCheck = timeToMins(from);
-  const toMinsCheck = timeToMins(to);
-  if (fromMinsCheck < openMins || toMinsCheck > closeMins) {
+  // إذا وقت الإغلاق بعد منتصف الليل (أصغر من الافتتاح)، نتجاوز هذا الفحص
+  const crossMidClose = closeMins < openMins;
+  const outsideHours = crossMidClose
+    ? (fromMinsCheck < openMins && fromMinsCheck >= closeMins)
+    : (fromMinsCheck < openMins || fromMinsCheck >= closeMins);
+  if (outsideHours) {
     toast('⚠️ الحجز خارج أوقات العمل (' + openTime + ' – ' + closeTime + ')', true);
     return;
   }
