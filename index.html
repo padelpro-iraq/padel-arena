@@ -694,6 +694,22 @@ async function doBook(withWa) {
   if (!name) { toast('⚠️ أدخل اسمك الكامل', true); return; }
   if (!phone) { toast('⚠️ أدخل رقم الجوال', true); return; }
 
+  // التحقق من رقم العراقي — 11 رقم يبدأ بـ 077 أو 078
+  const phoneClean = phone.replace(/\D/g,'');
+  if (!/^07[78]\d{8}$/.test(phoneClean)) {
+    toast('⚠️ الرقم يجب أن يكون 11 رقم ويبدأ بـ 077 أو 078', true);
+    return;
+  }
+
+  // منع نفس الرقم مرتين في نفس اليوم
+  const dupPhone = Object.values(bookings).find(b =>
+    b.date === pending.date && b.phone && b.phone.replace(/\D/g,'') === phoneClean
+  );
+  if (dupPhone) {
+    toast('⚠️ هذا الرقم عنده حجز بالفعل في هذا اليوم', true);
+    return;
+  }
+
   document.getElementById('btnConfirm').disabled = true;
   document.getElementById('btnConfirm').textContent = '⏳ جاري الحجز...';
 
@@ -737,7 +753,7 @@ async function doBook(withWa) {
     const ntfyTitle = encodeURIComponent('🎾 حجز جديد - ' + name);
     const ntfyTags = 'tada,tennis';
     const ntfyPriority = 'high';
-    const ntfyMsg = `${cName}\n📅 ${fmt(pending.date)}\n⏰ ${to12(pending.from)} - ${to12(endTime)}\n👤 ${name} | ${phone}\n💰 ${pending.price.toLocaleString()} د.ع`;
+    const ntfyMsg = `${cName}\n📅 ${fmt(pending.date)}\n⏰ ${to12(pending.from)} - ${to12(endTime)}\n👤 ${name}\n📞 ${phone}\n💰 ${pending.price/1000} ألف د.ع`;
     await fetch(`https://ntfy.sh/padelpro_bookings_x9k2?title=${ntfyTitle}&priority=${ntfyPriority}&tags=${ntfyTags}`, {
       method: 'POST',
       mode: 'no-cors',

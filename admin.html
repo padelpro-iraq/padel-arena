@@ -1242,6 +1242,11 @@ window.doManualBook = async function() {
   const price = parseInt(document.getElementById('mPrice').value) || 0;
 
   if (!date||!from||!to||!name||!phone) { toast('⚠️ أكمل جميع الحقول',true); return; }
+  if (from >= to && timeToMins(to) > timeToMins(from) - 1) { /* ok */ }
+
+  // التحقق من رقم العراقي — 11 رقم يبدأ بـ 077 أو 078
+  const phoneClean2 = phone.replace(/\D/g,'');
+  if (!/^07[78]\d{8}$/.test(phoneClean2)) { toast('⚠️ الرقم يجب أن يكون 11 رقم ويبدأ بـ 077 أو 078',true); return; }
   if (from >= to) { toast('⚠️ وقت النهاية يجب أن يكون بعد البداية',true); return; }
 
   // ✅ منع حجز أوقات ماضية
@@ -1311,7 +1316,7 @@ window.doManualBook = async function() {
   // ✅ ntfy push notification
   try {
     const ntfyTitle = encodeURIComponent(`📝 حجز يدوي - ${name}`);
-    const ntfyMsg = `${cName}\n📅 ${fmt(date)}\n⏰ ${from} - ${to}\n👤 ${name} | ${phone}\n💰 ${price.toLocaleString()} د.ع`;
+    const ntfyMsg = `${cName}\n📅 ${fmt(date)}\n⏰ ${to12(from)} - ${to12(to)}\n👤 ${name}\n📞 ${phone}\n💰 ${(price/1000)} ألف د.ع`;
     await fetch(`https://ntfy.sh/padelpro_bookings_x9k2?title=${ntfyTitle}&priority=high&tags=memo,tennis`, {
       method: 'POST', mode: 'no-cors', body: ntfyMsg
     });
