@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salon Art - احجز موعدك</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;direction:rtl;background:#f7f3ee;min-height:100vh;}
+.app{min-height:100vh;padding-bottom:80px;}
+.header{background:linear-gradient(160deg,#0a0a0a 60%,#1a1208 100%);padding:36px 20px 28px;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,#c9a84c18 0%,transparent 70%);}
+.logo-ring{width:110px;height:110px;border:1px solid #c9a84c44;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;position:relative;background:radial-gradient(circle,#1a1208,#0a0a0a);}
+.logo-ring::after{content:'';position:absolute;inset:-5px;border:1px solid #c9a84c18;border-radius:50%;}
+.logo-svg{width:100px;height:100px;}
+.brand{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:#f5f0ea;letter-spacing:4px;}
+.brand span{color:#c9a84c;}
+.brand-sub{font-size:10px;color:#c9a84c88;letter-spacing:5px;font-weight:500;display:block;margin:6px 0 4px;}
+.header-desc{font-size:12px;color:#555;margin-top:6px;}
+.section{padding:22px 18px 0;max-width:460px;margin:0 auto;}
+.lbl{font-size:10px;font-weight:700;color:#b0a090;letter-spacing:3px;margin-bottom:10px;}
+.divider{height:1px;background:linear-gradient(to left,transparent,#e0d8cc,transparent);margin:22px auto 0;max-width:460px;}
+.inp{width:100%;background:#fff;border:1.5px solid #e8e0d5;border-radius:12px;padding:14px 16px;font-family:'Tajawal',sans-serif;font-size:15px;color:#111;outline:none;transition:border-color .2s;margin-bottom:10px;display:block;}
+.inp::placeholder{color:#ccc;}
+.inp:focus{border-color:#c9a84c;}
+.inp.error{border-color:#e05555;}
+.inp-err{font-size:11px;color:#e05555;margin:-6px 0 8px 4px;display:none;}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.service-btn{background:#fff;border:1.5px solid #e8e0d5;border-radius:12px;padding:14px 12px;cursor:pointer;transition:all .18s;text-align:right;}
+.service-btn:hover{border-color:#c9a84c66;}
+.service-btn.sel{background:#111;border-color:#111;}
+.service-name{font-size:14px;font-weight:700;color:#333;display:block;}
+.service-btn.sel .service-name{color:#f5f0ea;}
+.service-price{font-size:12px;color:#c9a84c;font-weight:700;margin-top:3px;display:block;}
+.days-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;}
+.days-scroll::-webkit-scrollbar{display:none;}
+.day-card{flex-shrink:0;width:64px;background:#fff;border:1.5px solid #e8e0d5;border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s;}
+.day-card:hover:not(.disabled){border-color:#c9a84c66;}
+.day-card.sel{background:#111;border-color:#111;}
+.day-card.disabled{opacity:.3;cursor:not-allowed;}
+.day-card.today{border-color:#c9a84c44;}
+.day-name{font-size:11px;font-weight:700;color:#aaa;display:block;margin-bottom:4px;}
+.day-card.sel .day-name{color:#c9a84c88;}
+.day-num{font-size:20px;font-weight:900;color:#333;display:block;}
+.day-card.sel .day-num{color:#c9a84c;}
+.day-card.today .day-num{color:#c9a84c;}
+.day-month{font-size:10px;color:#bbb;display:block;margin-top:2px;}
+.slots-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.slot-btn{background:#fff;border:1.5px solid #e8e0d5;border-radius:10px;padding:13px 4px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;color:#666;cursor:pointer;transition:all .18s;text-align:center;width:100%;}
+.slot-btn:hover:not(.bkd):not(.sel):not(.past){border-color:#c9a84c;color:#c9a84c;}
+.slot-btn.sel{background:#111;border-color:#111;color:#c9a84c;font-weight:900;}
+.slot-btn.bkd{opacity:.3;cursor:not-allowed;}
+.slot-btn.bkd::after{content:"محجوز";display:block;font-size:9px;color:#e05555;}
+.slot-btn.past{opacity:.2;cursor:not-allowed;text-decoration:line-through;}
+.all-booked{background:#fff8f0;border:1.5px solid #f0c080;border-radius:12px;padding:18px;text-align:center;margin-top:4px;}
+.all-booked p{font-size:14px;color:#8a5000;font-weight:700;margin-bottom:6px;}
+.all-booked small{font-size:12px;color:#b07030;}
+.book-btn{width:100%;padding:17px;background:linear-gradient(135deg,#b8942a,#c9a84c,#e2c060,#c9a84c);background-size:300%;color:#0d0d0d;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:900;border:none;border-radius:13px;cursor:pointer;transition:all .4s;box-shadow:0 4px 20px #c9a84c33;}
+.book-btn:hover:not(:disabled){background-position:right center;transform:translateY(-2px);}
+.book-btn:disabled{opacity:.3;cursor:not-allowed;background:#ccc;box-shadow:none;transform:none;}
+.wait-btn{width:100%;padding:15px;background:transparent;border:1.5px solid #c9a84c;color:#c9a84c;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;border-radius:13px;cursor:pointer;}
+.success{background:#fff;border:1px solid #e8e0d5;border-radius:18px;padding:30px 22px;text-align:center;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.success h2{font-size:22px;font-weight:900;color:#111;margin-bottom:4px;}
+.success-sub{font-size:13px;color:#bbb;margin-bottom:20px;}
+.detail-box{background:#f7f3ee;border-radius:12px;padding:4px 18px;margin-bottom:16px;text-align:right;}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #ede8e0;}
+.detail-row:last-child{border:none;}
+.detail-row span{font-size:12px;color:#bbb;}
+.detail-row strong{font-size:14px;color:#111;font-weight:700;}
+.price-row{background:#f0f8f0;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;}
+.price-row span{font-size:13px;color:#4a8a4a;font-weight:700;}
+.price-row strong{font-size:18px;color:#2a6a2a;font-weight:900;}
+.warn-box{background:#fffbf0;border:1.5px solid #f0d060;border-radius:11px;padding:14px 16px;font-size:13px;color:#7a5c00;line-height:1.9;margin-bottom:18px;}
+.new-book-btn{width:100%;padding:14px;background:#111;border:none;border-radius:12px;color:#c9a84c;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.wait-success{background:#fff;border:1.5px solid #c9a84c44;border-radius:18px;padding:28px 22px;text-align:center;animation:pop .35s ease;}
+.wait-success h2{font-size:20px;font-weight:900;color:#111;margin:12px 0 6px;}
+.loading-screen{position:fixed;inset:0;background:#f7f3ee;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+.loading-screen svg{animation:spin 1.5s linear infinite;}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.loading-screen p{margin-top:16px;color:#b0a090;font-size:14px;}
+.hidden{display:none;}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#111;color:#c9a84c;padding:12px 28px;border-radius:50px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;z-index:999;white-space:nowrap;display:none;box-shadow:0 4px 24px #0008;}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <svg width="44" height="44" viewBox="0 0 54 54" fill="none">
+    <circle cx="27" cy="27" r="24" stroke="#e8e0d5" stroke-width="3"/>
+    <path d="M27 3 A24 24 0 0 1 51 27" stroke="#c9a84c" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <p>جاري التحميل...</p>
+</div>
+
+<div class="app" id="mainApp" style="display:none">
+  <div class="header">
+    <div class="logo-ring">
+      <svg class="logo-svg" viewBox="0 0 160 160" fill="none">
+        <circle cx="80" cy="80" r="72" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+        <circle cx="80" cy="80" r="63" stroke="#c9a84c" stroke-width="0.5" opacity="0.3" fill="none"/>
+        <line x1="48" y1="50" x2="112" y2="106" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+        <line x1="112" y1="50" x2="48" y2="106" stroke="#e8c96a" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="48" cy="106" r="12" stroke="#c9a84c" stroke-width="2.5" fill="none"/>
+        <circle cx="112" cy="106" r="12" stroke="#e8c96a" stroke-width="2.5" fill="none"/>
+        <circle cx="80" cy="77" r="7" fill="#0d0d0d" stroke="#c9a84c" stroke-width="2.5"/>
+        <circle cx="80" cy="77" r="2.8" fill="#c9a84c"/>
+      </svg>
+    </div>
+    <div class="brand">SALON <span>ART</span></div>
+    <span class="brand-sub">✦ احجز موعدك ✦</span>
+    <div class="header-desc" id="headerDesc">من 5 مساءً حتى 11 ليلاً</div>
+  </div>
+
+  <div id="formView">
+    <div class="section" style="margin-top:26px">
+      <div class="lbl">بياناتك</div>
+      <input class="inp" id="nameInp" placeholder="اسمك الكريم..." maxlength="30"/>
+      <div class="inp-err" id="nameErr">⚠️ الاسم يجب أن يكون 3 أحرف على الأقل</div>
+      <input class="inp" id="phoneInp" placeholder="رقم واتساب (07XXXXXXXXX)" maxlength="13" type="tel"/>
+      <div class="inp-err" id="phoneErr">⚠️ أدخل رقم عراقي صحيح</div>
+    </div>
+    <div class="divider"></div>
+    <div class="section" style="margin-top:22px">
+      <div class="lbl">اختار الخدمة</div>
+      <div class="services-grid" id="servicesGrid"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section" style="margin-top:22px">
+      <div class="lbl">اختار اليوم</div>
+      <div class="days-scroll" id="daysScroll"></div>
+    </div>
+    <div class="section" id="slotsSection" style="margin-top:20px;display:none">
+      <div class="lbl" id="slotsLabel">الساعات المتاحة</div>
+      <div class="slots-grid" id="slotsGrid"></div>
+      <div id="allBookedBox" style="display:none">
+        <div class="all-booked">
+          <p>⏳ كل الأوقات محجوزة!</p>
+          <small>انضم لقائمة الانتظار وسنبلغك إذا تفرغ وقت</small>
+        </div>
+      </div>
+    </div>
+    <div class="section" style="margin-top:22px" id="bookBtnSection">
+      <button class="book-btn" id="bookBtn" disabled onclick="handleBook()">اختار الخدمة واليوم والساعة</button>
+    </div>
+    <div class="section" style="margin-top:10px;display:none" id="waitBtnSection">
+      <button class="wait-btn" onclick="handleWaitlist()">+ انضم لقائمة الانتظار</button>
+    </div>
+    <div style="height:30px"></div>
+  </div>
+
+  <div id="successView" class="hidden">
+    <div class="section" style="margin-top:28px">
+      <div class="success">
+        <svg width="52" height="52" viewBox="0 0 54 54" fill="none" style="margin:0 auto 16px;display:block">
+          <circle cx="27" cy="27" r="26" stroke="#c9a84c" stroke-width="1" opacity=".5"/>
+          <line x1="27" y1="27" x2="8" y2="12" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="27" y1="27" x2="8" y2="42" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="27" y1="27" x2="46" y2="12" stroke="#e8c96a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="27" y1="27" x2="46" y2="42" stroke="#e8c96a" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="27" cy="27" r="3.5" fill="#c9a84c"/>
+        </svg>
+        <h2>تم الحجز بنجاح! ✅</h2>
+        <div class="success-sub">شكراً لاختيارك Salon Art ✨</div>
+        <div class="detail-box">
+          <div class="detail-row"><span>الاسم</span><strong id="s-name"></strong></div>
+          <div class="detail-row"><span>الخدمة</span><strong id="s-service"></strong></div>
+          <div class="detail-row"><span>التاريخ</span><strong id="s-date"></strong></div>
+          <div class="detail-row"><span>الساعة</span><strong id="s-slot"></strong></div>
+          <div class="detail-row"><span>رقم الهاتف</span><strong id="s-phone"></strong></div>
+        </div>
+        <div class="price-row"><span>السعر</span><strong id="s-price"></strong></div>
+        <div class="warn-box">
+          🔔 سيتواصل معك صاحب الصالون للتأكيد على واتساب.<br/>
+          ⚠️ التأخر أكثر من <strong>15 دقيقة</strong> يلغي حجزك.
+        </div>
+        <button class="new-book-btn" onclick="resetForm()">➕ حجز موعد آخر</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="waitlistView" class="hidden">
+    <div class="section" style="margin-top:28px">
+      <div class="wait-success">
+        <div style="font-size:48px">⏳</div>
+        <h2>تمت إضافتك لقائمة الانتظار</h2>
+        <p style="font-size:13px;color:#888;margin-top:8px">راح نبلغك على واتساب إذا تفرغ وقت ليوم <strong id="w-day"></strong></p>
+        <button class="new-book-btn" style="margin-top:18px" onclick="resetForm()">↩ العودة للحجز</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const _app = initializeApp({apiKey:"AIzaSyATJ5h3IKeINor1bGJeNnGI2mgoyMtETFQ",authDomain:"salon-art-4adea.firebaseapp.com",projectId:"salon-art-4adea",storageBucket:"salon-art-4adea.firebasestorage.app",messagingSenderId:"186276133082",appId:"1:186276133082:web:004c4e532e2862a67b8de3"});
+const _db = getFirestore(_app);
+const DOC_REF = doc(_db, "salon", "data");
+
+const CONFIG = {
+  TG_TOKEN:   '8205449854:AAEy8543td3uSxq7L96y09B73UKn0wwdBZE',
+  TG_CHAT:    '7706249764',
+  NTFY_TOPIC: 'salonart-mom18',
+};
+
+const ALL_SLOTS  = ["12:00 م","1:00 م","2:00 م","3:00 م","4:00 م","5:00 م","6:00 م","7:00 م","8:00 م","9:00 م","10:00 م","11:00 م","12:00 ص","1:00 ص","2:00 ص","3:00 ص","4:00 ص","5:00 ص","6:00 ص"];
+const SLOT_HOURS = {"12:00 م":12,"1:00 م":13,"2:00 م":14,"3:00 م":15,"4:00 م":16,"5:00 م":17,"6:00 م":18,"7:00 م":19,"8:00 م":20,"9:00 م":21,"10:00 م":22,"11:00 م":23,"12:00 ص":0,"1:00 ص":1,"2:00 ص":2,"3:00 ص":3,"4:00 ص":4,"5:00 ص":5,"6:00 ص":6};
+const DAY_NAMES  = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+const MONTH_NAMES= ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const SERVICES   = [
+  {id:'full',  name:'حلاقة كاملة', price:20000, priceLabel:'١٥٬٠٠٠ - ٢٥٬٠٠٠ د.ع'},
+  {id:'beard', name:'تحديد ولحية', price:10000},
+  {id:'wash',  name:'شسوار',        price:5000},
+  {id:'child', name:'طفل',          price:10000},
+];
+
+let data={bookings:[],waitlist:[],disabledDays:[],workHours:{start:"5:00 م",end:"11:00 م"}};
+let selService=null,selDateKey=null,selDateLabel=null,selSlot=null,isSaving=false;
+
+function makeDateKey(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`;}
+function makeLabel(d){return `${DAY_NAMES[d.getDay()]} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;}
+function formatPrice(p){return Number(p).toLocaleString('ar-IQ')+' د.ع';}
+function getNext7Days(){const days=[],t=new Date();t.setHours(0,0,0,0);for(let i=0;i<7;i++){const d=new Date(t);d.setDate(t.getDate()+i);days.push(d);}return days;}
+function normalizePhone(p){const c=p.replace(/\D/g,'');return c.startsWith('964')?'0'+c.slice(3):c;}
+function isValidPhone(p){const c=normalizePhone(p);return /^07[3-9]\d{8}$/.test(c);}
+function isValidName(n){return n.trim().length>=3&&/[\u0600-\u06FFa-zA-Z]/.test(n);}
+
+// أوقات العمل الفعلية من الإعدادات
+function getSlots(){
+  const wh=data.workHours||{start:"5:00 م",end:"11:00 م"};
+  const si=ALL_SLOTS.indexOf(wh.start),ei=ALL_SLOTS.indexOf(wh.end);
+  if(si===-1||ei===-1)return ["5:00 م","6:00 م","7:00 م","8:00 م","9:00 م","10:00 م","11:00 م"];
+  if(ei>=si)return ALL_SLOTS.slice(si,ei+1);
+  return [...ALL_SLOTS.slice(si),...ALL_SLOTS.slice(0,ei+1)];
+}
+
+// فلتر الأوقات الفائتة — يدعم منتصف الليل
+function isSlotPast(dateKey,slot){
+  const h=SLOT_HOURS[slot];if(h===undefined)return false;
+  const now=new Date(),todayStr=makeDateKey(now);
+  const isMid=(h>=0&&h<=6);
+  if(isMid){
+    const nd=new Date(dateKey+'T00:00:00');nd.setDate(nd.getDate()+1);
+    if(makeDateKey(nd)!==todayStr)return false;
+    const st=new Date();st.setHours(h,0,0,0);return now>=st;
+  }
+  if(dateKey!==todayStr)return false;
+  const st=new Date();st.setHours(h,0,0,0);return now>=st;
+}
+
+function isBooked(dk,s){return data.bookings.some(b=>b.dateKey===dk&&b.slot===s&&!b.cancelled);}
+function phoneBooked(p){const np=normalizePhone(p);return data.bookings.some(b=>!b.cancelled&&normalizePhone(b.phone||'')===np);}
+function allSlotsBooked(dk){const av=getSlots().filter(s=>!isSlotPast(dk,s));return av.length===0||av.every(s=>isBooked(dk,s));}
+
+async function loadData(){
+  try{
+    const snap=await getDoc(DOC_REF);
+    if(snap.exists()){
+      const raw=snap.data();
+      data={
+        bookings:     typeof raw.bookings==='string'     ? JSON.parse(raw.bookings)     : (raw.bookings||[]),
+        waitlist:     typeof raw.waitlist==='string'     ? JSON.parse(raw.waitlist)     : (raw.waitlist||[]),
+        disabledDays: typeof raw.disabledDays==='string' ? JSON.parse(raw.disabledDays) : (raw.disabledDays||[]),
+        workHours:    {start: raw.workHoursStart||"5:00 م", end: raw.workHoursEnd||"11:00 م"},
+      };
+    }else{
+      data={bookings:[],waitlist:[],disabledDays:[],workHours:{start:"5:00 م",end:"11:00 م"}};
+    }
+    const wh=data.workHours;
+    document.getElementById('headerDesc').textContent=`من ${wh.start} حتى ${wh.end}`;
+  }catch(e){console.error(e);showToast('❌ خطأ في الاتصال، تحقق من الإنترنت');}
+}
+
+async function saveData(){
+  await setDoc(DOC_REF,{
+    bookings:         JSON.stringify(data.bookings||[]),
+    waitlist:         JSON.stringify(data.waitlist||[]),
+    disabledDays:     JSON.stringify(data.disabledDays||[]),
+    workHoursStart:   (data.workHours&&data.workHours.start)||"5:00 م",
+    workHoursEnd:     (data.workHours&&data.workHours.end)||"11:00 م",
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._to);t._to=setTimeout(()=>t.style.display='none',3500);
+}
+
+function updateBtn(){
+  const name=document.getElementById('nameInp').value.trim();
+  const phone=document.getElementById('phoneInp').value.trim();
+  // validation hints
+  const ne=document.getElementById('nameErr'),pe=document.getElementById('phoneErr');
+  const ni=document.getElementById('nameInp'),pi=document.getElementById('phoneInp');
+  if(name&&!isValidName(name)){ni.classList.add('error');ne.style.display='block';}else{ni.classList.remove('error');ne.style.display='none';}
+  if(phone&&!isValidPhone(phone)){pi.classList.add('error');pe.style.display='block';}else{pi.classList.remove('error');pe.style.display='none';}
+  const btn=document.getElementById('bookBtn');
+  const ok=name&&phone&&isValidName(name)&&isValidPhone(phone)&&selService&&selDateKey&&selSlot;
+  btn.disabled=!ok;
+  if(ok){const svc=SERVICES.find(s=>s.id===selService);const priceStr=svc.priceLabel?svc.priceLabel:formatPrice(svc.price);btn.textContent=`✦ احجز ${selSlot} — ${priceStr}`;}
+  else btn.textContent='اختار الخدمة واليوم والساعة';
+}
+
+function renderServices(){
+  const g=document.getElementById('servicesGrid');g.innerHTML='';
+  SERVICES.forEach(s=>{
+    const btn=document.createElement('button');
+    btn.className='service-btn'+(selService===s.id?' sel':'');
+    btn.innerHTML=`<span class="service-name">${s.name}</span><span class="service-price">${s.priceLabel ? s.priceLabel : formatPrice(s.price)}</span>`;
+    btn.onclick=()=>{selService=s.id;renderServices();updateBtn();};
+    g.appendChild(btn);
+  });
+}
+
+function renderDays(){
+  const g=document.getElementById('daysScroll');g.innerHTML='';
+  const todayK=makeDateKey(new Date());
+  getNext7Days().forEach(d=>{
+    const key=makeDateKey(d);
+    const dis=(data.disabledDays||[]).includes(key);
+    const card=document.createElement('div');
+    card.className='day-card'+(selDateKey===key?' sel':'')+(dis?' disabled':'')+(key===todayK?' today':'');
+    card.innerHTML=`<span class="day-name">${DAY_NAMES[d.getDay()]}</span><span class="day-num">${d.getDate()}</span><span class="day-month">${MONTH_NAMES[d.getMonth()]}</span>`;
+    if(!dis)card.onclick=()=>{selDateKey=key;selDateLabel=makeLabel(d);selSlot=null;renderDays();renderSlots();updateBtn();};
+    g.appendChild(card);
+  });
+}
+
+function renderSlots(){
+  const sec=document.getElementById('slotsSection');
+  if(!selDateKey){sec.style.display='none';return;}
+  sec.style.display='block';
+  document.getElementById('slotsLabel').textContent=`الساعات المتاحة • ${selDateLabel}`;
+  const g=document.getElementById('slotsGrid');g.innerHTML='';
+  const full=allSlotsBooked(selDateKey);
+  document.getElementById('allBookedBox').style.display=full?'block':'none';
+  document.getElementById('waitBtnSection').style.display=full?'block':'none';
+  document.getElementById('bookBtnSection').style.display=full?'none':'block';
+  getSlots().forEach(s=>{
+    const bkd=isBooked(selDateKey,s),past=isSlotPast(selDateKey,s);
+    const btn=document.createElement('button');
+    btn.className='slot-btn'+(bkd?' bkd':'')+(past&&!bkd?' past':'')+(selSlot===s?' sel':'');
+    btn.textContent=s;
+    if(!bkd&&!past)btn.onclick=()=>{selSlot=s;renderSlots();updateBtn();};
+    g.appendChild(btn);
+  });
+}
+
+// ── إشعارات للحلاق ──
+async function sendTelegram(msg){
+  try{
+    await fetch('https://api.telegram.org/bot8205449854:AAEy8543td3uSxq7L96y09B73UKn0wwdBZE/sendMessage',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:'7706249764',text:msg,parse_mode:'HTML'})
+    });
+  }catch(e){}
+}
+async function sendNtfy(msg){
+  try{
+    await fetch('https://ntfy.sh/salonart-mom18',{
+      method:'POST',
+      headers:{'Title':'Salon Art','Priority':'high','Tags':'scissors'},
+      body:msg
+    });
+  }catch(e){}
+}
+function notify(msg){ sendTelegram(msg); sendNtfy(msg); }
+
+async function handleBook(){
+  if(isSaving)return;
+  const name=document.getElementById('nameInp').value.trim();
+  const phone=document.getElementById('phoneInp').value.trim();
+  if(!isValidName(name)){showToast('⚠️ الاسم يجب 3 أحرف على الأقل');return;}
+  if(!isValidPhone(phone)){showToast('⚠️ رقم الهاتف غير صحيح');return;}
+  if(!selService||!selDateKey||!selSlot)return;
+  if(phoneBooked(phone)){showToast('⚠️ هذا الرقم عنده حجز مسبق!');return;}
+  const btn=document.getElementById('bookBtn');
+  btn.disabled=true;btn.textContent='⏳ جاري الحجز...';isSaving=true;
+  // تحقق مزدوج
+  await loadData();
+  if(isBooked(selDateKey,selSlot)){showToast('⚠️ هذا الوقت انحجز للتو!');renderSlots();btn.disabled=false;btn.textContent='✦ احجز';isSaving=false;return;}
+  if(phoneBooked(phone)){showToast('⚠️ هذا الرقم عنده حجز مسبق!');btn.disabled=false;btn.textContent='✦ احجز';isSaving=false;return;}
+  const svc=SERVICES.find(s=>s.id===selService);
+  const booking={id:'b'+Date.now(),name,phone,service:svc.name,serviceId:svc.id,price:svc.price,dateKey:selDateKey,dateLabel:selDateLabel,slot:selSlot,day:selDateLabel,createdAt:Date.now(),bookedAt:new Date().toLocaleTimeString('ar-IQ'),reminded:false,cancelled:false,note:''};
+  data.bookings.push(booking);
+  try{
+    await saveData();
+    // إشعار تيليغرام + ntfy
+    const notifMsg=`🎉 حجز جديد — Salon Art\n\n👤 ${name}\n✂️ ${svc.name}\n📅 ${selDateLabel}\n⏰ ${selSlot}\n💰 ${formatPrice(svc.price)}\n📞 ${phone}`;
+    notify(notifMsg);
+    document.getElementById('s-name').textContent=name;
+    document.getElementById('s-service').textContent=svc.name;
+    document.getElementById('s-date').textContent=selDateLabel;
+    document.getElementById('s-slot').textContent=selSlot;
+    document.getElementById('s-phone').textContent=phone;
+    document.getElementById('s-price').textContent=formatPrice(svc.price);
+    document.getElementById('formView').classList.add('hidden');
+    document.getElementById('successView').classList.remove('hidden');
+  }catch{data.bookings.pop();btn.disabled=false;btn.textContent=`✦ احجز ${selSlot}`;showToast('❌ فشل الحفظ');}
+  isSaving=false;
+}
+
+async function handleWaitlist(){
+  const name=document.getElementById('nameInp').value.trim();
+  const phone=document.getElementById('phoneInp').value.trim();
+  if(!isValidName(name)){showToast('⚠️ أدخل اسمك');return;}
+  if(!isValidPhone(phone)){showToast('⚠️ رقم الهاتف غير صحيح');return;}
+  if(!selDateKey){showToast('⚠️ اختار اليوم أولاً');return;}
+  data.waitlist.push({id:'w'+Date.now(),name,phone,day:selDateLabel,dateKey:selDateKey,createdAt:Date.now()});
+  try{
+    await saveData();
+    notify(`⏳ <b>انتظار جديد</b>\n👤 ${name}\n📅 ${selDateLabel}\n📞 ${phone}`);
+    document.getElementById('w-day').textContent=selDateLabel;
+    document.getElementById('formView').classList.add('hidden');
+    document.getElementById('waitlistView').classList.remove('hidden');
+  }catch{data.waitlist.pop();showToast('❌ فشل');}
+}
+
+function resetForm(){
+  selService=null;selDateKey=null;selDateLabel=null;selSlot=null;
+  document.getElementById('nameInp').value='';
+  document.getElementById('phoneInp').value='';
+  document.getElementById('successView').classList.add('hidden');
+  document.getElementById('waitlistView').classList.add('hidden');
+  document.getElementById('formView').classList.remove('hidden');
+  document.getElementById('slotsSection').style.display='none';
+  document.getElementById('bookBtnSection').style.display='block';
+  document.getElementById('waitBtnSection').style.display='none';
+  loadData().then(()=>{renderServices();renderDays();updateBtn();});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+(async()=>{
+  await loadData();
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  renderServices();renderDays();
+  document.getElementById('nameInp').addEventListener('input',updateBtn);
+  document.getElementById('phoneInp').addEventListener('input',updateBtn);
+  // expose handlers for inline onclick
+  window.handleBook=handleBook;
+  window.handleWaitlist=handleWaitlist;
+  window.resetForm=resetForm;
+})();
+</script>
+</body>
+</html>
